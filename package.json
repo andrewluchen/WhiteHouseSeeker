@@ -4,6 +4,8 @@
   "description": "A shameless attempt to clone Senate Seeker",
   "main": "index.js",
   "scripts": {
+    "postinstall": "node_modules/webpack/bin/webpack.js",
+    "webpack": "node_modules/webpack/bin/webpack.js --progress --colors --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,7 +18,7 @@
     "url": "https://github.com/andrewluchen/WhiteHouseSeeker/issues"
   },
   "homepage": "https://github.com/andrewluchen/WhiteHouseSeeker#readme",
-  "devDependencies": {
+  "dependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
