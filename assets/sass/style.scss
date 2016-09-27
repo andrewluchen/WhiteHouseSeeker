@@ -1,0 +1,12 @@
+@import 'colors';
+
+html body {
+    background-color: $bg_blue;
+}
+
+.header {
+    display: flex;
+    > * {
+        flex: 1;
+    }
+}

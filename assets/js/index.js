@@ -1,14 +1,25 @@
-var React = require('react')
-var ReactDOM = require('react-dom')
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Router, Route, browserHistory } from 'react-router';
 
-var Hello = React.createClass ({
-    render: function() {
-        return (
-            <h1>
-            Hello, React!
-            </h1>
-        )
-    }
-})
+import App from './App';
+require('../sass/style.scss');
 
-ReactDOM.render(<Hello />, document.getElementById('container'))
+const NotFound = () => (<h1>404. This page is not found!</h1>);
+
+class Root extends React.Component {
+  render() {
+    return (
+      <Router history={browserHistory}>
+        <Route component={App}>
+
+          // 404
+          <Route path="*" component={NotFound} />
+
+        </Route>
+      </Router>
+    );
+  }
+}
+
+ReactDOM.render(<Root />, document.getElementById('container'));
