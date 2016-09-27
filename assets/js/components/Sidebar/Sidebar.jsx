@@ -1,5 +1,6 @@
-var React = require('react');
-var ReactSidebar = require('react-sidebar').default;
+import React from 'react';
+import ReactSidebar from 'react-sidebar';
+import Editor from '../Editor/Editor';
 
 class Sidebar extends React.Component {
   render() {
@@ -32,6 +33,7 @@ class Sidebar extends React.Component {
         sidebar={sidebar}
         open={true}
         docked={true}
+        transition
         {...this.props}
       />
     );
