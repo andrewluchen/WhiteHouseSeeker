@@ -2,9 +2,20 @@
 @import 'colors';
 
 @import 'header';
+@import 'leaderboard';
 @import 'sidebar';
 @import 'editor';
 
 html body {
     background-color: $ui_usgs;
+    font-family: Arial;
+}
+
+.main_layout {
+    padding: 5px;
+}
+
+.divider {
+    height:1px;
+    border-bottom:1px solid $ui_gray;
 }

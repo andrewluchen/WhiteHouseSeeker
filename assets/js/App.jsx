@@ -10,7 +10,11 @@ class App extends React.Component {
       <div>
         <Sidebar>
           <Header/>
-          {this.props.children}
+
+          <div className='main_layout'>
+            {this.props.children}
+          </div>
+
         </Sidebar>
       </div>
     );

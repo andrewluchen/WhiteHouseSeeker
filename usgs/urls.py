@@ -1,7 +1,13 @@
 from django.conf.urls import include, url
 
-import usgs.views
+from usgs import views
+
+apipatterns = [
+    url(r'^capitol/$', views.Capitol.as_view(), name='capitol'),
+]
 
 urlpatterns = [
-    url(r'^', usgs.views.index, name='index'),
+    url(r'^api/', include(apipatterns)),
+    url(r'^echo/$', views.echo, name='echo'),
+    url(r'^', views.index, name='index'),
 ]

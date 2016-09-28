@@ -20,9 +20,11 @@ class Sidebar extends React.Component {
           <SidebarSubItem title='Press Office' link='/pressoffice'/>
           <SidebarSubItem title='Social Media' link='/socialmedia'/>
         </SidebarItem>
-        <SidebarItem title='Capital Hill' link='/capitolhill'>
+        <SidebarItem title='Capitol Hill' link='/capitol'>
           <SidebarSubItem title='US Senate' link='/senate'/>
+          <SidebarSubItem title='Senate Comittees' link='/senate/committee'/>
           <SidebarSubItem title='US House of Representatives' link='/house'/>
+          <SidebarSubItem title='House Comittees' link='/house/committee'/>
           <SidebarSubItem title='White House' link='/potus'/>
           <SidebarSubItem title='Federal Judiciary' link='/judiciary'/>
           <SidebarSubItem title='Library of Congress' link='/library'/>
@@ -33,6 +35,8 @@ class Sidebar extends React.Component {
           <SidebarSubItem title='Republican National Committee' link='/rnc'/>
         </SidebarItem>
         <SidebarItem title='Gen Pop' link='/genpop'/>
+        <div className='divider'/>
+        <SidebarItem title='About' link='/about'/>
       </div>
     );
 
