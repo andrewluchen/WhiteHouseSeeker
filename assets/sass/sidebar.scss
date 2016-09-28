@@ -1,0 +1,49 @@
+.sidebar {
+
+    &.root {
+        display: flex;
+        flex-flow: column;
+        font-family: Arial;
+        font-weight: 300;
+        height: 100%;
+    }
+
+    &.header {
+        background-color: $ui_blue;
+        color: $ui_white;
+        font-size: 1.5em;
+        padding: 10px;
+    }
+
+    &.content {
+        background-color: $ui_off_white;
+        flex: 1;
+        padding: 10px;
+    }
+
+    &.link {
+        display: block;
+        color: $ui_gray_dark;
+        text-decoration: none;
+
+        &:hover {
+            color: $ui_black;
+        }
+    }
+
+    &.menu {
+        padding: 8px 0px;
+        font-size: 20px;
+    }
+
+    &.submenu {
+        padding: 4px 0px;
+        font-size: 14px;
+    }
+
+    &.subitems {
+        position: relative;
+        left: 10px;
+    }
+
+}

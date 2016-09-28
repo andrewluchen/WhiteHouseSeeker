@@ -1,31 +1,45 @@
 import React from 'react';
 import ReactSidebar from 'react-sidebar';
-import Editor from '../Editor/Editor';
+
+import SidebarItem from './SidebarItem';
+import SidebarSubItem from './SidebarSubItem';
 
 class Sidebar extends React.Component {
+
   render() {
-    var sidebar = (
-      <div>
-        <div>Gen Pop</div>
-        <div>Administrativa</div>
-          <div>Rules</div>
-          <div>Announcement</div>
-          <div>Sign-In</div>
-        <div>
-          <div>National News</div>
-          <div>International News</div>
-          <div>Press Office</div>
-          <div>Social Media</div>
-        </div>
-        <div>Capitol Hill</div>
-        <div>
-          <div>US Senate</div>
-          <div>US House of Representatives</div>
-          <div>White House</div>
-          <div>Federal Judiciary</div>
-          <div>Library of Congress</div>
-        </div>
-        <div>Party War Room</div>
+    let sidebarTree = (
+      <div className='sidebar content'>
+        <SidebarItem title='Administrativa' link='#'>
+          <SidebarSubItem title='Rules' link='/rules'/>
+          <SidebarSubItem title='Announcements' link='/announcements'/>
+          <SidebarSubItem title='Character Sign-In' link='/ic'/>
+        </SidebarItem>
+        <SidebarItem title='News' link='/news'>
+          <SidebarSubItem title='National News' link='/nationalnews'/>
+          <SidebarSubItem title='International News' link='/internationalnews'/>
+          <SidebarSubItem title='Press Office' link='/pressoffice'/>
+          <SidebarSubItem title='Social Media' link='/socialmedia'/>
+        </SidebarItem>
+        <SidebarItem title='Capital Hill' link='/capitolhill'>
+          <SidebarSubItem title='US Senate' link='/senate'/>
+          <SidebarSubItem title='US House of Representatives' link='/house'/>
+          <SidebarSubItem title='White House' link='/potus'/>
+          <SidebarSubItem title='Federal Judiciary' link='/judiciary'/>
+          <SidebarSubItem title='Library of Congress' link='/library'/>
+        </SidebarItem>
+        <SidebarItem title='Minigames' link='/minigames'/>
+        <SidebarItem title='Party Warroom' link='/party'>
+          <SidebarSubItem title='Democratic National Committee' link='/dnc'/>
+          <SidebarSubItem title='Republican National Committee' link='/rnc'/>
+        </SidebarItem>
+        <SidebarItem title='Gen Pop' link='/genpop'/>
+      </div>
+    );
+
+    let sidebar = (
+      <div className='sidebar root'>
+        <div className='sidebar header'>Menu</div>
+        {sidebarTree}
       </div>
     );
     return (
@@ -33,7 +47,7 @@ class Sidebar extends React.Component {
         sidebar={sidebar}
         open={true}
         docked={true}
-        transition
+        transition={false}
         {...this.props}
       />
     );
