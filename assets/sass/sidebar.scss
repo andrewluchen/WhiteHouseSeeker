@@ -1,6 +1,6 @@
 .sidebar {
 
-    &.root {
+    &-root {
         display: flex;
         flex-flow: column;
         font-family: Arial;
@@ -8,20 +8,20 @@
         height: 100%;
     }
 
-    &.header {
+    &-header {
         background-color: $ui_blue;
         color: $ui_white;
         font-size: 1.5em;
         padding: 10px;
     }
 
-    &.content {
+    &-content {
         background-color: $ui_off_white;
         flex: 1;
         padding: 10px;
     }
 
-    &.link {
+    &-link {
         display: block;
         color: $ui_gray_dark;
         text-decoration: none;
@@ -31,17 +31,17 @@
         }
     }
 
-    &.menu {
+    &-menu {
         padding: 8px 0px;
         font-size: 20px;
     }
 
-    &.submenu {
+    &-submenu {
         padding: 4px 0px;
         font-size: 14px;
     }
 
-    &.subitems {
+    &-subitems {
         position: relative;
         left: 10px;
     }

@@ -4,8 +4,8 @@ import { Link } from 'react-router';
 class SidebarSubItem extends React.Component {
   render() {
     return (
-      <div className='sidebar submenu'>
-        <Link to={this.props.link} className='sidebar link'>
+      <div className='sidebar-submenu'>
+        <Link to={this.props.link} className='sidebar-link'>
           {this.props.title}
         </Link>
         {this.props.children}

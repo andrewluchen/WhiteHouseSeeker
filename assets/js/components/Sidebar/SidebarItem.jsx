@@ -4,11 +4,11 @@ import { Link } from 'react-router';
 class SidebarItem extends React.Component {
   render() {
     return (
-      <div className='sidebar menu'>
+      <div className='sidebar-menu'>
         <Link to={this.props.link} className='sidebar link'>
           {this.props.title}
         </Link>
-        <div className='sidebar subitems'>
+        <div className='sidebar-subitems'>
           {this.props.children}
         </div>
       </div>

@@ -21,7 +21,6 @@ class Capitol extends React.Component {
     this.state = {
       leadership: [],
     }
-    this.save = this.save.bind(this);
   }
 
   componentDidMount() {

@@ -33,3 +33,8 @@ class Capitol(View):
     @user_passes_test(is_admin)
     def put(self, request):
         pass
+
+class NewBill(View):
+
+    def post(self, request):
+        pass

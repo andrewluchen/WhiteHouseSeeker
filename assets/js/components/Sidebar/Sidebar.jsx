@@ -8,7 +8,7 @@ class Sidebar extends React.Component {
 
   render() {
     let sidebarTree = (
-      <div className='sidebar content'>
+      <div className='sidebar-content'>
         <SidebarItem title='Administrativa' link='#'>
           <SidebarSubItem title='Rules' link='/rules'/>
           <SidebarSubItem title='Announcements' link='/announcements'/>
@@ -41,8 +41,8 @@ class Sidebar extends React.Component {
     );
 
     let sidebar = (
-      <div className='sidebar root'>
-        <div className='sidebar header'>Menu</div>
+      <div className='sidebar-root'>
+        <div className='sidebar-header'>Menu</div>
         {sidebarTree}
       </div>
     );
