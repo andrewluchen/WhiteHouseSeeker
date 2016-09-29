@@ -10,6 +10,9 @@ class Login extends React.Component {
         <div className="login">
           <div className="login__container">
             <div id="content" className="colM">
+              <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>
+                Login
+              </div>
               <form action="/auth/login/" method="post" id="login-form">
                 <input name="csrfmiddlewaretoken" hidden="true" value={getCookie('csrftoken')}/>
                 <div className="form-row">
@@ -21,7 +24,7 @@ class Login extends React.Component {
                   <input id="id_password" name="password" required="" type="password"/>
                 </div>
                 <div className="submit-row">
-                  <label>&nbsp;</label><input value="Log in" type="submit"/>
+                  <label>&nbsp;</label><input value="Log In" type="submit"/>
                 </div>
               </form>
             </div>
