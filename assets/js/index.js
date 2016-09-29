@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 
+require('font-awesome-webpack');
 require('../sass/style.scss');
 
 import App from './App';
@@ -10,6 +11,7 @@ import newBill from './views/newBill';
 
 import About from './views/About';
 import Capitol from './views/Capitol';
+import Index from './views/Index';
 import Senate from './views/Senate';
 import House from './views/House';
 
@@ -20,6 +22,7 @@ class Root extends React.Component {
     return (
       <Router history={browserHistory}>
         <Route component={App}>
+          <Route path="/" component={Index} />
           <Route path="about" component={About} />
           <Route path="capitol" component={Capitol} />
           <Route path="senate" component={Senate} />

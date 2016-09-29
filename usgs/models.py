@@ -13,7 +13,7 @@ class CharacterIdField(models.IntegerField):
     def value_to_string(self, obj):
         if (not obj):
             return 'None'
-        character = models.Leadership.objects.get(id=obj)
+        character = Character.objects.get(id=obj)
         if (len(character) == 0):
             return 'None'
         else:

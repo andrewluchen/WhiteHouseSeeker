@@ -1,5 +1,8 @@
 from django.conf.urls import include, url
 
+from django.contrib import admin
+admin.autodiscover()
+
 from usgs import views
 
 apipatterns = [
@@ -10,5 +13,6 @@ apipatterns = [
 urlpatterns = [
     url(r'^api/', include(apipatterns)),
     url(r'^echo/$', views.echo, name='echo'),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^', views.index, name='index'),
 ]

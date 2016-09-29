@@ -26,7 +26,11 @@ class Editor extends React.Component {
     return (
       <div className='editor_container'>
         <div className='editor'>
-          <ReactQuill theme='snow' onChange={this.onChange}/>
+          <ReactQuill
+            theme='snow'
+            value={this.state.content}
+            onChange={this.onChange}
+          />
         </div>
         <button onClick={this.onSubmit}>Submit</button>
         <div

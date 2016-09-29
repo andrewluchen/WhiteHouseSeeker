@@ -1,7 +1,20 @@
 .header {
+    background-color: $ui_blue;
+    color: $ui_off_white;
     display: flex;
+    padding: 10px;
 
-    > * {
+    &-logo {
         flex: 1;
+    }
+
+    &-messages {
+    }
+
+    &-notifications {
+    }
+
+    &-settings {
+        margin-left: 10px;
     }
 }
