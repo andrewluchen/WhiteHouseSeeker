@@ -1,8 +1,8 @@
 import React from 'react';
 
-import ClerkOffice from '../components/Bill/ClerkOffice';
-import Debates from '../components/Debate/Debates';
-import Votes from '../components/Vote/Votes';
+import ClerkOffice from './Bill/ClerkOffice';
+import Debates from './Debate/Debates';
+import Votes from './Vote/Votes';
 
 class Senate extends React.Component {
 

@@ -4,6 +4,30 @@ import getCookie from '../getCookie';
 
 class Login extends React.Component {
 
+  constructor() {
+    super();
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    var data = {
+      csrfmiddlewaretoken: getCookie('csrftoken'),
+      username: this.refs.username.value,
+      email: this.refs.email.value,
+      password: this.refs.password.value,
+    }
+    $.ajax({
+      type: 'POST',
+      url: '/auth/register/',
+      data: data,
+      success: response => {
+        window.location.href = '/login/';
+      },
+      error: () => alert('Error'),
+    });
+  }
+
   render() {
     return (
       <div className="__login">
@@ -13,19 +37,18 @@ class Login extends React.Component {
               <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>
                 Register
               </div>
-              <form action="/auth/register/" method="post" id="login-form">
-                <input name="csrfmiddlewaretoken" hidden="true" value={getCookie('csrftoken')}/>
+              <form id="login-form" onSubmit={this.onSubmit}>
                 <div className="form-row">
                   <label className="required" htmlFor="id_username">Username:</label>
-                  <input id="id_username" maxLength="254" name="username" required="" type="text"/>
+                  <input ref="username" id="id_username" maxLength="254" name="username" required="" type="text"/>
                 </div>
                 <div className="form-row">
                   <label className="required" htmlFor="id_email">Email:</label>
-                  <input id="id_email" maxLength="254" name="email" required="" type="text"/>
+                  <input ref="email" id="id_email" maxLength="254" name="email" required="" type="email"/>
                 </div>
                 <div className="form-row">
                   <label className="required" htmlFor="id_password">Password:</label>
-                  <input id="id_password" name="password" required="" type="password"/>
+                  <input ref="password" id="id_password" name="password" required="" type="password"/>
                 </div>
                 <div className="submit-row">
                   <label>&nbsp;</label><input value="Register" type="submit"/>

@@ -42,7 +42,13 @@ class Sidebar extends React.Component {
 
     let sidebar = (
       <div className='sidebar-root'>
-        <div className='sidebar-header'>Menu</div>
+        <div className='sidebar-header'>
+          <div className='header-logo'>
+            <div>
+              <img src={require('../../../img/logo.png')}/>
+            </div>
+          </div>
+        </div>
         {sidebarTree}
       </div>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LeaderBoard from '../components/LeaderBoard/LeaderBoard';
+import LeaderBoard from './LeaderBoard/LeaderBoard';
 
 const _test = [
   ['Speaker of the House', 'Mr. Speaker', 'Republican'],

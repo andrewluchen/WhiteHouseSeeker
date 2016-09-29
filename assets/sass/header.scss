@@ -5,6 +5,16 @@
     font-size: 1.5em;
     padding: 10px;
 
+    &-container {
+        display: flex;
+    }
+
+    &-welcome {
+        color: $ui_white;
+        flex: 1;
+        font-weight: bold;
+    }
+
     &-logo {
         flex: 1;
         text-align: center;
@@ -26,8 +36,19 @@
 
     &-settings {
         border-left: 1px solid $ui_gray;
-        margin-left: 10px;
+        margin-left: 5px;
         padding-left: 10px;
+    }
+
+    &-login {
+        color: $ui_white;
+        font-weight: bold;
+        text-decoration: none;
+
+        &:hover {
+            color: $ui_gray;
+        }
 
     }
+
 }

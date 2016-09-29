@@ -1,5 +1,5 @@
 import React from 'react';
-import NewBill from '../components/Bill/NewBill';
+import NewBill from './Bill/NewBill';
 
 export default function newBill(house) {
   if (house === 'house') {

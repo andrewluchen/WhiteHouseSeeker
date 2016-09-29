@@ -1,10 +1,21 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.views import View
 
+from rest_framework_jwt.settings import api_settings
+
 from usgs import forms
+
+def jwt(user):
+    jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+    jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+    payload = jwt_payload_handler(user)
+    return jwt_encode_handler(payload)
+
 
 def user_register(request):
     context = RequestContext(request)
@@ -26,10 +37,10 @@ def user_login(request):
 
     if user and user.is_active:
         login(request, user)
-        return HttpResponseRedirect('/index')
+        data = { 'id_token': jwt(user) }
+        return HttpResponse(json.dumps(data), content_type="application/json")
     else:
-        print "Invalid login details: {0}, {1}".format(username, password)
-        return HttpResponse("Invalid login details supplied.")
+        return HttpResponse(status=401)
 
 @login_required
 def user_logout(request):

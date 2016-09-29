@@ -56,6 +56,8 @@ class Bill(View):
 
     @staticmethod
     def newbill(request):
+        print request.user
+        return HttpResponse(400)
         title = request.POST['title']
         body = request.POST['body']
         sponsor_id = request.POST['sponsor_id']
