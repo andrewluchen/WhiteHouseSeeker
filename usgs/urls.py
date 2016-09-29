@@ -8,7 +8,7 @@ from usgs import views
 
 apipatterns = [
     url(r'^capitol/$', views.Capitol.as_view(), name='capitol'),
-    url(r'^bill/new/$', views.NewBill.as_view(), name='new-bill'),
+    url(r'^bill/new/$', views.Bill.newbill, name='new-bill'),
 ]
 
 urlpatterns = [

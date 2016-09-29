@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Character(models.Model):
     player = models.ForeignKey(User, related_name='characters')
     name = models.TextField()
     party = models.TextField()
     state = models.TextField()
     active = models.BooleanField()
+
 
 class CharacterIdField(models.IntegerField):
 
@@ -20,20 +22,8 @@ class CharacterIdField(models.IntegerField):
             character = character[0]
             return character.name + '(' + character.party[0] + '-' + character.state + ')'
 
-class Bill(models.Model):
-    title = models.TextField()
-    body = models.TextField()
-    sponsor = models.ForeignKey(Character, related_name='sponsored_bills')
-    cosponsors = models.ManyToManyField(Character, related_name='cosponsored_bills')
-
-class Vote(models.Model):
-    subject = models.ForeignKey(Bill, related_name='votes')
-    yeas = models.ManyToManyField(Character, related_name='yea_votes')
-    nays = models.ManyToManyField(Character, related_name='nay_votes')
-    pres = models.ManyToManyField(Character, related_name='pres_votes')
 
 class Leadership(models.Model):
-    # use Character.id as fields
     potus = CharacterIdField(null=True)
     vpotus = CharacterIdField(null=True)
     speaker = CharacterIdField(null=True)
@@ -41,3 +31,35 @@ class Leadership(models.Model):
     majoritywhip = CharacterIdField(null=True)
     minoirtyleader = CharacterIdField(null=True)
     minoritywhip = CharacterIdField(null=True)
+
+
+class LegislativeBody(models.Model):
+    name = models.CharField(max_length=80)
+    parent = models.ForeignKey('self', related_name='children', blank=True, null=True)
+
+
+class Bill(models.Model):
+    title = models.TextField()
+    body = models.TextField()
+    introduced = models.DateTimeField()
+    modified = models.DateTimeField()
+    location = models.ForeignKey(LegislativeBody, related_name='bills')
+    sponsor = models.ForeignKey(Character, related_name='sponsored_bills')
+    cosponsors = models.ManyToManyField(Character, related_name='cosponsored_bills', blank=True)
+
+
+class Debate(models.Model):
+    subject = models.ForeignKey(Bill, related_name='debates')
+    starttime = models.DateTimeField()
+    endtime = models.DateTimeField()
+    location = models.ForeignKey(LegislativeBody, related_name='debates')
+
+
+class Vote(models.Model):
+    subject = models.ForeignKey(Bill, related_name='votes')
+    starttime = models.DateTimeField()
+    endtime = models.DateTimeField()
+    location = models.ForeignKey(LegislativeBody, related_name='votes')
+    yeas = models.ManyToManyField(Character, related_name='yea_votes', blank=True)
+    nays = models.ManyToManyField(Character, related_name='nay_votes', blank=True)
+    pres = models.ManyToManyField(Character, related_name='pres_votes', blank=True)

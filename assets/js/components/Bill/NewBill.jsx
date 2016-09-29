@@ -1,5 +1,7 @@
 import React from 'react';
 
+import getCookie from '../../getCookie';
+
 import Editor from '../Editor/Editor';
 
 class NewBill extends React.Component {
@@ -24,11 +26,12 @@ class NewBill extends React.Component {
     $.post(
       this.props.endpoint,
       {
+        csrfmiddlewaretoken: getCookie('csrftoken'),
         title: title,
         body: body,
       },
       function(data) {
-        window.location = this.props.redirect;
+        window.location = redirect;
       }
     )
   }

@@ -9,7 +9,7 @@ class House extends React.Component {
   render() {
     return (
       <div>
-        <ClerkOffice name='House Hopper' newRoute='house/new'/>
+        <ClerkOffice name='House Hopper' newRoute='/house/new'/>
         <Votes/>
         <Debates/>
       </div>

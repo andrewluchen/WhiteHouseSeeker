@@ -9,7 +9,7 @@ class Senate extends React.Component {
   render() {
     return (
       <div>
-        <ClerkOffice name='Senate Clerk Office' newRoute='senate/new'/>
+        <ClerkOffice name='Senate Clerk Office' newRoute='/senate/new'/>
         <Votes/>
         <Debates/>
       </div>

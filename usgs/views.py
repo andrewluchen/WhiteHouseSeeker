@@ -15,16 +15,34 @@ def echo(request):
     print(request)
     print(request.data)
 
+def initialize():
+    bodies = [
+        'library',
+        'potus_desk',
+        'senate',
+        'house',
+        'concomm',
+        'graveyard',
+    ]
+    for body in bodies:
+        b = models.LegislativeBody.objects.get(name=body).first()
+        b.save()
+
+def get_leg_body(chamber):
+    chamber = models.LegislativeBody.objects.get(name=chamber).first()
+    if (chamber == None):
+        initialize()
+        chamber = models.LegislativeBody.objects.get(name=chamber).first()
+    return chamber
+
 def is_admin(user):
     return False
 
 class Capitol(View):
 
     def get(self, request):
-        objs = models.Leadership.objects.all()
-        if (len(objs) != 0):
-            obj = objs[0]
-        else:
+        obj = models.Leadership.objects.all().first()
+        if (obj == None):
             obj = models.Leadership()
             obj.save()
         response = serializers.serialize('json', [obj,])
@@ -34,7 +52,14 @@ class Capitol(View):
     def put(self, request):
         pass
 
-class NewBill(View):
+class Bill(View):
 
-    def post(self, request):
-        print(request)
+    @staticmethod
+    def newbill(request):
+        title = request.POST['title']
+        body = request.POST['body']
+        sponsor_id = request.POST['sponsor_id']
+        sponsor = models.Character.objects.get(id=sponsor_id)
+        bill = models.Bill(title=title, body=body, sponsor=sponsor)
+        bill.save()
+        return HttpResponse(status=201)
