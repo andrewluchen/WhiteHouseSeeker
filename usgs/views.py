@@ -37,4 +37,4 @@ class Capitol(View):
 class NewBill(View):
 
     def post(self, request):
-        pass
+        print(request)

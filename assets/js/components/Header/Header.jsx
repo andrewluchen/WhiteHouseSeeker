@@ -4,7 +4,11 @@ class Header extends React.Component {
   render() {
     return (
       <div className='header'>
-        <div className='header-logo'>Logo</div>
+        <div className='header-logo'>
+          <div>
+            <img src={require('../../../img/logo.png')}/>
+          </div>
+        </div>
         <div className='header-notifications'>
           <i className='fa fa-bell'/>
         </div>
@@ -12,7 +16,7 @@ class Header extends React.Component {
           <i className='fa fa-envelope'/>
         </div>
         <div className='header-settings'>
-          Setting <i className='fa fa-gear'/>
+          <i className='fa fa-gear header-settings-gear'/>
         </div>
       </div>
     );

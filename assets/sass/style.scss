@@ -2,10 +2,11 @@
 @import 'quill.snow';
 @import 'colors';
 
+@import 'editor';
 @import 'header';
 @import 'leaderboard';
+@import 'login';
 @import 'sidebar';
-@import 'editor';
 
 html body {
     background-color: $ui_usgs;
@@ -27,6 +28,6 @@ button {
 }
 
 .divider {
-    height:1px;
-    border-bottom:1px solid $ui_gray;
+    height: 1px;
+    border-bottom: 1px solid $ui_gray;
 }

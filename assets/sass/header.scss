@@ -2,19 +2,32 @@
     background-color: $ui_blue;
     color: $ui_off_white;
     display: flex;
+    font-size: 1.5em;
     padding: 10px;
 
     &-logo {
         flex: 1;
+        text-align: center;
+
+        img {
+            margin: -9px;
+            height: 42px;
+        }
+
     }
 
     &-messages {
+        margin: 0 10px;
     }
 
     &-notifications {
+        margin: 0 10px;
     }
 
     &-settings {
+        border-left: 1px solid $ui_gray;
         margin-left: 10px;
+        padding-left: 10px;
+
     }
 }

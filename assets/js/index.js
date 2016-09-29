@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 
-require('font-awesome-webpack');
 require('../sass/style.scss');
 
 import App from './App';
+import Login from './views/Login';
+import Register from './views/Register';
 
 import newBill from './views/newBill';
 
@@ -23,6 +24,9 @@ class Root extends React.Component {
       <Router history={browserHistory}>
         <Route component={App}>
           <Route path="/" component={Index} />
+          <Route path="login/" component={Login} />
+          <Route path="register/" component={Register} />
+
           <Route path="about" component={About} />
           <Route path="capitol" component={Capitol} />
           <Route path="senate" component={Senate} />

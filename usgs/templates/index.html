@@ -1,6 +1,8 @@
 <html>
 <head>
+  {% csrf_token %}
   {% load render_bundle from webpack_loader %}
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body>
   <div id="container"></div>
