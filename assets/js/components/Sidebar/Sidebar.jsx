@@ -34,7 +34,7 @@ class Sidebar extends React.Component {
           <SidebarSubItem title='Democratic National Committee' link='/dnc'/>
           <SidebarSubItem title='Republican National Committee' link='/rnc'/>
         </SidebarItem>
-        <SidebarItem title='Gen Pop' link='/genpop'/>
+        <SidebarItem title='General Discussion' link='/genpop'/>
         <div className='divider'/>
         <SidebarItem title='About' link='/about'/>
       </div>

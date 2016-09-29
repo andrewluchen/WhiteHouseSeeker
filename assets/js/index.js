@@ -10,6 +10,7 @@ import Register from './components/Register';
 
 import About from './components/About';
 import Capitol from './components/Capitol';
+import CharacterManagement from './components/CharacterManagement';
 import Index from './components/Index';
 import Senate from './components/Senate';
 import House from './components/House';
