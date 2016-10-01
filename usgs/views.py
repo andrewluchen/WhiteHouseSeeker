@@ -31,9 +31,9 @@ def initialize():
     for body in bodies:
         b = models.LegislativeBody(name=body)
         b.save()
-initialize()
 
 def index(request):
+    initialize()
     return render(request, 'index.html')
 
 def echo(request):
