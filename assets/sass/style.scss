@@ -2,6 +2,7 @@
 @import 'quill.snow';
 @import 'colors';
 
+@import 'character';
 @import 'editor';
 @import 'header';
 @import 'leaderboard';
@@ -13,16 +14,6 @@ html body {
     font-family: Arial;
 }
 
-button {
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-}
-
 .main_layout {
     padding: 10px;
 }
@@ -30,4 +21,30 @@ button {
 .divider {
     height: 1px;
     border-bottom: 1px solid $ui_gray;
+}
+
+
+.democratic {
+    color: $ui_democratic !important;
+}
+
+.republican {
+    color: $ui_republican !important;
+}
+
+.independent {
+    color: $ui_independent !important;
+}
+
+
+.bg_democratic {
+    background-color: $ui_democratic !important;
+}
+
+.bg_republican {
+    background-color: $ui_republican !important;
+}
+
+.bg_independent {
+    background-color: $ui_independent !important;
 }

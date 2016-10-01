@@ -1,0 +1,7 @@
+let LOGIN_USER = 'LOGIN_USER';
+let LOGOUT_USER = 'LOGOUT_USER';
+
+export {
+  LOGIN_USER,
+  LOGOUT_USER,
+}

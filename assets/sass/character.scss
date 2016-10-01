@@ -1,0 +1,28 @@
+.character {
+
+    &-header {
+        display: flex;
+        margin: 0 40px;
+        margin-bottom: 20px;
+
+        &-selector {
+            flex: 1;
+            margin-left: 10px;
+        }
+    }
+
+    &-avatar {
+        padding-top: 40px;
+        text-align: center;
+    }
+
+    &-buttons {
+        float: right;
+        margin-top: 10px;
+
+        button {
+          margin: 0 2px;
+        }
+    }
+
+}

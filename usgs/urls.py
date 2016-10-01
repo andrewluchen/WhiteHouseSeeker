@@ -7,8 +7,13 @@ from usgs import auth
 from usgs import views
 
 apipatterns = [
-    url(r'^capitol/$', views.Capitol.as_view(), name='capitol'),
-    url(r'^bill/new/$', views.Bill.newbill, name='new-bill'),
+    url(r'^leaders/$', views.Leaders.as_view(), name='leaders'),
+    url(r'^character/$', views.Character.as_view(), name='new-character'),
+    url(r'^character/(?P<pk>[0-9]+)/$', views.Character.as_view(), name='view-character'),
+    url(r'^characters/$', views.Characters.as_view(), name='characters'),
+    url(r'^bill/$', views.Bill.as_view(), name='new-bill'),
+    url(r'^bill/(?P<pk>[0-9]+)/$', views.Bill.as_view(), name='view-bill'),
+    # url(r'^bills/$', views.Bill.as_view(), name='bills'),
 ]
 
 urlpatterns = [

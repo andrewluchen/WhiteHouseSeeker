@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 
 class Editor extends React.Component {
@@ -32,7 +33,13 @@ class Editor extends React.Component {
             onChange={this.onChange}
           />
         </div>
-        <button onClick={this.onSubmit}>Submit</button>
+        <Button
+          bsStyle='primary'
+          bsSize='large'
+          onClick={this.onSubmit}
+        >
+          Submit
+        </Button>
         <div
           className='preview'
           dangerouslySetInnerHTML={{__html: this.state.content}}

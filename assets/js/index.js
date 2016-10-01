@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 
+import getCookie from './getCookie';
+
 require('../sass/style.scss');
 
 import App from './App';
@@ -19,6 +21,14 @@ import newBill from './components/newBill';
 const NotFound = () => (<h1>404. This page is not found!</h1>);
 
 class Root extends React.Component {
+
+  constructor() {
+    super();
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+      jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    });
+  }
+
   render() {
     return (
       <Router history={browserHistory}>

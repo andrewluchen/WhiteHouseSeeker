@@ -1,21 +1,25 @@
 import json
 
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User, Group
 from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
 from usgs import models
+from usgs import forms
 
-def index(request):
-    return render(request, 'index.html')
-
-def echo(request):
-    print(request)
-    print(request.data)
+DEMOCRATS = 'Democrats'
+REPUBLICANS = 'Republicans'
 
 def initialize():
+    # check initialized
+    if Group.objects.filter(name=DEMOCRATS):
+        return
+    # do initialize
+    Group.objects.create(name=DEMOCRATS)
+    Group.objects.create(name=REPUBLICANS)
     bodies = [
         'library',
         'potus_desk',
@@ -25,20 +29,25 @@ def initialize():
         'graveyard',
     ]
     for body in bodies:
-        b = models.LegislativeBody.objects.get(name=body).first()
+        b = models.LegislativeBody(name=body)
         b.save()
+initialize()
+
+def index(request):
+    return render(request, 'index.html')
+
+def echo(request):
+    print(request)
+    print(request.data)
 
 def get_leg_body(chamber):
     chamber = models.LegislativeBody.objects.get(name=chamber).first()
-    if (chamber == None):
-        initialize()
-        chamber = models.LegislativeBody.objects.get(name=chamber).first()
     return chamber
 
 def is_admin(user):
     return False
 
-class Capitol(View):
+class Leaders(View):
 
     def get(self, request):
         obj = models.Leadership.objects.all().first()
@@ -52,12 +61,41 @@ class Capitol(View):
     def put(self, request):
         pass
 
+
+class Character(View):
+
+    def get(self, request, character_id):
+        characters = models.Character.objects.get(player=request.user)
+
+    def post(self, request):
+        form = forms.CharacterForm(request.POST)
+        if form.is_valid():
+            character = models.Character(
+                player=request.user,
+                name=form.cleaned_data['name'],
+                birthday=form.cleaned_data['birthday'],
+                residence=form.cleaned_data['residence'],
+                party=form.cleaned_data['party'],
+                state=form.cleaned_data['state'],
+                active=form.cleaned_data['active'],
+                primary=form.cleaned_data['primary'],
+            )
+            character.save()
+            return HttpResponse(status=201)
+        print form.errors
+
+
+class Characters(View):
+
+    def get(self, request):
+        characters = models.Character.objects.get(player=request.user)
+        response = serializers.serialize('json', [obj,])
+        return HttpResponse(response, content_type='application/json')
+
+
 class Bill(View):
 
-    @staticmethod
-    def newbill(request):
-        print request.user
-        return HttpResponse(400)
+    def post(request):
         title = request.POST['title']
         body = request.POST['body']
         sponsor_id = request.POST['sponsor_id']

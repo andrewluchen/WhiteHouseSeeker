@@ -24,24 +24,27 @@ class Capitol extends React.Component {
   }
 
   componentDidMount() {
-    $.get('api/capitol/', function (data) {
-      let fields = data[0].fields;
-      this.setState({
-        leadership: [
-          ['President', fields.potus],
-          ['Vice President', fields.vpotus],
-          ['Speaker of the House', fields.speaker],
-          ['Senate Majority Leader', fields.housemajorityleader],
-          ['Senate Majority Whip', fields.senatemajoritywhip],
-          ['Senate Minority Leader', fields.senateminorityleader],
-          ['Senate Minority Whip', fields.senateminoritywhip],
-          ['House Majority Leader', fields.housemajorityleader],
-          ['House Majority Whip', fields.housemajoritywhip],
-          ['House Minority Leader', fields.houseminorityleader],
-          ['House Minority Whip', fields.houseminoritywhip],
-        ],
-      });
-    }.bind(this));
+    $.get(
+      'api/leaders/',
+      function (data) {
+        let fields = data[0].fields;
+        this.setState({
+          leadership: [
+            ['President', fields.potus],
+            ['Vice President', fields.vpotus],
+            ['Speaker of the House', fields.speaker],
+            ['Senate Majority Leader', fields.housemajorityleader],
+            ['Senate Majority Whip', fields.senatemajoritywhip],
+            ['Senate Minority Leader', fields.senateminorityleader],
+            ['Senate Minority Whip', fields.senateminoritywhip],
+            ['House Majority Leader', fields.housemajorityleader],
+            ['House Majority Whip', fields.housemajoritywhip],
+            ['House Minority Leader', fields.houseminorityleader],
+            ['House Minority Whip', fields.houseminoritywhip],
+          ],
+        });
+      }.bind(this),
+    );
   }
 
   render() {

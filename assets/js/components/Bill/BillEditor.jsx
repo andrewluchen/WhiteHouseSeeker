@@ -1,10 +1,8 @@
 import React from 'react';
 
-import getCookie from '../../getCookie';
-
 import Editor from '../Editor/Editor';
 
-class NewBill extends React.Component {
+class BillEditor extends React.Component {
 
   constructor() {
     super();
@@ -23,17 +21,17 @@ class NewBill extends React.Component {
 
   onSubmit(title, body) {
     let redirect = this.props.redirect
-    $.post(
-      this.props.endpoint,
-      {
-        csrfmiddlewaretoken: getCookie('csrftoken'),
+    $.ajax({
+      url: this.props.endpoint,
+      type: this.props.verb,
+      data: {
         title: title,
         body: body,
       },
-      function(data) {
+      success: function(data) {
         window.location = redirect;
       }
-    )
+    });
   }
 
   render() {
@@ -42,7 +40,7 @@ class NewBill extends React.Component {
         <div className='bill-header'>{this.props.header}</div>
         <input
           className='bill-title'
-          placeholder='Legislation Title'
+          placeholder={this.props.titlePlaceholder}
           onChange={this.onChange}
         />
         <Editor onSubmit={content => this.onSubmit(this.state.title, content)}/>
@@ -51,10 +49,14 @@ class NewBill extends React.Component {
   }
 }
 
-NewBill.propTypes = {
+BillEditor.propTypes = {
   header: React.PropTypes.string,
+  titlePlaceholder: React.PropTypes.string,
+  title: React.PropTypes.string,
+  content: React.PropTypes.string,
   endpoint: React.PropTypes.string,
+  verb: React.PropTypes.string,
   redirect: React.PropTypes.string,
 }
 
-export default NewBill;
+export default BillEditor;

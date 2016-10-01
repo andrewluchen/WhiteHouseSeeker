@@ -1,13 +1,19 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 
 
 class Character(models.Model):
     player = models.ForeignKey(User, related_name='characters')
-    name = models.TextField()
-    party = models.TextField()
-    state = models.TextField()
-    active = models.BooleanField()
+    created = models.DateTimeField(default=datetime.now)
+    name = models.CharField(max_length=80)
+    birthday = models.DateField()
+    residence = models.CharField(max_length=80)
+    party = models.CharField(max_length=80)
+    state = models.CharField(max_length=80)
+    active = models.BooleanField(default=False, blank=True)
+    primary = models.BooleanField(default=True, blank=True)
 
 
 class CharacterIdField(models.IntegerField):

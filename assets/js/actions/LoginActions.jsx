@@ -1,5 +1,5 @@
 import AppDispatcher from '../AppDispatcher';
-import { LOGIN_USER, LOGOUT_USER } from '../constants/LoginConstants';
+import { LOGIN_USER, LOGOUT_USER } from '../ActionConstants';
 
 export default {
   loginUser: (jwt) => {

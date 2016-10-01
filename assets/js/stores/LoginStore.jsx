@@ -1,7 +1,7 @@
 import jwt_decode from 'jwt-decode';
 
 import AppDispatcher from '../AppDispatcher';
-import { LOGIN_USER, LOGOUT_USER } from '../constants/LoginConstants';
+import { LOGIN_USER, LOGOUT_USER } from '../ActionConstants';
 import BaseStore from './BaseStore';
 
 class LoginStore extends BaseStore {
