@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { fetchCharacters } from '../../actions/CharacterActions';
@@ -6,35 +7,6 @@ import CharacterStore from '../../stores/CharacterStore';
 import LoginStore from '../../stores/LoginStore';
 
 class Header extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      user: LoginStore.getUser(),
-      character: CharacterStore.getActive(),
-      availableCharacters: CharacterStore.getCharacters(),
-    }
-  }
-
-  componentDidMount() {
-    this.changeListener = this.onChange.bind(this);
-    LoginStore.addChangeListener(this.changeListener);
-    CharacterStore.addChangeListener(this.changeListener);
-    fetchCharacters();
-  }
-
-  componentWillUnmount() {
-    LoginStore.removeChangeListener(this.changeListener);
-    CharacterStore.removeChangeListener(this.changeListener);
-  }
-
-  onChange() {
-    this.setState({
-      user: LoginStore.getUser(),
-      character: CharacterStore.getActive(),
-      availableCharacters: CharacterStore.getCharacters(),
-    });
-  }
-
   render() {
     let authenticatedContent = (
       <div className='header-container'>
@@ -59,12 +31,18 @@ class Header extends React.Component {
     return (
       <div className='header'>
         <div className='header-welcome'>
-          {this.state.user ? 'Welcome Back ' + this.state.user.username + '!' : null}
+          {this.props.user ? 'Welcome Back ' + this.props.user.username + '!' : null}
         </div>
-        {this.state.user ? authenticatedContent : logIn}
+        {this.props.user ? authenticatedContent : logIn}
       </div>
     );
   }
 }
 
-export default Header;
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user
+  }
+}
+
+export default connect(mapStateToProps)(Header);

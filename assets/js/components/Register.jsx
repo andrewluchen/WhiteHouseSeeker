@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { registerUser } from '../actions/AuthActions';
+
 class Login extends React.Component {
 
   constructor() {
@@ -9,20 +11,12 @@ class Login extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    var data = {
+    let data = {
       username: this.refs.username.value,
       email: this.refs.email.value,
       password: this.refs.password.value,
     }
-    $.ajax({
-      type: 'POST',
-      url: '/auth/register/',
-      data: data,
-      success: response => {
-        window.location.href = '/login/';
-      },
-      error: () => alert('Invalid registration details'),
-    });
+    registerUser(data);
   }
 
   render() {

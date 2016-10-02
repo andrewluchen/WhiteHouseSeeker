@@ -1,7 +1,5 @@
 import React from 'react';
 
-import CharacterStore from '../stores/CharacterStore';
-
 import CharacterSelector from './Character/CharacterSelector';
 import CharacterEditor from './Character/CharacterEditor';
 
@@ -10,25 +8,10 @@ class CharacterManagement extends React.Component {
   constructor() {
     super();
     this.state = {
-      character: CharacterStore.getActive(),
-      availableCharacters: CharacterStore.getCharacters(),
+      character: null,
+      availableCharacters: [],
     };
     this.onCharacterSelected = this.onCharacterSelected.bind(this);
-  }
-
-  componentDidMount() {
-    this.changeListener = this.onChange.bind(this);
-    CharacterStore.addChangeListener(this.changeListener);
-  }
-
-  componentWillUnmount() {
-    CharacterStore.removeChangeListener(this.changeListener);
-  }
-
-  onChange() {
-    this.setState({
-      availableCharacters: CharacterStore.getCharacters(),
-    });
   }
 
   onCharacterSelected(characterID) {

@@ -1,3 +1,4 @@
+/*
 import jwt_decode from 'jwt-decode';
 
 import AppDispatcher from '../AppDispatcher';
@@ -38,3 +39,4 @@ class LoginStore extends BaseStore {
 
 }
 export default new LoginStore();
+*/

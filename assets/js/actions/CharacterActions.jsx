@@ -1,3 +1,4 @@
+/*
 import AppDispatcher from '../AppDispatcher';
 import { CHARACTERS_CHANGED } from './ActionConstants';
 import LoginStore from '../stores/LoginStore';
@@ -19,3 +20,4 @@ function fetchCharacters() {
 export {
   fetchCharacters,
 }
+*/

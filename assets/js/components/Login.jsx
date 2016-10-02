@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import LoginActions from '../actions/LoginActions';
+import { loginUser } from '../actions/AuthActions';
 
 class Login extends React.Component {
 
@@ -11,21 +13,11 @@ class Login extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    var data = {
+    let data = {
       username: this.refs.username.value,
       password: this.refs.password.value,
     }
-    $.ajax({
-      type: 'POST',
-      url: '/auth/login/',
-      data: data,
-      success: response => {
-        var jwt = response.id_token;
-        LoginActions.loginUser(jwt);
-        window.location.href = '/';
-      },
-      error: () => alert('Invalid login details'),
-    });
+    this.props.loginUser(data);
   }
 
   render() {
@@ -58,4 +50,11 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    { loginUser: loginUser },
+    dispatch,
+  );
+}
+
+export default connect(null, mapDispatchToProps)(Login);

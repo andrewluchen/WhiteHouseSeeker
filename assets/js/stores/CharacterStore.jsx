@@ -1,4 +1,4 @@
-import AppDispatcher from '../AppDispatcher';
+/*import AppDispatcher from '../AppDispatcher';
 import { CHARACTERS_CHANGED } from '../actions/ActionConstants';
 import BaseStore from './BaseStore';
 import LoginStore from './LoginStore';
@@ -41,3 +41,4 @@ class CharacterStore extends BaseStore {
 }
 
 export default new CharacterStore();
+*/
