@@ -13,6 +13,7 @@ class CharacterEditor extends React.Component {
     }
     this.saveCharacter = this.saveCharacter.bind(this);
     this.setParty = this.setParty.bind(this);
+    this.rand = Math.random();
   }
 
   saveCharacter() {
@@ -49,7 +50,28 @@ class CharacterEditor extends React.Component {
         <option value={STATES[key]} key={key}>{key + ' (' + STATES[key] + ')'}</option>
       );
     }
-    let cn = this.state.party.toLowerCase();
+    let cn = this.state.party.toLowerCase().split(' ')[0];
+    let parties = (
+      <FormControl className={cn} ref='party' componentClass='select' value={this.state.party} onChange={this.setParty}>
+        <option className='democratic' value='Democratic'>Democratic</option>
+        <option className='republican' value='Republican'>Republican</option>
+        <option className='independent' value='Independent Democratic'>Independent (Caucus with Democrats)</option>
+        <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
+        <option className='media' value='Media'>The Fourth Estate</option>
+      </FormControl>
+    );
+    if (this.rand > 0.5) {
+      parties =
+      (
+        <FormControl className={cn} ref='party' componentClass='select' value={this.state.party} onChange={this.setParty}>
+          <option className='republican' value='Republican'>Republican</option>
+          <option className='democratic' value='Democratic'>Democratic</option>
+          <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
+          <option className='independent' value='Independent Democratic'>Independent (Caucus with Democrats)</option>
+          <option className='media' value='Media'>The Fourth Estate</option>
+        </FormControl>
+      );
+    }
     return (
       <Grid fluid>
         <form ref='form'>
@@ -74,13 +96,8 @@ class CharacterEditor extends React.Component {
                 {stateOptions}
               </FormControl>
 
-              <ControlLabel>Party:</ControlLabel>
-              <FormControl className={cn} ref='party' componentClass='select' value={this.state.party} onChange={this.setParty}>
-                <option className='independent' value='Liberal Independent'>Independent (D)</option>
-                <option className='independent' value='Conservative Independent'>Independent (R)</option>
-                <option className='democratic' value='Democratic'>Democratic</option>
-                <option className='republican' value='Republican'>Republican</option>
-              </FormControl>
+              <ControlLabel>Party (all your characters must be from the same party):</ControlLabel>
+              {parties}
             </Col>
           </Row>
 

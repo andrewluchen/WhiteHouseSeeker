@@ -37,8 +37,9 @@ def index(request):
     return render(request, 'index.html')
 
 def echo(request):
-    print(request)
-    print(request.data)
+    print ('request: ', request)
+    print ('user: ', request.user)
+    print ('is_authenticated: ', request.user.is_authenticated)
 
 def get_leg_body(chamber):
     chamber = models.LegislativeBody.objects.get(name=chamber).first()
@@ -65,7 +66,10 @@ class Leaders(View):
 class Character(View):
 
     def get(self, request, character_id):
-        characters = models.Character.objects.get(player=request.user)
+        #characters = models.Character.objects.get(player=request.user)
+        characters = list(models.Character.objects.all())
+        response = serializers.serialize('json', [obj,])
+        return HttpResponse(response, content_type='application/json')
 
     def post(self, request):
         form = forms.CharacterForm(request.POST)
@@ -88,8 +92,8 @@ class Character(View):
 class Characters(View):
 
     def get(self, request):
-        characters = models.Character.objects.get(player=request.user)
-        response = serializers.serialize('json', [obj,])
+        characters = list(models.Character.objects.all())
+        response = serializers.serialize('json', characters)
         return HttpResponse(response, content_type='application/json')
 
 

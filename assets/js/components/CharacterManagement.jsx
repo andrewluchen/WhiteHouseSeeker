@@ -12,7 +12,7 @@ class CharacterManagement extends React.Component {
     this.state = {
       character: CharacterStore.getActive(),
       availableCharacters: CharacterStore.getCharacters(),
-    }
+    };
     this.onCharacterSelected = this.onCharacterSelected.bind(this);
   }
 
@@ -45,7 +45,7 @@ class CharacterManagement extends React.Component {
     return (
       <div>
         <div className='character-header'>
-          <span>Select a Character:</span>
+          <span character='character-header-label'>Select a Character:</span>
           <div className='character-header-selector'>
             <CharacterSelector
               characters={this.state.availableCharacters}

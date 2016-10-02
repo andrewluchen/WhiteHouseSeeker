@@ -1,5 +1,5 @@
 import AppDispatcher from '../AppDispatcher';
-import { CHARACTERS_CHANGED } from '../ActionConstants';
+import { CHARACTERS_CHANGED } from '../actions/ActionConstants';
 import BaseStore from './BaseStore';
 import LoginStore from './LoginStore';
 
@@ -15,21 +15,19 @@ class CharacterStore extends BaseStore {
   registerToActions(action) {
     switch(action.actionType) {
       case CHARACTERS_CHANGED:
+        this.characters = [];
+        action.characters.forEach(character => {
+          let fields = character.fields;
+          this.characters.push({
+            key: character.pk,
+            name: fields.title + ' ' + fields.name + ' (' + fields.party[0] + '-' + fields.state + ')'
+          });
+        });
+        console.log(this.characters);
+        this.emitChange();
       default:
         break;
     };
-  }
-
-  fetchCharacters() {
-    $.get(
-      'api/charaters/',
-      {
-        user: UserStore.getUser().id,
-      },
-      function (data) {
-
-      }.bind(this),
-    );
   }
 
   getCharacters() {

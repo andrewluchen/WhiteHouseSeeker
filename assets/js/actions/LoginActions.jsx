@@ -1,24 +1,27 @@
 import AppDispatcher from '../AppDispatcher';
-import { LOGIN_USER, LOGOUT_USER } from '../ActionConstants';
+import { LOGIN_USER, LOGOUT_USER } from './ActionConstants';
 
-export default {
-  loginUser: (jwt) => {
-    var savedJwt = localStorage.getItem('jwt');
+function loginUser(jwt) {
+  let savedJwt = localStorage.getItem('jwt');
 
-    AppDispatcher.dispatch({
-      actionType: LOGIN_USER,
-      jwt: jwt,
-    });
+  AppDispatcher.dispatch({
+    actionType: LOGIN_USER,
+    jwt: jwt,
+  });
 
-    if (savedJwt !== jwt) {
-      localStorage.setItem('jwt', jwt);
-    }
-  },
-
-  logoutUser: () => {
-    localStorage.removeItem('jwt');
-    AppDispatcher.dispatch({
-      actionType: LOGOUT_USER,
-    });
+  if (savedJwt !== jwt) {
+    localStorage.setItem('jwt', jwt);
   }
+}
+
+function logoutUser() {
+  localStorage.removeItem('jwt');
+  AppDispatcher.dispatch({
+    actionType: LOGOUT_USER,
+  });
+}
+
+export {
+  loginUser,
+  logoutUser,
 }

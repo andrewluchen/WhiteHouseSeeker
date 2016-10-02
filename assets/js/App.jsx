@@ -5,16 +5,22 @@ import Sidebar from './components/Sidebar/Sidebar';
 
 class App extends React.Component {
 
+  componentDidMount() {
+    document.title = 'White House Seeker';
+  }
+
   render() {
     return (
       <div>
         <Sidebar>
-          <Header/>
+          <div className='main_container'> 
+            <Header/>
 
-          <div className='main_layout'>
-            {this.props.children}
+            <div className='main_layout'>
+              {this.props.children}
+            </div>
+
           </div>
-
         </Sidebar>
       </div>
     );

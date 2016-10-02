@@ -12,6 +12,7 @@ class Character(models.Model):
     residence = models.CharField(max_length=80)
     party = models.CharField(max_length=80)
     state = models.CharField(max_length=80)
+    title = models.CharField(max_length=80, blank=True)
     active = models.BooleanField(default=False, blank=True)
     primary = models.BooleanField(default=True, blank=True)
 

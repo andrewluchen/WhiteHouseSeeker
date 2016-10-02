@@ -1,7 +1,5 @@
 import React from 'react';
 
-import getCookie from '../getCookie';
-
 class Login extends React.Component {
 
   constructor() {
@@ -12,7 +10,6 @@ class Login extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     var data = {
-      csrfmiddlewaretoken: getCookie('csrftoken'),
       username: this.refs.username.value,
       email: this.refs.email.value,
       password: this.refs.password.value,
@@ -24,7 +21,7 @@ class Login extends React.Component {
       success: response => {
         window.location.href = '/login/';
       },
-      error: () => alert('Error'),
+      error: () => alert('Invalid registration details'),
     });
   }
 

@@ -1,6 +1,7 @@
 .sidebar {
 
     &-root {
+        background-color: $ui_off_white;
         display: flex;
         flex-flow: column;
         font-family: Arial;
@@ -15,9 +16,18 @@
         padding: 10px;
     }
 
+    &-logo {
+        text-align: center;
+
+        img {
+            height: 42px;
+            margin: -6px;
+        }
+
+    }
+
     &-content {
-        background-color: $ui_off_white;
-        flex: 1;
+        overflow: auto;
         padding: 10px;
     }
 
@@ -32,12 +42,12 @@
     }
 
     &-menu {
-        padding: 8px 0px;
+        padding: 4px 0px;
         font-size: 20px;
     }
 
     &-submenu {
-        padding: 4px 0px;
+        padding: 2px 0px;
         font-size: 14px;
     }
 

@@ -1,31 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+import { fetchCharacters } from '../../actions/CharacterActions';
+import CharacterStore from '../../stores/CharacterStore';
 import LoginStore from '../../stores/LoginStore';
 
 class Header extends React.Component {
   constructor() {
     super();
-    this.state = this._getLoginState();
+    this.state = {
+      user: LoginStore.getUser(),
+      character: CharacterStore.getActive(),
+      availableCharacters: CharacterStore.getCharacters(),
+    }
   }
 
   componentDidMount() {
-    this.changeListener = this._onChange.bind(this);
+    this.changeListener = this.onChange.bind(this);
     LoginStore.addChangeListener(this.changeListener);
+    CharacterStore.addChangeListener(this.changeListener);
+    fetchCharacters();
   }
 
   componentWillUnmount() {
     LoginStore.removeChangeListener(this.changeListener);
+    CharacterStore.removeChangeListener(this.changeListener);
   }
 
-  _getLoginState() {
-    return {
-      user: LoginStore.getUser()
-    };
-  }
-
-  _onChange() {
-    this.setState(this._getLoginState());
+  onChange() {
+    this.setState({
+      user: LoginStore.getUser(),
+      character: CharacterStore.getActive(),
+      availableCharacters: CharacterStore.getCharacters(),
+    });
   }
 
   render() {

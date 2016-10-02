@@ -29,11 +29,16 @@ class Sidebar extends React.Component {
           <SidebarSubItem title='Federal Judiciary' link='/judiciary'/>
           <SidebarSubItem title='Library of Congress' link='/library'/>
         </SidebarItem>
-        <SidebarItem title='Minigames' link='/minigames'/>
+        <SidebarItem title='Elections' link='/elections'>
+          <SidebarSubItem title='National' link='/elections/president'/>
+          <SidebarSubItem title='Gubernatorial' link='/elections/governor'/>
+          <SidebarSubItem title='Congressional' link='/elections/congress'/>
+        </SidebarItem>
         <SidebarItem title='Party Warroom' link='/party'>
           <SidebarSubItem title='Democratic National Committee' link='/dnc'/>
           <SidebarSubItem title='Republican National Committee' link='/rnc'/>
         </SidebarItem>
+        <SidebarItem title='Minigames' link='/minigames'/>
         <SidebarItem title='General Discussion' link='/genpop'/>
         <div className='divider'/>
         <SidebarItem title='About' link='/about'/>
@@ -43,10 +48,10 @@ class Sidebar extends React.Component {
     let sidebar = (
       <div className='sidebar-root'>
         <div className='sidebar-header'>
-          <div className='header-logo'>
-            <div>
+          <div className='sidebar-logo'>
+            <a href='/#'>
               <img src={require('../../../img/logo.png')}/>
-            </div>
+            </a>
           </div>
         </div>
         {sidebarTree}
