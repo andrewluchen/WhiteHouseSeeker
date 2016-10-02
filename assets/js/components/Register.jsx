@@ -1,8 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { registerUser } from '../actions/AuthActions';
 
-class Login extends React.Component {
+class Register extends React.Component {
 
   constructor() {
     super();
@@ -16,7 +17,7 @@ class Login extends React.Component {
       email: this.refs.email.value,
       password: this.refs.password.value,
     }
-    registerUser(data);
+    this.props.registerUser(data);
   }
 
   render() {
@@ -53,4 +54,14 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+Register.propTypes = {
+  registerUser: React.PropTypes.func,
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    registerUser: data => dispatch(registerUser(data)),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Register);

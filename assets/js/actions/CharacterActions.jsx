@@ -1,23 +1,33 @@
-/*
-import AppDispatcher from '../AppDispatcher';
-import { CHARACTERS_CHANGED } from './ActionConstants';
-import LoginStore from '../stores/LoginStore';
+export const CHARACTERS_CHANGED = 'CHARACTERS_CHANGED';
 
-function fetchCharacters() {
-  let user = LoginStore.getUser();
-  $.get(
-    '/api/characters/',
-    { user: user ? user.id : '' },
-    function (data) {
-      AppDispatcher.dispatch({
-        actionType: CHARACTERS_CHANGED,
-        characters: data,
-      });
-    },
-  );
+function changeCharacters(characters) {
+  return {
+    type: CHARACTERS_CHANGED,
+    characers: characters,
+  }
 }
 
-export {
-  fetchCharacters,
+export function fetchUserCharacters(user) {
+  return dispatch => {
+    if (!user) {
+      return;
+    }
+    $.get(
+      '/api/characters/',
+      { user: user ? user.id : '' },
+      data => {
+        dispatch(changeCharacters(characters));
+      },
+    );
+  }
 }
-*/
+
+export function createCharacter(data) {
+  return dispatch => {
+    $.ajax({
+      url: '/api/character/',
+      type: 'POST',
+      data: data,
+    });
+  }
+}

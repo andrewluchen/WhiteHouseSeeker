@@ -16,6 +16,13 @@ def jwt(user):
     payload = jwt_payload_handler(user)
     return jwt_encode_handler(payload)
 
+def user_echo(request):
+    if request.user and request.user.is_authenticated():
+        data = { 'id_token': jwt(request.user) }
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    else:
+        return HttpResponse(status=401)
+
 
 def user_register(request):
     context = RequestContext(request)

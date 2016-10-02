@@ -1,3 +1,4 @@
+import jwt_decode from 'jwt-decode';
 import { browserHistory } from 'react-router';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -14,7 +15,7 @@ function receiveLogin(jwt) {
   return {
     type: LOGIN_SUCCESS,
     isAuthenticated: true,
-    id_token: jwt,
+    user: jwt_decode(jwt),
   }
 }
 
@@ -33,6 +34,7 @@ export function loginUser(data) {
       data: data,
       success: response => {
         let jwt = response.id_token;
+        localStorage.setItem('jwt', jwt);
         dispatch(receiveLogin(jwt));
         browserHistory.push('/');
       },
@@ -43,6 +45,24 @@ export function loginUser(data) {
   }
 }
 
+export function loginJwt(jwt) {
+  return dispatch => {
+    dispatch(requestLogin());
+    $.ajax({
+      type: 'GET',
+      url: '/auth/echo/',
+      success: response => {
+        let jwt = response.id_token;
+        localStorage.setItem('jwt', jwt);
+        dispatch(receiveLogin(jwt));
+      },
+      error: response => {
+        localStorage.removeItem('jwt');
+        dispatch(receiveLogout());
+      }
+    });
+  };
+}
 
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
@@ -71,7 +91,7 @@ function logoutFailure(messaage) {
 export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout());
-    localStorage.removeItem('id_token');
+    localStorage.removeItem('jwt');
     dispatch(receiveLogout());
   }
 }
@@ -102,12 +122,14 @@ function registerError(message) {
 
 export function registerUser(data) {
   return dispatch => {
+    dispatch(requestRegister());
     $.ajax({
       type: 'POST',
       url: '/auth/register/',
       data: data,
       success: response => {
         browserHistory.push('/login/');
+        dispatch(receiveRegister());
       },
       error: function(xhr, status, error) {
         dispatch(registerError(xhr.responseText));

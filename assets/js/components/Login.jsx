@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { loginUser } from '../actions/AuthActions';
 
@@ -50,11 +49,14 @@ class Login extends React.Component {
   }
 }
 
+Login.propTypes = {
+  loginUser: React.PropTypes.func,
+};
+
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    { loginUser: loginUser },
-    dispatch,
-  );
+  return {
+    loginUser: data => dispatch(loginUser(data)),
+  };
 }
 
 export default connect(null, mapDispatchToProps)(Login);

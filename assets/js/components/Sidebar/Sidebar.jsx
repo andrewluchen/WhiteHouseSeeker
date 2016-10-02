@@ -12,7 +12,7 @@ class Sidebar extends React.Component {
         <SidebarItem title='Administrativa' link='#'>
           <SidebarSubItem title='Rules' link='/rules'/>
           <SidebarSubItem title='Announcements' link='/announcements'/>
-          <SidebarSubItem title='Character Sign-In' link='/ic'/>
+          <SidebarSubItem title='Character Sign-In' link='/my'/>
         </SidebarItem>
         <SidebarItem title='News' link='/news'>
           <SidebarSubItem title='National News' link='/nationalnews'/>

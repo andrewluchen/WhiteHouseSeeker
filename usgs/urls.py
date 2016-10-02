@@ -17,9 +17,10 @@ apipatterns = [
 ]
 
 urlpatterns = [
-    url(r'^auth/register/$', auth.user_register, name='register'),
-    url(r'^auth/login/$', auth.user_login, name='login'),
-    url(r'^auth/logout/$', auth.user_logout, name='logout'),
+    url(r'^auth/echo/$', auth.user_echo, name='echo-user'),
+    url(r'^auth/register/$', auth.user_register, name='register-user'),
+    url(r'^auth/login/$', auth.user_login, name='login-user'),
+    url(r'^auth/logout/$', auth.user_logout, name='logout-user'),
     url(r'^api/', include(apipatterns)),
     url(r'^echo/$', views.echo, name='echo'),
     url(r'^admin/', include(admin.site.urls)),

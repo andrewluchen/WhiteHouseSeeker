@@ -2,39 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Col, ControlLabel, FormControl, Grid, Row } from 'react-bootstrap';
 
-import { STATES, } from '../../StateConstants';
+import { STATES } from '../../StateConstants';
 
 class CharacterEditor extends React.Component {
 
   constructor() {
     super();
+    this.rand = Math.random();
+    this.randState = STATES[
+      Object.keys(STATES)[Math.floor(this.rand * Object.keys(STATES).length)]
+    ];
     this.state = {
-      party: 'Independent',
+      party: this.rand > 0.5 ? 'Republican' : 'Democratic',
     }
     this.saveCharacter = this.saveCharacter.bind(this);
     this.setParty = this.setParty.bind(this);
-    this.rand = Math.random();
   }
 
   saveCharacter() {
-    $.ajax({
-      url: this.props.endpoint,
-      type: this.props.verb,
-      data: {
-        name: ReactDOM.findDOMNode(this.refs.name).value,
-        birthday: ReactDOM.findDOMNode(this.refs.birthday).value,
-        residence: ReactDOM.findDOMNode(this.refs.residence).value,
-        state: ReactDOM.findDOMNode(this.refs.state).value,
-        party: ReactDOM.findDOMNode(this.refs.party).value,
-        bio: ReactDOM.findDOMNode(this.refs.bio).value,
-      },
-      success: function (data) {
-
-      },
-      error: function (data) {
-
-      },
-    });
+    this.props.onSave({
+     name: ReactDOM.findDOMNode(this.refs.name).value,
+     birthday: ReactDOM.findDOMNode(this.refs.birthday).value,
+     residence: ReactDOM.findDOMNode(this.refs.residence).value,
+     state: ReactDOM.findDOMNode(this.refs.state).value,
+     party: ReactDOM.findDOMNode(this.refs.party).value,
+     bio: ReactDOM.findDOMNode(this.refs.bio).value,
+   });
   }
 
   setParty(event) {
@@ -57,7 +50,7 @@ class CharacterEditor extends React.Component {
         <option className='republican' value='Republican'>Republican</option>
         <option className='independent' value='Independent Democratic'>Independent (Caucus with Democrats)</option>
         <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
-        <option className='media' value='Media'>The Fourth Estate</option>
+        <option className='fourthestate' value='Media'>The Fourth Estate</option>
       </FormControl>
     );
     if (this.rand > 0.5) {
@@ -68,7 +61,7 @@ class CharacterEditor extends React.Component {
           <option className='democratic' value='Democratic'>Democratic</option>
           <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
           <option className='independent' value='Independent Democratic'>Independent (Caucus with Democrats)</option>
-          <option className='media' value='Media'>The Fourth Estate</option>
+          <option className='fourthestate' value='Media'>The Fourth Estate</option>
         </FormControl>
       );
     }
@@ -92,7 +85,7 @@ class CharacterEditor extends React.Component {
               <FormControl ref='residence' type='text'/>
 
               <ControlLabel>State:</ControlLabel>
-              <FormControl ref='state' componentClass='select'>
+              <FormControl ref='state' defaultValue={this.randState} componentClass='select'>
                 {stateOptions}
               </FormControl>
 
@@ -115,7 +108,7 @@ class CharacterEditor extends React.Component {
               bsStyle='danger'
               bsSize='large'
             >
-              Delete
+              Retire Character
             </Button>
             <Button
               bsStyle='primary'
@@ -132,8 +125,7 @@ class CharacterEditor extends React.Component {
 }
 
 CharacterEditor.propTypes = {
-  endpoint: React.PropTypes.string,
-  verb: React.PropTypes.string,
+  onSave: React.PropTypes.func,
   data: React.PropTypes.object,
 }
 

@@ -6,15 +6,16 @@ from django.db import models
 
 class Character(models.Model):
     player = models.ForeignKey(User, related_name='characters')
-    created = models.DateTimeField(default=datetime.now)
+    primary = models.BooleanField()
+    activated = models.DateTimeField(default=datetime.now)
+    deactivated = models.DateTimeField(null=True, blank=True)
+
     name = models.CharField(max_length=80)
     birthday = models.DateField()
     residence = models.CharField(max_length=80)
     party = models.CharField(max_length=80)
     state = models.CharField(max_length=80)
     title = models.CharField(max_length=80, blank=True)
-    active = models.BooleanField(default=False, blank=True)
-    primary = models.BooleanField(default=True, blank=True)
 
 
 class CharacterIdField(models.IntegerField):

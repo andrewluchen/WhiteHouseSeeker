@@ -39,6 +39,7 @@ def index(request):
 def echo(request):
     print ('request: ', request)
     print ('user: ', request.user)
+    print ('username: ', request.user.username)
     print ('is_authenticated: ', request.user.is_authenticated)
 
 def get_leg_body(chamber):
@@ -76,13 +77,12 @@ class Character(View):
         if form.is_valid():
             character = models.Character(
                 player=request.user,
+                primary=form.cleaned_data['primary'],
                 name=form.cleaned_data['name'],
                 birthday=form.cleaned_data['birthday'],
                 residence=form.cleaned_data['residence'],
                 party=form.cleaned_data['party'],
                 state=form.cleaned_data['state'],
-                active=form.cleaned_data['active'],
-                primary=form.cleaned_data['primary'],
             )
             character.save()
             return HttpResponse(status=201)

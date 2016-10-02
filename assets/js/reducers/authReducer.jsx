@@ -1,5 +1,3 @@
-import jwt_decode from 'jwt-decode';
-
 import {
   LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS, REGISTER_FAILURE,
 } from '../actions/AuthActions';
@@ -13,7 +11,7 @@ function auth(state = {
     case LOGIN_SUCCESS:
       return Object.assign({}, state, {
         isAuthenticated: true,
-        user: jwt_decode(action.id_token),
+        user: action.user,
       });
     case LOGIN_FAILURE:
       return Object.assign({}, state, {

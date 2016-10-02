@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { fetchCharacters } from '../../actions/CharacterActions';
-import CharacterStore from '../../stores/CharacterStore';
-import LoginStore from '../../stores/LoginStore';
 
 class Header extends React.Component {
   render() {
@@ -39,10 +37,14 @@ class Header extends React.Component {
   }
 }
 
+Header.propTypes = {
+  user: React.PropTypes.object,
+};
+
 function mapStateToProps(state) {
   return {
     user: state.auth.user
-  }
+  };
 }
 
 export default connect(mapStateToProps)(Header);
