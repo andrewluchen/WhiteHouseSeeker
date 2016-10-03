@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Col, ControlLabel, FormControl, Grid, Row } from 'react-bootstrap';
+import { Col, Grid, Row } from 'react-bootstrap';
+import { Button, ControlLabel, FormControl, Radio } from 'react-bootstrap';
 
 import { STATES } from '../../StateConstants';
 
@@ -13,26 +14,41 @@ class CharacterEditor extends React.Component {
       Object.keys(STATES)[Math.floor(this.rand * Object.keys(STATES).length)]
     ];
     this.state = {
+      name: '',
+      birthday: '',
+      gender: this.rand > 0.5 ? 'M' : 'F',
+      residence: '',
+      state: this.randState,
       party: this.rand > 0.5 ? 'Republican' : 'Democratic',
+      avatar: '',
+      bio: '',
     }
     this.saveCharacter = this.saveCharacter.bind(this);
-    this.setParty = this.setParty.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   saveCharacter() {
     this.props.onSave({
+     name: this.state.name,
+     birthday: this.state.birthday,
+     gender: this.state.gender,
+     residence: this.state.residence,
+     state: this.state.state,
+     party: this.state.party,
+     avatar: this.state.avatar,
+     bio: this.state.bio,
+   });
+  }
+
+  onChange(event) {
+    this.setState({
      name: ReactDOM.findDOMNode(this.refs.name).value,
      birthday: ReactDOM.findDOMNode(this.refs.birthday).value,
      residence: ReactDOM.findDOMNode(this.refs.residence).value,
      state: ReactDOM.findDOMNode(this.refs.state).value,
      party: ReactDOM.findDOMNode(this.refs.party).value,
+     avatar: ReactDOM.findDOMNode(this.refs.avatar).value,
      bio: ReactDOM.findDOMNode(this.refs.bio).value,
-   });
-  }
-
-  setParty(event) {
-    this.setState({
-      party: event.target.value,
     });
   }
 
@@ -45,7 +61,7 @@ class CharacterEditor extends React.Component {
     }
     let cn = this.state.party.toLowerCase().split(' ')[0];
     let parties = (
-      <FormControl className={cn} ref='party' componentClass='select' value={this.state.party} onChange={this.setParty}>
+      <FormControl ref='party' className={cn} componentClass='select' value={this.state.party} onChange={this.onChange}>
         <option className='democratic' value='Democratic'>Democratic</option>
         <option className='republican' value='Republican'>Republican</option>
         <option className='independent' value='Independent Democratic'>Independent (Caucus with Democrats)</option>
@@ -56,7 +72,7 @@ class CharacterEditor extends React.Component {
     if (this.rand > 0.5) {
       parties =
       (
-        <FormControl className={cn} ref='party' componentClass='select' value={this.state.party} onChange={this.setParty}>
+        <FormControl ref='party' className={cn} componentClass='select' value={this.state.party} onChange={this.onChange}>
           <option className='republican' value='Republican'>Republican</option>
           <option className='democratic' value='Democratic'>Democratic</option>
           <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
@@ -67,25 +83,32 @@ class CharacterEditor extends React.Component {
     }
     return (
       <Grid fluid>
-        <form ref='form'>
+        <form className='character'>
           <Row className='show-grid'>
             <Col xs={6} md={4}>
-              <div className='character-avatar'>
-                Character Image
+              <div className='character-avatar-container'>
+                <img className='character-avatar' src={this.state.avatar} alt='avatar'/><br/>
+                Image URL: <FormControl ref='avatar' value={this.state.avatar} onChange={this.onChange} type='text'/>
               </div>
             </Col>
             <Col xs={12} md={8}>
               <ControlLabel>Name:</ControlLabel>
-              <FormControl ref='name' type='text'/>
+              <FormControl ref='name' value={this.state.name} onChange={this.onChange} type='text'/>
 
               <ControlLabel>Date of Birth:</ControlLabel>
-              <FormControl ref='birthday' type='text' placeholder='MM/DD/YYYY'/>
+              <FormControl ref='birthday' value={this.state.birthday} onChange={this.onChange} type='text' placeholder='MM/DD/YYYY'/>
 
+              <ControlLabel>Gender:</ControlLabel><br/>
+              <Radio checked={this.state.gender === 'M'} onChange={() => this.setState({gender:'M'})} inline>Male</Radio>
+              {' '}
+              <Radio checked={this.state.gender === 'F'} onChange={() => this.setState({gender:'F'})} inline>Female</Radio>
+
+              <br/>
               <ControlLabel>Residence:</ControlLabel>
-              <FormControl ref='residence' type='text'/>
+              <FormControl ref='residence' value={this.state.residence} onChange={this.onChange} type='text'/>
 
               <ControlLabel>State:</ControlLabel>
-              <FormControl ref='state' defaultValue={this.randState} componentClass='select'>
+              <FormControl ref='state' value={this.state.state} onChange={this.onChange} componentClass='select'>
                 {stateOptions}
               </FormControl>
 
@@ -98,12 +121,6 @@ class CharacterEditor extends React.Component {
           <FormControl ref='bio' componentClass='textarea'/>
 
           <div className='character-buttons'>
-            <Button
-              bsStyle='success'
-              bsSize='large'
-            >
-              Make Primary
-            </Button>
             <Button
               bsStyle='danger'
               bsSize='large'

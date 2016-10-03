@@ -9,7 +9,7 @@ function character(state = {
   switch (action.type) {
     case CHARACTERS_CHANGED:
       let characters = [];
-      action.characterss.forEach(character => {
+      action.characters.forEach(character => {
         let fields = character.fields;
         let prefix = fields.title ? fields.title : 'Private Citizen';
         characters.push({
@@ -18,7 +18,7 @@ function character(state = {
         });
       });
       return Object.assign({}, state, {
-        characters: action.characters,
+        characters: characters,
         active: 0,
       });
     default:

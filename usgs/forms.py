@@ -15,4 +15,13 @@ class CharacterForm(forms.ModelForm):
 
     class Meta:
         model = models.Character
-        fields = ('name', 'birthday', 'residence', 'party', 'state', 'primary')
+        fields = (
+            'name',
+            'birthday',
+            'gender',
+            'residence',
+            'state',
+            'party',
+            'avatar',
+            'bio',
+        )

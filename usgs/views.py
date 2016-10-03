@@ -74,6 +74,8 @@ class Character(View):
 
     def post(self, request):
         form = forms.CharacterForm(request.POST)
+        print request.POST
+        return
         if form.is_valid():
             character = models.Character(
                 player=request.user,
@@ -92,7 +94,12 @@ class Character(View):
 class Characters(View):
 
     def get(self, request):
-        characters = list(models.Character.objects.all())
+        characters = models.Character.objects.all()
+        username = request.GET.get('username')
+        player = models.User.objects.filter(username=username).first()
+        if player:
+            characters = characters.filter(player=player)
+        characters = list(characters)
         response = serializers.serialize('json', characters)
         return HttpResponse(response, content_type='application/json')
 

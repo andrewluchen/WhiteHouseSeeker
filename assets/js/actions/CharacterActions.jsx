@@ -1,22 +1,20 @@
 export const CHARACTERS_CHANGED = 'CHARACTERS_CHANGED';
 
-function changeCharacters(characters) {
+function charactersChanged(characters) {
   return {
     type: CHARACTERS_CHANGED,
-    characers: characters,
+    characters: characters,
   }
 }
 
-export function fetchUserCharacters(user) {
+export function fetchUserCharacters(username) {
   return dispatch => {
-    if (!user) {
-      return;
-    }
     $.get(
       '/api/characters/',
-      { user: user ? user.id : '' },
+      { username: username },
       data => {
-        dispatch(changeCharacters(characters));
+        let characters = data;
+        dispatch(charactersChanged(characters));
       },
     );
   }

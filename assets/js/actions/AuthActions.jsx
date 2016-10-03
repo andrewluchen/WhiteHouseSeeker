@@ -1,6 +1,8 @@
 import jwt_decode from 'jwt-decode';
 import { browserHistory } from 'react-router';
 
+import { fetchUserCharacters } from './CharacterActions';
+
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
@@ -36,6 +38,7 @@ export function loginUser(data) {
         let jwt = response.id_token;
         localStorage.setItem('jwt', jwt);
         dispatch(receiveLogin(jwt));
+        dispatch(fetchUserCharacters(jwt_decode(jwt).username))
         browserHistory.push('/');
       },
       error: function(xhr, status, error) {
@@ -55,6 +58,7 @@ export function loginJwt(jwt) {
         let jwt = response.id_token;
         localStorage.setItem('jwt', jwt);
         dispatch(receiveLogin(jwt));
+        dispatch(fetchUserCharacters(jwt_decode(jwt).username))
       },
       error: response => {
         localStorage.removeItem('jwt');

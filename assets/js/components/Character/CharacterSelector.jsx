@@ -9,7 +9,7 @@ class CharacterSelector extends React.Component {
       characters = [];
       this.props.characters.forEach(character => {
         characters.push(
-          <option value={character.key}>{character.name}</option>
+          <option value={character.key} key={character.key}>{character.name}</option>
         );
       })
     }

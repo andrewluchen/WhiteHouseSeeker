@@ -12,9 +12,12 @@ class Character(models.Model):
 
     name = models.CharField(max_length=80)
     birthday = models.DateField()
+    gender = models.CharField(max_length=2)
     residence = models.CharField(max_length=80)
     party = models.CharField(max_length=80)
     state = models.CharField(max_length=80)
+    avatar = models.TextField()
+    bio = models.TextField()
     title = models.CharField(max_length=80, blank=True)
 
 
