@@ -27,7 +27,7 @@ class CharacterSelector extends React.Component {
 
   render() {
     let characters = <option value=''>You have no characters...</option>;
-    if (this.props.characters.length !== 0) {
+    if (this.props.characters.length !== 0 || this.props.newOption) {
       characters = [];
       this.props.characters.forEach(character => {
         let description = character.description;

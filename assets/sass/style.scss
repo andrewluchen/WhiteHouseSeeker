@@ -4,7 +4,7 @@
 
 @import 'character';
 @import 'editor';
-@import 'header';
+@import 'topbar';
 @import 'leaderboard';
 @import 'login';
 @import 'sidebar';
@@ -23,7 +23,7 @@ html body {
 .main_layout {
     flex: 1;
     padding: 10px;
-    y-overflow: auto;
+    overflow: auto;
 }
 
 .divider {

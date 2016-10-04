@@ -9,31 +9,31 @@ import CharacterSelector from '../Character/CharacterSelector';
 class Header extends React.Component {
   render() {
     let authenticatedContent = (
-      <div className='header-container'>
-        <div className='header-notifications'>
+      <div className='topbar-container'>
+        <div className='topbar-notifications'>
           <i className='fa fa-bell'/>
         </div>
-        <div className='header-messages'>
+        <div className='topbar-messages'>
           <i className='fa fa-envelope'/>
         </div>
-        <div className='header-settings'>
+        <div className='topbar-settings'>
           <i className='fa fa-gear header-settings-gear'/>
         </div>
       </div>
     );
     let logIn = (
       <div>
-        <Link to='/register/' className='header-login'>Register</Link>
+        <Link to='/register/' className='topbar-login'>Register</Link>
         {' / '}
-        <Link to='/login/' className='header-login'>Login</Link>
+        <Link to='/login/' className='topbar-login'>Login</Link>
       </div>
     );
     return (
-      <div className='header'>
-        <div className='header-welcome'>
+      <div className='topbar'>
+        <div className='topbar-welcome'>
           {this.props.user ? 'Welcome Back ' + this.props.user.username + '!' : null}
         </div>
-        <div className='header-characters'>
+        <div className='topbar-characters'>
           <CharacterSelector
             characters={this.props.characters}
             active={this.props.active}
