@@ -8,11 +8,11 @@ from usgs import views
 
 apipatterns = [
     url(r'^leaders/$', views.Leaders.as_view(), name='leaders'),
-    url(r'^character/$', views.Character.as_view(), name='new-character'),
-    url(r'^character/(?P<pk>[0-9]+)/$', views.Character.as_view(), name='view-character'),
+    url(r'^character/new/$', views.Character.new_character, name='new-character'),
+    url(r'^character/(?P<pk>[0-9]+)/$', views.Character.as_view(), name='character'),
     url(r'^characters/$', views.Characters.as_view(), name='characters'),
-    url(r'^bill/$', views.Bill.as_view(), name='new-bill'),
-    url(r'^bill/(?P<pk>[0-9]+)/$', views.Bill.as_view(), name='view-bill'),
+    url(r'^bill/$', views.Bill.new_bill, name='new-bill'),
+    url(r'^bill/(?P<pk>[0-9]+)/$', views.Bill.as_view(), name='bill'),
     # url(r'^bills/$', views.Bill.as_view(), name='bills'),
 ]
 
@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^api/', include(apipatterns)),
     url(r'^echo/$', views.echo, name='echo'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', views.index, name='index'),
+    url(r'^', views.Index.as_view(), name='index'),
 ]

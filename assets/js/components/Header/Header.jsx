@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { fetchCharacters } from '../../actions/CharacterActions';
+import { setPrimaryCharacter } from '../../actions/CharacterActions';
+
+import CharacterSelector from '../Character/CharacterSelector';
 
 class Header extends React.Component {
   render() {
@@ -31,6 +33,14 @@ class Header extends React.Component {
         <div className='header-welcome'>
           {this.props.user ? 'Welcome Back ' + this.props.user.username + '!' : null}
         </div>
+        <div className='header-characters'>
+          <CharacterSelector
+            characters={this.props.characters}
+            active={this.props.active}
+            onSelect={this.props.setPrimaryCharacter}
+            newOption={false}
+          />
+        </div>
         {this.props.user ? authenticatedContent : logIn}
       </div>
     );
@@ -39,12 +49,23 @@ class Header extends React.Component {
 
 Header.propTypes = {
   user: React.PropTypes.object,
+  characters: React.PropTypes.array,
+  active: React.PropTypes.number,
+  setPrimaryCharacter: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
   return {
-    user: state.auth.user
+    user: state.auth.user,
+    characters: state.characters.characters,
+    active: state.characters.active,
   };
 }
 
-export default connect(mapStateToProps)(Header);
+function mapDispatchToProps(dispatch) {
+  return {
+    setPrimaryCharacter: i => dispatch(setPrimaryCharacter(i)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

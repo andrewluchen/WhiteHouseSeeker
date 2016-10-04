@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { createCharacter } from '../actions/CharacterActions';
+import { createCharacter, updateCharacter } from '../actions/CharacterActions';
 
 import CharacterSelector from './Character/CharacterSelector';
 import CharacterEditor from './Character/CharacterEditor';
@@ -11,9 +11,11 @@ class MyCharacters extends React.Component {
   constructor() {
     super();
     this.state = {
-      character: null,
+      active: 0,
+      data: {},
     };
     this.createCharacter = this.createCharacter.bind(this);
+    this.updateCharacter = this.updateCharacter.bind(this);
     this.onCharacterSelected = this.onCharacterSelected.bind(this);
   }
 
@@ -26,16 +28,39 @@ class MyCharacters extends React.Component {
     this.props.createCharacter(data);
   }
 
-  onCharacterSelected(characterID) {
-    $.get('api/charater/' + characterID + '/', function (data) {
+  updateCharacter(data) {
+    this.props.updateCharacter(data);
+  }
 
-    })
+  onCharacterSelected(characterID) {
+    if (characterID === 0) {
+      return;
+    }
+    this.setState({
+      active: characterID,
+    });
+    $.get(
+      'api/character/' + characterID + '/',
+      response => {
+        this.setState({ data: response[0].fields });
+      },
+    );
   }
 
   render() {
-    let editor = <CharacterEditor onSave={this.createCharacter}/>
-    if (false) {
-      // change a current character
+    let editor = (
+      <CharacterEditor
+        data={{}}
+        onSave={data => this.createCharacter(this.props.username, data)}
+      />
+    );
+    if (this.props.active !== 0) {
+      editor = (
+        <CharacterEditor
+          data={this.state.data}
+          onSave={data => this.updateCharacter(this.props.username, this.props.active, data)}
+        />
+      );
     }
     return (
       <div>
@@ -44,7 +69,9 @@ class MyCharacters extends React.Component {
           <div className='character-header-selector'>
             <CharacterSelector
               characters={this.props.characters}
+              active={this.state.active}
               onSelect={this.onCharacterSelected}
+              newOption={true}
             />
           </div>
         </div>
@@ -55,12 +82,15 @@ class MyCharacters extends React.Component {
 }
 
 MyCharacters.propTypes = {
+  user: React.PropTypes.object,
   characters: React.PropTypes.array,
+  active: React.PropTypes.number,
   createCharacter: React.PropTypes.func,
 }
 
 function mapStateToProps(state) {
   return {
+    user: state.auth.user,
     characters: state.characters.characters,
   }
 }
@@ -68,6 +98,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     createCharacter: data => dispatch(createCharacter(data)),
+    updateCharacter: data => dispatch(updateCharacter(data)),
   };
 }
 

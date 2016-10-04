@@ -5,13 +5,8 @@
     font-size: 1.5em;
     padding: 10px;
 
-    &-container {
-        display: flex;
-    }
-
     &-welcome {
         color: $ui_white;
-        flex: 1;
         font-weight: bold;
     }
 
@@ -24,6 +19,17 @@
             height: 42px;
         }
 
+    }
+
+    &-characters {
+        flex: 1;
+        height: 1;
+        margin: 0 20%;
+    }
+
+    &-container {
+        display: flex;
+        padding: 4px;
     }
 
     &-messages {

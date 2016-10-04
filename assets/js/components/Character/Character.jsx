@@ -27,44 +27,28 @@ class CharacterEditor extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  componentWillReceiveProps(props) {
-    if (props.data.name) {
-      let data = props.data;
-      this.setState({
-        name: data.name,
-        birthday: data.birthday,
-        gender: data.gender,
-        residence: data.residence,
-        state: data.state,
-        party: data.party,
-        avatar: data.avatar,
-        bio: data.bio,
-      });
-    }
-  }
-
   saveCharacter() {
     this.props.onSave({
-      name: this.state.name,
-      birthday: this.state.birthday,
-      gender: this.state.gender,
-      residence: this.state.residence,
-      state: this.state.state,
-      party: this.state.party,
-      avatar: this.state.avatar,
-      bio: this.state.bio,
+     name: this.state.name,
+     birthday: this.state.birthday,
+     gender: this.state.gender,
+     residence: this.state.residence,
+     state: this.state.state,
+     party: this.state.party,
+     avatar: this.state.avatar,
+     bio: this.state.bio,
    });
   }
 
   onChange(event) {
     this.setState({
-      name: ReactDOM.findDOMNode(this.refs.name).value,
-      birthday: ReactDOM.findDOMNode(this.refs.birthday).value,
-      residence: ReactDOM.findDOMNode(this.refs.residence).value,
-      state: ReactDOM.findDOMNode(this.refs.state).value,
-      party: ReactDOM.findDOMNode(this.refs.party).value,
-      avatar: ReactDOM.findDOMNode(this.refs.avatar).value,
-      bio: ReactDOM.findDOMNode(this.refs.bio).value,
+     name: ReactDOM.findDOMNode(this.refs.name).value,
+     birthday: ReactDOM.findDOMNode(this.refs.birthday).value,
+     residence: ReactDOM.findDOMNode(this.refs.residence).value,
+     state: ReactDOM.findDOMNode(this.refs.state).value,
+     party: ReactDOM.findDOMNode(this.refs.party).value,
+     avatar: ReactDOM.findDOMNode(this.refs.avatar).value,
+     bio: ReactDOM.findDOMNode(this.refs.bio).value,
     });
   }
 
@@ -158,8 +142,8 @@ class CharacterEditor extends React.Component {
 }
 
 CharacterEditor.propTypes = {
-  data: React.PropTypes.object,
   onSave: React.PropTypes.func,
+  data: React.PropTypes.object,
 }
 
 export default CharacterEditor;

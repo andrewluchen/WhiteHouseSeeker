@@ -16,6 +16,7 @@ class CharacterForm(forms.ModelForm):
     class Meta:
         model = models.Character
         fields = (
+            'primary',
             'name',
             'birthday',
             'gender',

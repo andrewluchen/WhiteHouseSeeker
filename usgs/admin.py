@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from usgs import models
+
+class CharacterAdmin(admin.ModelAdmin):
+    list_display = ('player', 'name')
+
+admin.site.register(models.Character, CharacterAdmin)

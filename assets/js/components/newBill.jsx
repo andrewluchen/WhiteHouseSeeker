@@ -10,7 +10,7 @@ export default function newBill(house) {
         titlePlaceholder='Legislation Name'
         title=''
         content=''
-        endpoint='/api/bill/'
+        endpoint='/api/bill/new/'
         verb='POST'
         redirect='/house'
       />
@@ -22,7 +22,7 @@ export default function newBill(house) {
         titlePlaceholder='Legislation Name'
         title=''
         content=''
-        endpoint='/api/bill/'
+        endpoint='/api/bill/new/'
         verb='POST'
         redirect='/senate'
       />

@@ -16,8 +16,8 @@ class Character(models.Model):
     residence = models.CharField(max_length=80)
     party = models.CharField(max_length=80)
     state = models.CharField(max_length=80)
-    avatar = models.TextField()
-    bio = models.TextField()
+    avatar = models.TextField(default='', blank=True)
+    bio = models.TextField(default='', blank=True)
     title = models.CharField(max_length=80, blank=True)
 
 
