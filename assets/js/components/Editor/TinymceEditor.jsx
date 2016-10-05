@@ -4,10 +4,10 @@ import TinyMCE from 'react-tinymce';
 
 class TinymceEditor extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      content: ""
+      content: props.content
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -53,6 +53,7 @@ class TinymceEditor extends React.Component {
 }
 
 TinymceEditor.propTypes = {
+  content: React.PropTypes.string,
   onSubmit: React.PropTypes.func,
 }
 

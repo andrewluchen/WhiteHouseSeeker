@@ -4,6 +4,7 @@ import json
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User, Group
 from django.core import serializers
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
@@ -66,6 +67,7 @@ class Character(View):
         return HttpResponse(response, content_type='application/json')
 
     def post(self, request, pk):
+        utils.validate_character(request.user, pk)
         if (request.POST.get('change_primary')):
             old = models.Character.objects.get(player=request.user, primary=True)
             new = models.Character.objects.get(player=request.user, pk=pk)
@@ -106,20 +108,56 @@ class Bill(View):
         title = request.POST.get('title')
         body = request.POST.get('body')
         sponsor_id = request.POST.get('sponsor_id')
-        if (utils.validate_character(request.user, sponsor_id)):
-            sponsor = models.Character.objects.get(pk=sponsor_id)
-            chamber = request.POST.get('chamber')
-            bill = models.Bill(title=title, sponsor=sponsor)
-            bill.save()
-            version = models.BillVersion(
-                bill=bill,
-                status=models.BILL_CLERK,
-                body=body,
-                modified=datetime.now(),
-                location=utils.get_leg_body(chamber),
-            )
-            version.save()
-            return HttpResponse(status=201)
+        utils.validate_character(request.user, sponsor_id)
+
+        sponsor = models.Character.objects.get(pk=sponsor_id)
+        chamber = request.POST.get('chamber')
+        bill = models.Bill(title=title, sponsor=sponsor)
+        bill.save()
+        version = models.BillVersion(
+            bill=bill,
+            status=models.BILL_CLERK,
+            body=body,
+            modified=datetime.now(),
+            location=utils.get_leg_body(chamber),
+        )
+        version.save()
+        return HttpResponse(status=201)
+
+    def get(self, request, pk):
+        billobj = models.Bill.objects.get(id=pk)
+        if (request.GET.get('version_id')):
+            bill = model_to_dict(models.BillVersion.objects.get(id=request.GET.get('version_id')))
+            bill['title'] = billobj.title;
+            bill['sponsor'] = {
+                'id': billobj.sponsor.id,
+                'name': utils.character_to_string(billobj.sponsor),
+            }
+            cosponsors = []
+            for cs in billobj.cosponsors.all():
+                cosponsors.append({
+                    'id': cs.id,
+                    'name': utils.character_to_string(cs),
+                })
+            bill['cosponsors'] = cosponsors
+            bill['modified'] = str(bill['modified'])
+            response = json.dumps(bill)
+            return HttpResponse(response, content_type='application/json')
+        else :
+            bill = model_to_dict(billobj)
+            bill['sponsor'] = {
+                'id': billobj.sponsor.id,
+                'name': utils.character_to_string(billobj.sponsor),
+            }
+            cosponsors = []
+            for cs in billobj.cosponsors.all():
+                cosponsors.append({
+                    'id': cs.id,
+                    'name': utils.character_to_string(cs),
+                })
+            bill['cosponsors'] = cosponsors
+            response = json.dumps(bill)
+            return HttpResponse(response, content_type='application/json')
 
     def post(self, request):
         pass

@@ -18,6 +18,7 @@ import About from './components/About';
 import Bill from './components/Bill/Bill';
 import BillVersion from './components/Bill/BillVersion';
 import Capitol from './components/Capitol';
+import EditBill from './components/Bill/EditBill';
 import Index from './components/Index';
 import House from './components/House';
 import MyCharacters from './components/MyCharacters';
@@ -52,6 +53,7 @@ class Root extends React.Component {
             <Route path='/house/new' component={() => <NewBill chamber='house'/>} />
             <Route path='/bill/:billId' component={Bill} />
             <Route path='/bill/:billId/:versionId' component={BillVersion} />
+            <Route path='/bill/:billId/:versionId/edit' component={EditBill} />
             <Route path='/about' component={About} />
 
             // 404

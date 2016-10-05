@@ -34,6 +34,7 @@ class Header extends React.Component {
           {this.props.user ? 'Welcome Back ' + this.props.user.username + '!' : null}
         </div>
         <div className='topbar-characters'>
+          <div>You are currently: &nbsp;</div>
           <CharacterSelector
             characters={this.props.characters}
             active={this.props.active}

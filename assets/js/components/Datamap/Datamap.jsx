@@ -63,7 +63,7 @@ class Datamap extends React.Component {
   }
 
   componentDidMount() {
-    let R = Raphael("test", 1000, 900);
+    let R = Raphael('datamap-stuff', 1000, 900);
     let attr = {
       "fill": "#d3d3d3",
       "stroke": "#fff",
@@ -100,7 +100,7 @@ class Datamap extends React.Component {
   }
 
   render() {
-    return <div id="test">asd</div>;
+    return <div id='datamap-stuff'>asd</div>;
   }
 }
 

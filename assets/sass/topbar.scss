@@ -2,12 +2,10 @@
     background-color: $ui_blue;
     color: $ui_off_white;
     display: flex;
-    font-size: 1.5em;
     padding: 10px;
 
     &-welcome {
-        color: $ui_white;
-        font-weight: bold;
+        font-size: 1.5em;
     }
 
     &-logo {
@@ -24,11 +22,17 @@
     &-characters {
         flex: 1;
         height: 1;
-        margin: 0 20%;
+        text-align: center;
+
+        > * {
+          display: inline-block;
+        }
+
     }
 
     &-container {
         display: flex;
+        font-size: 1.5em;
         padding: 4px;
     }
 

@@ -1,0 +1,62 @@
+import React from 'react';
+import { connect } from 'react-redux'
+import { Link } from 'react-router';
+
+import BillEditor from './BillEditor';
+
+class EditBill extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      billId: props.params.billId,
+      versionId: props.params.versionId,
+      title: '',
+      content: '',
+    };
+    this.fetchBill = this.fetchBill.bind(this);
+    this.submitBill = this.submitBill.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchBill(this.props.params.billId, this.props.params.versionId);
+  }
+
+  fetchBill(billId, versionId) {
+    $.get(
+      '/api/bill/' + billId + '/',
+      { version_id: versionId },
+      response => {
+        this.setState({
+          title: response.title,
+          content: response.body,
+        });
+      },
+    );
+  }
+
+  submitBill(data) {
+    $.ajax({
+      url: '/api/bill/' + this.state.billId + '/',
+      type: 'POST',
+      data: data,
+    });
+  }
+
+  render() {
+    if (!this.state.title && !this.state.content) {
+      return <div/>;
+    }
+    return (
+      <BillEditor
+        header='Edit Bill'
+        titlePlaceholder='Legislation Name'
+        title={this.state.title}
+        content={this.state.content}
+        onSubmit={this.submitBill}
+      />
+    );
+  }
+}
+
+export default EditBill;

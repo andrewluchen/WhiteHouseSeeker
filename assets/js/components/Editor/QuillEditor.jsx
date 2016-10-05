@@ -4,10 +4,10 @@ import ReactQuill from 'react-quill';
 
 class QuillEditor extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      content: ""
+      content: props.content
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -50,6 +50,7 @@ class QuillEditor extends React.Component {
 }
 
 QuillEditor.propTypes = {
+  content: React.PropTypes.string,
   onSubmit: React.PropTypes.func,
 }
 

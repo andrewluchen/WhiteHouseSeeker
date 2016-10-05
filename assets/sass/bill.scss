@@ -1,0 +1,13 @@
+.bill {
+
+  &-preview {
+      background-color: white;
+      border: 1px solid black;
+      margin: 2px;
+      padding: 2px;
+      position:relative;
+      top: 10px;
+      white-space: pre-wrap;
+  }
+
+}

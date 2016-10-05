@@ -4,10 +4,11 @@ import Editor from '../Editor/Editor';
 
 class BillEditor extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      title: '',
+      title: props.title,
+      content: props.content,
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -20,7 +21,7 @@ class BillEditor extends React.Component {
   }
 
   onSubmit(title, body) {
-    let data ={
+    let data = {
       title: title,
       body: body,
     };
@@ -34,9 +35,13 @@ class BillEditor extends React.Component {
         <input
           className='bill-title'
           placeholder={this.props.titlePlaceholder}
+          value={this.state.title}
           onChange={this.onChange}
         />
-        <Editor onSubmit={content => this.onSubmit(this.state.title, content)}/>
+        <Editor
+          content={this.state.content}
+          onSubmit={content => this.onSubmit(this.state.title, content)}
+        />
       </div>
     );
   }

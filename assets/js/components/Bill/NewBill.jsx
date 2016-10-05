@@ -21,7 +21,7 @@ class NewBill extends React.Component {
   render() {
     let chamber = this.props.chamber;
     let characterID = this.props.characterID;
-    if (house === 'house') {
+    if (chamber === 'house') {
       return (
         <BillEditor
           header="House Hopper"
@@ -31,7 +31,7 @@ class NewBill extends React.Component {
           onSubmit={data => this.submitBill(characterID, chamber, data, '/house')}
         />
       );
-    } else if (house === 'senate') {
+    } else if (chamber === 'senate') {
       return (
         <BillEditor
           header="Senate Clerk's Office"

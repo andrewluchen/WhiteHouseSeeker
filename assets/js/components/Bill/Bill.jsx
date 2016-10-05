@@ -2,18 +2,15 @@ import React from 'react';
 
 class Bill extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      billId: 0,
+      billId: props.params.billId,
     };
     this.fetchBill = this.fetchBill.bind(this);
   }
 
   componentDidMount() {
-    this.setState({
-      billId: this.props.params.billId,
-    });
     this.fetchBill(this.props.params.billId);
   }
 
@@ -28,7 +25,12 @@ class Bill extends React.Component {
   render() {
     return (
       <div>
-        asdf
+        <div>Sponsor:</div>
+        <div>Latest Action:</div>
+        <div>Tracker:</div>
+        <div>___</div>
+        <div>There are versions: [dropdown]</div>
+        <div>Cosponsors</div>
       </div>
     );
   }

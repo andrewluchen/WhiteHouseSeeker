@@ -32,8 +32,9 @@ def get_leg_body(chamber):
     return chamber
 
 def character_to_string(character):
+    title = character.title if character.title else 'Private Citizen'
     return (
-        character.title + ' ' + character.name + ' ' + '(' + character.party[0] + '-' + character.state + ')'
+        title + ' ' + character.name + ' ' + '(' + character.party[0] + '-' + character.state + ')'
     )
 
 def is_admin(user):
