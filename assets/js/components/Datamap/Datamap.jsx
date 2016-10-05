@@ -65,13 +65,13 @@ class Datamap extends React.Component {
   componentDidMount() {
     let R = Raphael('datamap-stuff', 1000, 900);
     let attr = {
-      "fill": "#d3d3d3",
-      "stroke": "#fff",
-      "stroke-opacity": "1",
-      "stroke-linejoin": "round",
-      "stroke-miterlimit": "4",
-      "stroke-width": "0.75",
-      "stroke-dasharray": "none"
+      'fill': '#d3d3d3',
+      'stroke': '#fff',
+      'stroke-opacity': '1',
+      'stroke-linejoin': 'round',
+      'stroke-miterlimit': '4',
+      'stroke-width': '0.75',
+      'stroke-dasharray': 'none'
     };
     let usRaphael = {};
 
@@ -83,7 +83,7 @@ class Datamap extends React.Component {
         let st = usRaphael[state];
         st.color = this.props.startingColors[state];
         let onStageChange = this.props.onStageChange;
-          st[0].style.cursor = "pointer";
+          st[0].style.cursor = 'pointer';
           st[0].onmousedown = function () {
             if (st.color === 'red') {
               st.color = 'blue';

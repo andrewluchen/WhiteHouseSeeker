@@ -32,7 +32,7 @@ class CharacterSelector extends React.Component {
       this.props.characters.forEach(character => {
         let description = character.description;
         characters.push(
-          <option value={character.pk} key={character.pk}>{character.description}</option>
+          <option value={character.id} key={character.id}>{character.description}</option>
         );
       })
       if (this.props.newOption) {

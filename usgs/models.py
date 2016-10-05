@@ -20,28 +20,26 @@ class Character(models.Model):
     bio = models.TextField(default='', blank=True)
     title = models.CharField(max_length=80, default='', blank=True)
 
+    def __unicode__(self):
+        title = self.title if self.title else 'Private Citizen'
+        return (
+            title + ' ' + self.name + ' ' + '(' + self.party[0] + '-' + self.state + ')'
+        )
 
-class CharacterIdField(models.IntegerField):
+    def __str__(self):
+        return self.__unicode__()
 
-    def value_to_string(self, obj):
-        if (not obj):
-            return 'None'
-        character = Character.objects.get(id=obj)
-        if (len(character) == 0):
-            return 'None'
-        else:
-            character = character[0]
-            return character.name + '(' + character.party[0] + '-' + character.state + ')'
+    description = property(__str__)
 
 
 class Leadership(models.Model):
-    potus = CharacterIdField(null=True)
-    vpotus = CharacterIdField(null=True)
-    speaker = CharacterIdField(null=True)
-    majorityleader = CharacterIdField(null=True)
-    majoritywhip = CharacterIdField(null=True)
-    minoirtyleader = CharacterIdField(null=True)
-    minoritywhip = CharacterIdField(null=True)
+    potus = models.ForeignKey(Character, null=True, related_name='+')
+    vpotus = models.ForeignKey(Character, null=True, related_name='+')
+    speaker = models.ForeignKey(Character, null=True, related_name='+')
+    majorityleader = models.ForeignKey(Character, null=True, related_name='+')
+    majoritywhip = models.ForeignKey(Character, null=True, related_name='+')
+    minoirtyleader = models.ForeignKey(Character, null=True, related_name='+')
+    minoritywhip = models.ForeignKey(Character, null=True, related_name='+')
 
 
 class LegislativeBody(models.Model):
@@ -65,6 +63,10 @@ class Bill(models.Model):
     sponsor = models.ForeignKey(Character, related_name='sponsored_bills')
     cosponsors = models.ManyToManyField(Character, related_name='cosponsored_bills', blank=True)
 
+    class Meta:
+        verbose_name = 'Bill Summary'
+        verbose_name_plural = 'Bill Summaries'
+
 
 class BillVersion(models.Model):
     bill = models.ForeignKey(Bill, related_name='versions')
@@ -74,16 +76,20 @@ class BillVersion(models.Model):
     modified = models.DateTimeField()
     location = models.ForeignKey(LegislativeBody, related_name='bills')
 
+    class Meta:
+        verbose_name = 'Bill Version'
+        verbose_name_plural = 'Bill Versions'
+
 
 class Debate(models.Model):
-    subject = models.ForeignKey(Bill, related_name='debates')
+    subject = models.ForeignKey(BillVersion, related_name='debates')
     starttime = models.DateTimeField()
     endtime = models.DateTimeField()
     location = models.ForeignKey(LegislativeBody, related_name='debates')
 
 
 class Vote(models.Model):
-    subject = models.ForeignKey(Bill, related_name='votes')
+    subject = models.ForeignKey(BillVersion, related_name='votes')
     starttime = models.DateTimeField()
     endtime = models.DateTimeField()
     location = models.ForeignKey(LegislativeBody, related_name='votes')

@@ -58,12 +58,16 @@ class Character(View):
             )
             character.save()
             return HttpResponse(status=201)
-        print form.errors
         return HttpResponse(form.errors, status=400)
 
     def get(self, request, pk):
-        character = models.Character.objects.get(pk=pk)
-        response = serializers.serialize('json', [character,])
+        characterobj = models.Character.objects.get(pk=pk)
+        character = model_to_dict(characterobj)
+        character['description'] = characterobj.description
+        character['birthday'] = str(character['birthday'])
+        character['activated'] = str(character['activated'])
+        character['deactivated'] = str(character['deactivated'])
+        response = json.dumps(character)
         return HttpResponse(response, content_type='application/json')
 
     def post(self, request, pk):
@@ -93,11 +97,17 @@ class Character(View):
 class Characters(View):
 
     def get(self, request):
-        characters = models.Character.objects.all()
+        characterobjs = models.Character.objects.all()
         username = request.GET.get('username')
-        player = models.User.objects.filter(username=username).first()
-        characters = list(characters.filter(player=player))
-        response = serializers.serialize('json', characters)
+        player = models.User.objects.get(username=username)
+        characterobjs = characterobjs.filter(player=player)
+        characters = list(characterobjs.values())
+        for i, c in enumerate(characters):
+            c['description'] = characterobjs[i].description
+            c['birthday'] = str(c['birthday'])
+            c['activated'] = str(c['activated'])
+            c['deactivated'] = str(c['deactivated'])
+        response = json.dumps(characters)
         return HttpResponse(response, content_type='application/json')
 
 
@@ -131,13 +141,13 @@ class Bill(View):
             bill['title'] = billobj.title;
             bill['sponsor'] = {
                 'id': billobj.sponsor.id,
-                'name': utils.character_to_string(billobj.sponsor),
+                'name': billobj.sponsor.description,
             }
             cosponsors = []
             for cs in billobj.cosponsors.all():
                 cosponsors.append({
                     'id': cs.id,
-                    'name': utils.character_to_string(cs),
+                    'name': cs.description,
                 })
             bill['cosponsors'] = cosponsors
             bill['modified'] = str(bill['modified'])
@@ -147,20 +157,26 @@ class Bill(View):
             bill = model_to_dict(billobj)
             bill['sponsor'] = {
                 'id': billobj.sponsor.id,
-                'name': utils.character_to_string(billobj.sponsor),
+                'name': billobj.sponsor.description,
             }
             cosponsors = []
             for cs in billobj.cosponsors.all():
                 cosponsors.append({
                     'id': cs.id,
-                    'name': utils.character_to_string(cs),
+                    'name': cs.description,
                 })
             bill['cosponsors'] = cosponsors
             response = json.dumps(bill)
             return HttpResponse(response, content_type='application/json')
 
-    def post(self, request):
-        pass
+    def post(self, request, pk):
+        bill = models.BillVersion.objects.get(pk=pk)
+        title = request.POST.get('title')
+        body = request.POST.get('body')
+        bill.title = title
+        bill.body = body
+        bill.save()
+        return HttpResponse(status=201)
 
 
 class Bills(View):
@@ -173,9 +189,9 @@ class Bills(View):
         if (request.GET.get('status')):
             billobjs = billobjs.filter(status=request.GET.get('status'))
         bills = list(billobjs.values())
-        for i in xrange(len(bills)):
-            bills[i]['title'] = billobjs[i].bill.title
-            bills[i]['sponsor'] = utils.character_to_string(billobjs[i].bill.sponsor)
-            bills[i]['modified'] = str(bills[i]['modified'])
+        for i, bill in enumerate(bills):
+            bill['title'] = billobjs[i].bill.title
+            bill['sponsor'] = billobjs[i].bill.sponsor.__str__()
+            bill['modified'] = str(bills[i]['modified'])
         response = json.dumps(bills)
         return HttpResponse(response, content_type='application/json')

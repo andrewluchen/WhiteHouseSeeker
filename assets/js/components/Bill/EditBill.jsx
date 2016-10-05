@@ -1,6 +1,6 @@
 import React from 'react';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux'
-import { Link } from 'react-router';
 
 import BillEditor from './BillEditor';
 
@@ -40,6 +40,9 @@ class EditBill extends React.Component {
       url: '/api/bill/' + this.state.billId + '/',
       type: 'POST',
       data: data,
+      success: () => {
+        browserHistory.push('/bill/' + billId + '/' + versionId);
+      }
     });
   }
 

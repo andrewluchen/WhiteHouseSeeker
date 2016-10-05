@@ -49,7 +49,9 @@ class BillVersion extends React.Component {
     let cosponsorList = [];
     this.state.cosponsors.forEach(cs => {
       cosponsorList.push(
-        <Link key={cs.id} to={'/character/' + cs.id}>{cs.name},&nbsp;</Link>
+        <span>
+          <Link key={cs.id} to={'/character/' + cs.id}>{cs.name}</Link>,&nbsp;
+        </span>
       );
     });
     return (

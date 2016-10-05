@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 
 import BillEditor from './BillEditor';
@@ -13,7 +14,7 @@ class NewBill extends React.Component {
       type: 'POST',
       data: data,
       success: () => {
-        window.location = redirect;
+        browserHistory.push(redirect);
       },
     });
   }

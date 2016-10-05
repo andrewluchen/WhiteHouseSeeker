@@ -44,7 +44,7 @@ class MyCharacters extends React.Component {
         response => {
           this.setState({
             active: characterID,
-            data: response[0].fields,
+            data: response,
           });
         },
       );
