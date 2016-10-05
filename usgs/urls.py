@@ -8,12 +8,14 @@ from usgs import views
 
 apipatterns = [
     url(r'^leaders/$', views.Leaders.as_view(), name='leaders'),
-    url(r'^character/new/$', views.Character.new_character, name='new-character'),
-    url(r'^character/(?P<pk>[0-9]+)/$', views.Character.as_view(), name='character'),
-    url(r'^characters/$', views.Characters.as_view(), name='characters'),
-    url(r'^bill/new/$', views.Bill.new_bill, name='new-bill'),
-    url(r'^bill/(?P<pk>[0-9]+)/$', views.Bill.as_view(), name='bill'),
-    url(r'^bills/$', views.Bills.as_view(), name='bills'),
+    url(r'^character/new/$', views.NewCharacterView.as_view(), name='new-character'),
+    url(r'^character/(?P<pk>[0-9]+)/$', views.CharacterView.as_view(), name='character'),
+    url(r'^characters/$', views.CharactersView.as_view(), name='characters'),
+    url(r'^bill/new/$', views.NewBillView.as_view(), name='new-bill'),
+    url(r'^bill/(?P<pk>[0-9]+)/$', views.BillView.as_view(), name='bill'),
+    url(r'^bill/(?P<bid>[0-9]+)/(?P<vid>[0-9]+)$', views.BillVersionView.as_view(), name='bill-version'),
+    url(r'^bills/clerk/$', views.ClerkView.as_view(), name='clerk-bills'),
+    url(r'^bills/$', views.BillsView.as_view(), name='bills'),
 ]
 
 urlpatterns = [

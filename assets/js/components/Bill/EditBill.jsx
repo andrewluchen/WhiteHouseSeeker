@@ -24,8 +24,7 @@ class EditBill extends React.Component {
 
   fetchBill(billId, versionId) {
     $.get(
-      '/api/bill/' + billId + '/',
-      { version_id: versionId },
+      '/api/bill/' + billId + '/' + versionId + '/',
       response => {
         this.setState({
           title: response.title,
@@ -37,7 +36,7 @@ class EditBill extends React.Component {
 
   submitBill(data) {
     $.ajax({
-      url: '/api/bill/' + this.state.billId + '/',
+      url: '/api/bill/' + this.state.billId + '/' + this.state.versionId + '/',
       type: 'POST',
       data: data,
       success: () => {

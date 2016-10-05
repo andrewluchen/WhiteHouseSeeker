@@ -6,30 +6,30 @@ DEMOCRATS = 'Democrats'
 REPUBLICANS = 'Republicans'
 
 def initialize():
-    # check initialized
-    if models.LegislativeBody.objects.filter(name='senate'):
-        return
-    # do initialize
-    Group.objects.create(name=DEMOCRATS)
-    Group.objects.create(name=REPUBLICANS)
-    bodies = [
-        'library',
-        'potusdesk',
-        'senate',
-        'house',
-        'concomm',
-    ]
-    for body in bodies:
-        b = models.LegislativeBody(name=body)
-        b.save()
-
-def validate_character(user, character_id):
-    character = models.Character.objects.get(pk=character_id)
-    return user.id == character.player.id
-
-def get_leg_body(chamber):
-    chamber = models.LegislativeBody.objects.get(name=chamber)
-    return chamber
+    if (not models.LegislativeBody.objects.filter(name='senate')):
+        bodies = [
+            'library',
+            'potusdesk',
+            'senate',
+            'house',
+            'concomm',
+        ]
+        for body in bodies:
+            b = models.LegislativeBody(name=body)
+            b.save()
+    if (not Group.objects.filter(name=DEMOCRATS)):
+        Group.objects.create(name=DEMOCRATS)
+        Group.objects.create(name=REPUBLICANS)
 
 def is_admin(user):
     return False
+
+def validate_character(user, character):
+    assert(user.id == character.player.id)
+
+def validate_bill_version(bill, billversion):
+    assert(bill.id == billversion.bill.id)
+
+def get_legislative_body(chamber):
+    chamber = models.LegislativeBody.objects.get(name=chamber)
+    return chamber

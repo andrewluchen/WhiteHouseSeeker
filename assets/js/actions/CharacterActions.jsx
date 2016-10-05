@@ -15,19 +15,6 @@ function characterSelected(key) {
   }
 }
 
-export function setPrimaryCharacter(key) {
-  return dispatch => {
-    $.ajax({
-      url: '/api/character/' + key + '/',
-      type: 'POST',
-      data: {
-        change_primary: true,
-      },
-    });
-    dispatch(characterSelected(key));
-  }
-}
-
 export function fetchUserCharacters(username) {
   return dispatch => {
     $.get(
@@ -77,5 +64,18 @@ export function updateCharacter(username, id, data) {
         dispatch(charactersChanged(characters));
       },
     );
+  }
+}
+
+export function setPrimaryCharacter(key) {
+  return dispatch => {
+    $.ajax({
+      url: '/api/character/' + key + '/',
+      type: 'POST',
+      data: {
+        make_primary: true,
+      },
+    });
+    dispatch(characterSelected(key));
   }
 }

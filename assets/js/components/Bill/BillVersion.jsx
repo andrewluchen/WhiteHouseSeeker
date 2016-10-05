@@ -22,8 +22,7 @@ class BillVersion extends React.Component {
 
   fetchBill(billId, versionId) {
     $.get(
-      '/api/bill/' + billId + '/',
-      { version_id: versionId },
+      '/api/bill/' + billId + '/' + versionId + '/',
       response => {
         this.setState({
           content: response.body,

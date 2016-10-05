@@ -11,3 +11,5 @@ class BillAdmin(admin.ModelAdmin):
 admin.site.register(models.Character, CharacterAdmin)
 admin.site.register(models.Bill, BillAdmin)
 admin.site.register(models.BillVersion)
+admin.site.register(models.Vote)
+admin.site.register(models.Debate)
