@@ -15,12 +15,14 @@ import Login from './components/Login';
 import Register from './components/Register';
 
 import About from './components/About';
+import Bill from './components/Bill/Bill';
+import BillVersion from './components/Bill/BillVersion';
 import Capitol from './components/Capitol';
-import MyCharacters from './components/MyCharacters';
 import Index from './components/Index';
-import Senate from './components/Senate';
 import House from './components/House';
-import newBill from './components/newBill';
+import MyCharacters from './components/MyCharacters';
+import NewBill from './components/Bill/NewBill';
+import Senate from './components/Senate';
 
 let store = applyMiddleware(reduxThunk)(createStore)(reducer);
 
@@ -45,9 +47,11 @@ class Root extends React.Component {
             <Route path='/my' component={MyCharacters} />
             <Route path='/capitol' component={Capitol} />
             <Route path='/senate' component={Senate} />
-            <Route path='/senate/new' component={newBill('senate')} />
+            <Route path='/senate/new' component={() => <NewBill chamber='senate'/>} />
             <Route path='/house' component={House} />
-            <Route path='/house/new' component={newBill('house')} />
+            <Route path='/house/new' component={() => <NewBill chamber='house'/>} />
+            <Route path='/bill/:billId' component={Bill} />
+            <Route path='/bill/:billId/:versionId' component={BillVersion} />
             <Route path='/about' component={About} />
 
             // 404

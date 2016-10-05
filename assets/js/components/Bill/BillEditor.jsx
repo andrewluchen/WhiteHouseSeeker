@@ -20,18 +20,11 @@ class BillEditor extends React.Component {
   }
 
   onSubmit(title, body) {
-    let redirect = this.props.redirect
-    $.ajax({
-      url: this.props.endpoint,
-      type: this.props.verb,
-      data: {
-        title: title,
-        body: body,
-      },
-      success: function(data) {
-        window.location = redirect;
-      }
-    });
+    let data ={
+      title: title,
+      body: body,
+    };
+    this.props.onSubmit(data);
   }
 
   render() {
@@ -54,9 +47,7 @@ BillEditor.propTypes = {
   titlePlaceholder: React.PropTypes.string,
   title: React.PropTypes.string,
   content: React.PropTypes.string,
-  endpoint: React.PropTypes.string,
-  verb: React.PropTypes.string,
-  redirect: React.PropTypes.string,
+  onSubmit: React.PropTypes.func,
 }
 
 export default BillEditor;

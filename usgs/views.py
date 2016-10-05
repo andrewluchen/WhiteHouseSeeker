@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 
 from django.contrib.auth.decorators import user_passes_test
@@ -56,7 +57,8 @@ class Character(View):
             )
             character.save()
             return HttpResponse(status=201)
-        return HttpResponse(form.errors)
+        print form.errors
+        return HttpResponse(form.errors, status=400)
 
     def get(self, request, pk):
         character = models.Character.objects.get(pk=pk)
@@ -73,7 +75,7 @@ class Character(View):
             new.save()
             return HttpResponse(status=200)
         else:
-            character = mdoels.Character.objects.get(pk=pk)
+            character = models.Character.objects.get(pk=pk)
             character.name = request.POST.get('name')
             character.gender = request.POST.get('gender')
             character.birthday = request.POST.get('birthday')
@@ -101,19 +103,41 @@ class Bill(View):
 
     @staticmethod
     def new_bill(request):
-        title = request.POST['title']
-        body = request.POST['body']
-        sponsor_id = request.POST['sponsor_id']
-        sponsor = models.Character.objects.get(id=sponsor_id)
-        bill = models.Bill(title=title, body=body, sponsor=sponsor)
-        bill.save()
-        return HttpResponse(status=201)
+        title = request.POST.get('title')
+        body = request.POST.get('body')
+        sponsor_id = request.POST.get('sponsor_id')
+        if (utils.validate_character(request.user, sponsor_id)):
+            sponsor = models.Character.objects.get(pk=sponsor_id)
+            chamber = request.POST.get('chamber')
+            bill = models.Bill(title=title, sponsor=sponsor)
+            bill.save()
+            version = models.BillVersion(
+                bill=bill,
+                status=models.BILL_CLERK,
+                body=body,
+                modified=datetime.now(),
+                location=utils.get_leg_body(chamber),
+            )
+            version.save()
+            return HttpResponse(status=201)
 
     def post(self, request):
-        title = request.POST['title']
-        body = request.POST['body']
-        sponsor_id = request.POST['sponsor_id']
-        sponsor = models.Character.objects.get(id=sponsor_id)
-        bill = models.Bill(title=title, body=body, sponsor=sponsor)
-        bill.save()
-        return HttpResponse(status=201)
+        pass
+
+
+class Bills(View):
+
+    def get(self, request):
+        billobjs = models.BillVersion.objects.all()
+        if (request.GET.get('chamber')):
+            chamber = utils.get_leg_body(request.GET.get('chamber'))
+            billobjs = billobjs.filter(location=chamber)
+        if (request.GET.get('status')):
+            billobjs = billobjs.filter(status=request.GET.get('status'))
+        bills = list(billobjs.values())
+        for i in xrange(len(bills)):
+            bills[i]['title'] = billobjs[i].bill.title
+            bills[i]['sponsor'] = utils.character_to_string(billobjs[i].bill.sponsor)
+            bills[i]['modified'] = str(bills[i]['modified'])
+        response = json.dumps(bills)
+        return HttpResponse(response, content_type='application/json')

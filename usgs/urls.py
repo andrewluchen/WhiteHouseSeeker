@@ -11,9 +11,9 @@ apipatterns = [
     url(r'^character/new/$', views.Character.new_character, name='new-character'),
     url(r'^character/(?P<pk>[0-9]+)/$', views.Character.as_view(), name='character'),
     url(r'^characters/$', views.Characters.as_view(), name='characters'),
-    url(r'^bill/$', views.Bill.new_bill, name='new-bill'),
+    url(r'^bill/new/$', views.Bill.new_bill, name='new-bill'),
     url(r'^bill/(?P<pk>[0-9]+)/$', views.Bill.as_view(), name='bill'),
-    # url(r'^bills/$', views.Bill.as_view(), name='bills'),
+    url(r'^bills/$', views.Bills.as_view(), name='bills'),
 ]
 
 urlpatterns = [

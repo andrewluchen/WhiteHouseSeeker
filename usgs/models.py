@@ -18,7 +18,7 @@ class Character(models.Model):
     state = models.CharField(max_length=80)
     avatar = models.TextField(default='', blank=True)
     bio = models.TextField(default='', blank=True)
-    title = models.CharField(max_length=80, blank=True)
+    title = models.CharField(max_length=80, default='', blank=True)
 
 
 class CharacterIdField(models.IntegerField):
@@ -45,18 +45,34 @@ class Leadership(models.Model):
 
 
 class LegislativeBody(models.Model):
-    name = models.CharField(max_length=80)
-    parent = models.ForeignKey('self', related_name='children', blank=True, null=True)
+    name = models.CharField(max_length=80, unique=True)
+    parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
+
+
+BILL_CLERK = 'Introduced'
+BILL_DEBATE = 'In Debate'
+BILL_VOTE = 'In Vote'
+BILL_PASS = 'Passed'
+BILL_FAIL = 'Failed'
+BILL_POTUS = 'Presented to the President'
+BILL_SIGN = 'Sign into Law'
+BILL_VETO = 'Vetoed by the President'
+BILL_OVERRIDE = 'Passed over veto'
 
 
 class Bill(models.Model):
     title = models.TextField()
-    body = models.TextField()
-    introduced = models.DateTimeField()
-    modified = models.DateTimeField()
-    location = models.ForeignKey(LegislativeBody, related_name='bills')
     sponsor = models.ForeignKey(Character, related_name='sponsored_bills')
     cosponsors = models.ManyToManyField(Character, related_name='cosponsored_bills', blank=True)
+
+
+class BillVersion(models.Model):
+    bill = models.ForeignKey(Bill, related_name='versions')
+    status = models.CharField(max_length=100)
+    closed = models.BooleanField(default=False, blank=True)
+    body = models.TextField()
+    modified = models.DateTimeField()
+    location = models.ForeignKey(LegislativeBody, related_name='bills')
 
 
 class Debate(models.Model):

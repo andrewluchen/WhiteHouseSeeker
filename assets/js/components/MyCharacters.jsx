@@ -25,40 +25,44 @@ class MyCharacters extends React.Component {
     } else {
       data['primary'] = false;
     }
-    this.props.createCharacter(data);
+    this.props.createCharacter([this.props.user.username, data]);
   }
 
   updateCharacter(data) {
-    this.props.updateCharacter(data);
+    this.props.updateCharacter([this.props.user.username, this.state.active, data]);
   }
 
   onCharacterSelected(characterID) {
     if (characterID === 0) {
-      return;
+      this.setState({
+        active: characterID,
+        data: {},
+      });
+    } else {
+      $.get(
+        'api/character/' + characterID + '/',
+        response => {
+          this.setState({
+            active: characterID,
+            data: response[0].fields,
+          });
+        },
+      );
     }
-    this.setState({
-      active: characterID,
-    });
-    $.get(
-      'api/character/' + characterID + '/',
-      response => {
-        this.setState({ data: response[0].fields });
-      },
-    );
   }
 
   render() {
     let editor = (
       <CharacterEditor
         data={{}}
-        onSave={data => this.createCharacter(this.props.username, data)}
+        onSave={data => this.createCharacter(data)}
       />
     );
-    if (this.props.active !== 0) {
+    if (this.state.active !== 0) {
       editor = (
         <CharacterEditor
           data={this.state.data}
-          onSave={data => this.updateCharacter(this.props.username, this.props.active, data)}
+          onSave={data => this.updateCharacter(data)}
         />
       );
     }
@@ -97,8 +101,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createCharacter: data => dispatch(createCharacter(data)),
-    updateCharacter: data => dispatch(updateCharacter(data)),
+    createCharacter: args => dispatch(createCharacter(...args)),
+    updateCharacter: args => dispatch(updateCharacter(...args)),
   };
 }
 

@@ -47,6 +47,9 @@ export function createCharacter(username, data) {
       url: '/api/character/new/',
       type: 'POST',
       data: data,
+      success: () => {
+        window.location = '/my';
+      },
     });
     $.get(
       '/api/characters/',

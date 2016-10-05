@@ -1,0 +1,20 @@
+.chamber {
+
+    &-room {
+
+      thead, tbody {
+          :nth-child(1) {
+              width: 80%;
+          }
+          :nth-child(2) {
+              width: 20%;
+          }
+      }
+    }
+
+    &-header {
+        font-size: 20px;
+        text-align: center;
+    }
+
+}
