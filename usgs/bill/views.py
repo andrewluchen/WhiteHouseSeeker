@@ -6,10 +6,11 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
 
-from usgs.bill.models import Bill, BillVersion, Vote
+from usgs.bill.models import Bill, BillVersion, Debate, Vote
 from usgs.character.models import Character
 
 from usgs.utils import get_legislative_body, validate_character, validate_bill_version
+
 
 class NewBillView(View):
 
@@ -101,16 +102,16 @@ class BillsView(View):
 class ClerkView(View):
 
     def get(self, request):
-        billobjs = BillVersion.objects.all()
+        billversionobjs = BillVersion.objects.all()
         if (request.GET.get('chamber')):
             chamber = get_legislative_body(request.GET.get('chamber'))
-            billobjs = billobjs.filter(location=chamber)
+            billversionobjs = billversionobjs.filter(location=chamber)
         if (request.GET.get('status')):
-            billobjs = billobjs.filter(status=request.GET.get('status'))
-        bills = list(billobjs.values())
+            billversionobjs = billversionobjs.filter(status=request.GET.get('status'))
+        bills = list(billversionobjs.values())
         for i, bill in enumerate(bills):
-            bill['title'] = billobjs[i].bill.description
-            bill['sponsor'] = billobjs[i].bill.sponsor.__str__()
+            bill['title'] = billversionobjs[i].bill.description
+            bill['sponsor'] = billversionobjs[i].bill.sponsor.__str__()
             bill['modified'] = str(bills[i]['modified'])
         response = json.dumps(bills)
         return HttpResponse(response, content_type='application/json')
@@ -152,6 +153,28 @@ class VoteView(View):
         response = json.dumps(vote)
         return HttpResponse(response, content_type='application/json')
 
+    def post(self, request, pk):
+        voteobj = Vote.objects.get(id=pk)
+        castvote = request.POST.get('vote')
+        character_id = request.POST.get('character_id')
+        character = Character.objects.get(id=character_id)
+        validate_character(request.user, character)
+
+        if (castvote == 'yea'):
+            voteobj.yeas.add(character)
+            voteobj.nays.remove(character)
+            voteobj.pres.remove(character)
+        if (castvote == 'nay'):
+            voteobj.yeas.remove(character)
+            voteobj.nays.add(character)
+            voteobj.pres.remove(character)
+        if (castvote == 'present'):
+            voteobj.yeas.remove(character)
+            voteobj.nays.remove(character)
+            voteobj.pres.add(character)
+        return HttpResponse(status=200)
+
+
 class VotesView(View):
 
     def get(self, request):
@@ -164,11 +187,30 @@ class VotesView(View):
             voteobjs = voteobjs.filter(endtime__gt=now)
         votes = list(voteobjs.values())
         for i, vote in enumerate(votes):
-            vote['title'] = voteobjs[i].subject.description
+            vote['title'] = voteobjs[i].subject.bill.description
             vote['yeas'] = voteobjs[i].yeas.count()
             vote['nays'] = voteobjs[i].nays.count()
             vote['pres'] = voteobjs[i].pres.count()
             vote['starttime'] = str(vote['starttime'])
             vote['endtime'] = str(vote['endtime'])
         response = json.dumps(votes)
+        return HttpResponse(response, content_type='application/json')
+
+
+class DebatesView(View):
+
+    def get(self, request):
+        debateobjs = Debate.objects.all()
+        now = timezone.now()
+        if (request.GET.get('chamber')):
+            chamber = get_legislative_body(request.GET.get('chamber'))
+            debateobjs = debateobjs.filter(location=chamber)
+        if (request.GET.get('active')):
+            debateobjs = debateobjs.filter(endtime__gt=now)
+        debates = list(debateobjs.values())
+        for i, debate in enumerate(debates):
+            debate['title'] = debateobjs[i].subject.bill.description
+            debate['starttime'] = str(debate['starttime'])
+            debate['endtime'] = str(debate['endtime'])
+        response = json.dumps(debates)
         return HttpResponse(response, content_type='application/json')

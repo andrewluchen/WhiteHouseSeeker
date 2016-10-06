@@ -96,7 +96,7 @@ function mapStateToProps(state) {
   return {
     user: state.auth.user,
     characters: state.characters.characters,
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {

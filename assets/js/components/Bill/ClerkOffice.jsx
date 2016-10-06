@@ -4,6 +4,12 @@ import { Table } from 'react-bootstrap';
 
 class ClerkOffice extends React.Component {
 
+  momentSort(left, right) {
+    left = left.endtime;
+    right = right.endtime;
+    return moment(left).diff(moment(right))
+  }
+
   render() {
     let bills = []
     this.props.bills.forEach(bill => {
@@ -21,7 +27,9 @@ class ClerkOffice extends React.Component {
     return (
       <div className='chamber-clerk'>
         <div className='chamber-header'>{this.props.name}</div>
-        <Link to={this.props.newRoute}>New Legislation</Link>
+        <div className='chamber-cornerlink'>
+          <Link to={this.props.newRoute}>New Legislation</Link>
+        </div>
         <Table bordered={true} striped={true}>
           <thead>
             <tr>

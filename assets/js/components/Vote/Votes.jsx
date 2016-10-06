@@ -36,7 +36,7 @@ class Votes extends React.Component {
           <thead>
             <tr>
               <th>Vote</th>
-              <th>Status</th>
+              <th>Status (Yea/Nay/Present)</th>
               <th>Ending</th>
             </tr>
           </thead>

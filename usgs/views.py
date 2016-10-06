@@ -2,12 +2,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
-from usgs import forms, models, utils
+from usgs import models, utils
 from usgs.bill.views import (
     BillView,
     BillVersionView,
     BillsView,
     ClerkView,
+    DebatesView,
     NewBillView,
     VoteView,
     VotesView,

@@ -22,7 +22,7 @@ class Header extends React.Component {
       </div>
     );
     let logIn = (
-      <div>
+      <div className='topbar-container'>
         <Link to='/register/' className='topbar-login'>Register</Link>
         {' / '}
         <Link to='/login/' className='topbar-login'>Login</Link>

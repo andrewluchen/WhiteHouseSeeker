@@ -2,7 +2,12 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 import moment from 'moment';
+
+const YEA = 'yea';
+const NAY = 'nay';
+const PRES = 'present';
 
 class Vote extends React.Component {
 
@@ -19,6 +24,8 @@ class Vote extends React.Component {
       endtime: moment(),
     };
     this.fetchVote = this.fetchVote.bind(this);
+    this.findMyVote = this.findMyVote.bind(this);
+    this.castVote = this.castVote.bind(this);
   }
 
   componentDidMount() {
@@ -50,18 +57,35 @@ class Vote extends React.Component {
   findMyVote(yeas, nays, pres, active) {
     yeas.forEach(yea => {
       if (yea.id === active) {
-        this.setState({ myvote: 'yea' });
+        this.setState({ myvote: YEA });
       }
     });
     nays.forEach(nay => {
       if (nay.id === active) {
-        this.setState({ myvote: 'nay' });
+        this.setState({ myvote: NAY });
       }
     });
     pres.forEach(pres => {
       if (pres.id === active) {
-        this.setState({ myvote: 'present' });
+        this.setState({ myvote: PRES });
       }
+    });
+  }
+
+  castVote(vote) {
+    $.ajax({
+      url: '/api/vote/' + this.props.params.voteId + '/',
+      type: 'POST',
+      data: {
+        character_id: this.props.active,
+        vote: vote,
+      },
+      success: () => {
+        this.setState({
+          myvote: vote,
+        })
+        this.fetchVote(this.props.params.voteId);
+      },
     });
   }
 
@@ -108,21 +132,46 @@ class Vote extends React.Component {
         </div>
       );
     })
+    let selectStyle = { bsStyle:'primary' }
+    let ayeStyle = this.state.myvote === YEA ? selectStyle : {};
+    let nayStyle = this.state.myvote === NAY ? selectStyle : {};
+    let presStyle = this.state.myvote === PRES ? selectStyle : {};
     return (
       <div>
-        {this.state.myvote}
-        TODO: VOTE RADIO HERE
+        <div className='vote-buttons'>
+          <Button
+            bsSize='large'
+            onClick={() => this.castVote(YEA)}
+            {...ayeStyle}
+          >
+            Yea
+          </Button>
+          <Button
+            bsSize='large'
+            onClick={() => this.castVote(NAY)}
+            {...nayStyle}
+          >
+            Nay
+          </Button>
+          <Button
+            bsSize='large'
+            onClick={() => this.castVote(PRES)}
+            {...presStyle}
+          >
+            Present
+          </Button>
+        </div>
         <Grid>
-          <Row className="show-grid">
-            <Col sm={6} md={3}>
+          <Row className='show-grid'>
+            <Col sm={8} md={4}>
               <strong>Yeas:</strong>
               {yeas}
             </Col>
-            <Col sm={6} md={3}>
+            <Col sm={8} md={4}>
               <strong>Nays:</strong>
               {nays}
             </Col>
-            <Col sm={6} md={3}>
+            <Col sm={8} md={4}>
               <strong>Present:</strong>
               {pres}
             </Col>
@@ -146,7 +195,7 @@ Vote.propTypes = {
 function mapStateToProps(state) {
   return {
     active: state.characters.active,
-  }
+  };
 }
 
 export default connect(mapStateToProps)(Vote);

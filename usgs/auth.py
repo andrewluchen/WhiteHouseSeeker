@@ -1,14 +1,14 @@
 import json
 
+from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.views import View
 
 from rest_framework_jwt.settings import api_settings
-
-from usgs import forms
 
 def jwt(user):
     jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -24,9 +24,17 @@ def user_echo(request):
         return HttpResponse(status=401)
 
 
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+
+
 def user_register(request):
     context = RequestContext(request)
-    user_form = forms.UserForm(data=request.POST)
+    user_form = UserForm(data=request.POST)
 
     if user_form.is_valid():
         user = user_form.save()

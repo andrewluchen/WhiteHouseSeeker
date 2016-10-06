@@ -35,13 +35,15 @@ class EditBill extends React.Component {
   }
 
   submitBill(data) {
+    let billId = this.props.params.billId;
+    let versionId = this.props.params.versionId;
     $.ajax({
-      url: '/api/bill/' + this.state.billId + '/' + this.state.versionId + '/',
+      url: '/api/bill/' + billId + '/' + versionId + '/',
       type: 'POST',
       data: data,
       success: () => {
-        browserHistory.push('/bill/' + this.state.billId + '/' + this.state.versionId);
-      }
+        browserHistory.push('/bill/' + billId + '/' + versionId);
+      },
     });
   }
 

@@ -1,20 +1,63 @@
 .chamber {
 
-    &-clerk {
-
-      thead, tbody {
-          :nth-child(1) {
-              width: 70%;
-          }
-          :nth-child(2) {
-              width: 30%;
-          }
-      }
-    }
-
     &-header {
         font-size: 20px;
         text-align: center;
+    }
+
+    &-cornerlink {
+        margin-left: 10px;
+    }
+
+    &-clerk {
+
+        thead, tbody {
+            tr {
+                background-color: $ui_off_white;
+            }
+            :nth-child(1) {
+                width: 70%;
+            }
+            :nth-child(2) {
+                width: 30%;
+            }
+        }
+
+    }
+
+    &-votes {
+
+        thead, tbody {
+            tr {
+                background-color: $ui_off_white;
+            }
+            :nth-child(1) {
+                width: 60%;
+            }
+            :nth-child(2) {
+                width: 20%;
+            }
+            :nth-child(3) {
+                width: 20%;
+            }
+        }
+
+    }
+
+    &-debates {
+
+        thead, tbody {
+            tr {
+                background-color: $ui_off_white;
+            }
+            :nth-child(1) {
+                width: 70%;
+            }
+            :nth-child(2) {
+                width: 30%;
+            }
+        }
+
     }
 
 }

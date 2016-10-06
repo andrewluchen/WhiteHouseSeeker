@@ -1,19 +1,32 @@
 .bill {
 
-  &-title {
-      margin: 4px;
-      font-size: 40px;
-      text-align: center;
-  }
+    &-title {
+        margin: 4px;
+        font-size: 40px;
+        text-align: center;
+    }
 
-  &-preview {
-      background-color: white;
-      border: 1px solid black;
-      margin: 2px;
-      padding: 2px;
-      position:relative;
-      top: 10px;
-      white-space: pre-wrap;
-  }
+    &-preview {
+        background-color: white;
+        border: 1px solid black;
+        margin: 2px;
+        padding: 2px;
+        position:relative;
+        top: 10px;
+        white-space: pre-wrap;
+    }
+
+}
+
+.vote {
+
+    &-buttons {
+        margin: 10px;
+
+        button {
+            margin: 0 5px;
+        }
+
+    }
 
 }

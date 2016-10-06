@@ -25,6 +25,7 @@ import MyCharacters from './components/MyCharacters';
 import NewBill from './components/Bill/NewBill';
 import Senate from './components/Senate';
 import Vote from './components/Vote/Vote';
+import Wtf from './components/Wtf';
 
 let store = applyMiddleware(reduxThunk)(createStore)(reducer);
 
@@ -57,6 +58,7 @@ class Root extends React.Component {
             <Route path='/bill/:billId/:versionId/edit' component={EditBill} />
             <Route path='/vote/:voteId' component={Vote} />
             <Route path='/about' component={About} />
+            <Route path='/wtf' component={Wtf} />
 
             // 404
             <Route path='*' component={() => (<h1>404. This page is not found!</h1>)} />

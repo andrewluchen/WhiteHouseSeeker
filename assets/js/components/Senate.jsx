@@ -50,7 +50,27 @@ class Senate extends React.Component {
   }
 
   getDebates() {
-
+    $.ajax({
+      url: '/api/debates/',
+      type: 'GET',
+      data: {
+        chamber: 'senate',
+        active: true,
+      },
+      success: response => {
+        let debates = []
+        response.forEach(debate => {
+          debates.push({
+            debate_id: debate.id,
+            title: debate.title,
+            endtime: debate.endtime,
+          });
+        });
+        this.setState({
+          debates: debates,
+        });
+      },
+    });
   }
 
   getVotes() {
@@ -83,13 +103,13 @@ class Senate extends React.Component {
   render() {
     return (
       <div>
+        <Votes votes={this.state.votes}/>
+        <Debates debates={this.state.debates}/>
         <ClerkOffice
           name='Senate Clerk Office'
           newRoute='/senate/new'
           bills={this.state.clerk}
         />
-        <Votes votes={this.state.votes}/>
-        <Debates/>
       </div>
     );
   }

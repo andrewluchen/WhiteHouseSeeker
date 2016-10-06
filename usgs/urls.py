@@ -8,16 +8,19 @@ from usgs import views
 
 apipatterns = [
     url(r'^leaders/$', views.Leaders.as_view(), name='leaders'),
+
     url(r'^character/new/$', views.NewCharacterView.as_view(), name='new-character'),
     url(r'^character/(?P<pk>[0-9]+)/$', views.CharacterView.as_view(), name='character'),
     url(r'^characters/$', views.CharactersView.as_view(), name='characters'),
+
     url(r'^bill/new/$', views.NewBillView.as_view(), name='new-bill'),
     url(r'^bill/(?P<pk>[0-9]+)/$', views.BillView.as_view(), name='bill'),
     url(r'^bill/(?P<bid>[0-9]+)/(?P<vid>[0-9]+)/$', views.BillVersionView.as_view(), name='bill-version'),
-    url(r'^bills/$', views.BillsView.as_view(), name='bills'),
-    url(r'^clerk/$', views.ClerkView.as_view(), name='clerk'),
+    url(r'^bills/$', views.BillsView.as_view(), name='get-bills'),
+    url(r'^clerk/$', views.ClerkView.as_view(), name='get-clerk'),
     url(r'^vote/(?P<pk>[0-9]+)/$', views.VoteView.as_view(), name='vote'),
-    url(r'^votes/$', views.VotesView.as_view(), name='votes'),
+    url(r'^votes/$', views.VotesView.as_view(), name='get-votes'),
+    url(r'^debates/$', views.DebatesView.as_view(), name='get-debates'),
 ]
 
 urlpatterns = [
