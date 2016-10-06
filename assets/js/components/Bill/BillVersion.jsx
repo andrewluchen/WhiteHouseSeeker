@@ -63,6 +63,9 @@ class BillVersion extends React.Component {
         {sponsorLink}
         <div><strong>Cosponsors List:&nbsp;</strong>{cosponsorList}</div>
         <div>TODO: Cosponsor Button</div>
+        <Link to={'/bill/' + this.props.params.billId + '/' + this.props.params.versionId + '/edit'}>
+          Edit
+        </Link>
         <div
           className='bill-preview'
           dangerouslySetInnerHTML={{__html: this.state.content}}

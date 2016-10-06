@@ -40,7 +40,7 @@ class EditBill extends React.Component {
       type: 'POST',
       data: data,
       success: () => {
-        browserHistory.push('/bill/' + billId + '/' + versionId);
+        browserHistory.push('/bill/' + this.state.billId + '/' + this.state.versionId);
       }
     });
   }

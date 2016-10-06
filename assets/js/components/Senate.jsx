@@ -20,15 +20,17 @@ class Senate extends React.Component {
 
   componentDidMount() {
     this.getClerk();
+    this.getVotes();
+    this.getDebates();
   }
 
   getClerk() {
     $.ajax({
-      url: '/api/bills/',
+      url: '/api/clerk/',
       type: 'GET',
       data: {
         chamber: 'senate',
-        status: 'Introduced'
+        status: 'Introduced',
       },
       success: response => {
         let clerk = []
@@ -36,7 +38,7 @@ class Senate extends React.Component {
           clerk.push({
             version_id: bill.id,
             bill_id: bill.bill_id,
-            title: 'S.' + bill.bill_id + ' ' + bill.title,
+            title: bill.title,
             sponsor: bill.sponsor
           });
         });
@@ -52,7 +54,30 @@ class Senate extends React.Component {
   }
 
   getVotes() {
-
+    $.ajax({
+      url: '/api/votes/',
+      type: 'GET',
+      data: {
+        chamber: 'senate',
+        active: true,
+      },
+      success: response => {
+        let votes = []
+        response.forEach(vote => {
+          votes.push({
+            vote_id: vote.id,
+            title: vote.title,
+            endtime: vote.endtime,
+            yeas: vote.yeas,
+            nays: vote.nays,
+            pres: vote.pres,
+          });
+        });
+        this.setState({
+          votes: votes,
+        });
+      },
+    });
   }
 
   render() {
@@ -63,7 +88,7 @@ class Senate extends React.Component {
           newRoute='/senate/new'
           bills={this.state.clerk}
         />
-        <Votes/>
+        <Votes votes={this.state.votes}/>
         <Debates/>
       </div>
     );

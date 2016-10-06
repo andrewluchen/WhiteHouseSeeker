@@ -19,10 +19,10 @@ class ClerkOffice extends React.Component {
       );
     });
     return (
-      <div className='chamber-room'>
+      <div className='chamber-clerk'>
         <div className='chamber-header'>{this.props.name}</div>
         <Link to={this.props.newRoute}>New Legislation</Link>
-        <Table striped={true}>
+        <Table bordered={true} striped={true}>
           <thead>
             <tr>
               <th>Bill Title</th>

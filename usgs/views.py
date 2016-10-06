@@ -1,16 +1,17 @@
-from datetime import datetime
-import json
-
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import User, Group
-from django.core import serializers
-from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
 from usgs import forms, models, utils
-from usgs.bill.views import NewBillView, BillView, BillVersionView, ClerkView, BillsView
+from usgs.bill.views import (
+    BillView,
+    BillVersionView,
+    BillsView,
+    ClerkView,
+    NewBillView,
+    VoteView,
+    VotesView,
+)
 from usgs.character.views import NewCharacterView, CharacterView, CharactersView
 
 def echo(request):

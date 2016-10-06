@@ -1,12 +1,12 @@
-from datetime import datetime
 import json
 
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
+from django.utils import timezone
 from django.views import View
 
-from usgs.bill.models import Bill, BillVersion
+from usgs.bill.models import Bill, BillVersion, Vote
 from usgs.character.models import Character
 
 from usgs.utils import get_legislative_body, validate_character, validate_bill_version
@@ -28,7 +28,7 @@ class NewBillView(View):
             bill=bill,
             status=BillVersion.BILL_CLERK,
             body=body,
-            modified=datetime.now(),
+            modified=timezone.now(),
             location=get_legislative_body(chamber),
         )
         version.save()
@@ -64,12 +64,14 @@ class BillVersionView(View):
         bill['sponsor'] = {
             'id': billobj.sponsor.id,
             'name': billobj.sponsor.description,
+            'party': billobj.sponsor.party,
         }
         cosponsors = []
         for cs in billobj.cosponsors.all():
             cosponsors.append({
                 'id': cs.id,
                 'name': cs.description,
+                'party': cs.party,
             })
         bill['cosponsors'] = cosponsors
         bill['modified'] = str(bill['modified'])
@@ -90,6 +92,12 @@ class BillVersionView(View):
         return HttpResponse(status=200)
 
 
+class BillsView(View):
+
+    def get(self, request):
+        pass
+
+
 class ClerkView(View):
 
     def get(self, request):
@@ -101,26 +109,66 @@ class ClerkView(View):
             billobjs = billobjs.filter(status=request.GET.get('status'))
         bills = list(billobjs.values())
         for i, bill in enumerate(bills):
-            bill['title'] = billobjs[i].bill.title
+            bill['title'] = billobjs[i].bill.description
             bill['sponsor'] = billobjs[i].bill.sponsor.__str__()
             bill['modified'] = str(bills[i]['modified'])
         response = json.dumps(bills)
         return HttpResponse(response, content_type='application/json')
 
 
-class BillsView(View):
+class VoteView(View):
+
+    def get(self, request, pk):
+        voteobj = Vote.objects.get(id=pk)
+        vote = model_to_dict(voteobj)
+        yeas = []
+        for i, c in enumerate(voteobj.yeas.all()):
+            yeas.append({
+                'id': c.id,
+                'name': c.description,
+                'party': c.party,
+            })
+        nays = []
+        for i, c in enumerate(voteobj.nays.all()):
+            nays.append({
+                'id': c.id,
+                'name': c.description,
+                'party': c.party,
+            })
+        pres = []
+        for i, c in enumerate(voteobj.pres.all()):
+            pres.append({
+                'id': c.id,
+                'name': c.description,
+                'party': c.party,
+            })
+        vote['yeas'] = yeas
+        vote['nays'] = nays
+        vote['pres'] = pres
+        vote['starttime'] = str(vote['starttime'])
+        vote['endtime'] = str(vote['endtime'])
+        vote['title'] = voteobj.subject.bill.description
+        vote['body'] = voteobj.subject.body
+        response = json.dumps(vote)
+        return HttpResponse(response, content_type='application/json')
+
+class VotesView(View):
 
     def get(self, request):
-        billobjs = BillVersion.objects.all()
+        voteobjs = Vote.objects.all()
+        now = timezone.now()
         if (request.GET.get('chamber')):
             chamber = get_legislative_body(request.GET.get('chamber'))
-            billobjs = billobjs.filter(location=chamber)
-        if (request.GET.get('status')):
-            billobjs = billobjs.filter(status=request.GET.get('status'))
-        bills = list(billobjs.values())
-        for i, bill in enumerate(bills):
-            bill['title'] = billobjs[i].bill.title
-            bill['sponsor'] = billobjs[i].bill.sponsor.__str__()
-            bill['modified'] = str(bills[i]['modified'])
-        response = json.dumps(bills)
+            voteobjs = voteobjs.filter(location=chamber)
+        if (request.GET.get('active')):
+            voteobjs = voteobjs.filter(endtime__gt=now)
+        votes = list(voteobjs.values())
+        for i, vote in enumerate(votes):
+            vote['title'] = voteobjs[i].subject.description
+            vote['yeas'] = voteobjs[i].yeas.count()
+            vote['nays'] = voteobjs[i].nays.count()
+            vote['pres'] = voteobjs[i].pres.count()
+            vote['starttime'] = str(vote['starttime'])
+            vote['endtime'] = str(vote['endtime'])
+        response = json.dumps(votes)
         return HttpResponse(response, content_type='application/json')

@@ -1,13 +1,12 @@
-from datetime import datetime
-
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 class Character(models.Model):
     player = models.ForeignKey(User, related_name='characters')
     primary = models.BooleanField()
-    activated = models.DateTimeField(default=datetime.now)
+    activated = models.DateTimeField(default=timezone.now)
     deactivated = models.DateTimeField(null=True, blank=True)
 
     name = models.CharField(max_length=80)
