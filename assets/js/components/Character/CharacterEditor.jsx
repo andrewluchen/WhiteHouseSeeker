@@ -134,7 +134,7 @@ class CharacterEditor extends React.Component {
           </Row>
 
           <ControlLabel>Biography:</ControlLabel>
-          <FormControl ref='bio' componentClass='textarea'/>
+          <FormControl ref='bio' value={this.state.bio} onChange={this.onChange} componentClass='textarea'/>
 
           <div className='character-buttons'>
             <Button

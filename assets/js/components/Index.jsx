@@ -5,7 +5,7 @@ class Index extends React.Component {
   render() {
     return (
       <div>
-        Index.html
+        This site is just a demo. It may be reset and all history may be trashed without warning.
       </div>
     );
   }

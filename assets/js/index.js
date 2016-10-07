@@ -18,6 +18,7 @@ import About from './components/About';
 import Bill from './components/Bill/Bill';
 import BillVersion from './components/Bill/BillVersion';
 import Capitol from './components/Capitol';
+import Character from './components/Character/Character';
 import EditBill from './components/Bill/EditBill';
 import Index from './components/Index';
 import House from './components/House';
@@ -48,6 +49,7 @@ class Root extends React.Component {
             <Route path='/register/' component={Register} />
 
             <Route path='/my' component={MyCharacters} />
+            <Route path='/character/:characterId' component={Character} />
             <Route path='/capitol' component={Capitol} />
             <Route path='/senate' component={Senate} />
             <Route path='/senate/new' component={() => <NewBill chamber='senate'/>} />

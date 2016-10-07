@@ -1,10 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import { loginJwt } from './actions/AuthActions';
 
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
+
+injectTapEventPlugin();
 
 class App extends React.Component {
 
@@ -21,8 +25,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Sidebar>
+      <MuiThemeProvider>
+        <div>
+          <Sidebar/>
+
           <div className='main_container'>
             <Header/>
 
@@ -31,8 +37,8 @@ class App extends React.Component {
             </div>
 
           </div>
-        </Sidebar>
-      </div>
+        </div>
+      </MuiThemeProvider>
     );
   }
 }

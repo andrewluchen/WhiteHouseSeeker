@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.views.generic import View
 
+from usgs.utils import validate_character
 from usgs.character.forms import CharacterForm
 from usgs.character.models import Character
 

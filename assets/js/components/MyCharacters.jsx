@@ -40,7 +40,7 @@ class MyCharacters extends React.Component {
       });
     } else {
       $.get(
-        'api/character/' + characterID + '/',
+        '/api/character/' + characterID + '/',
         response => {
           this.setState({
             active: characterID,
