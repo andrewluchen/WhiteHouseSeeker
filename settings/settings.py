@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import dj_database_url
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -54,7 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'usgs.urls'
+ROOT_URLCONF = 'settings.urls'
 
 TEMPLATES = [
     {
@@ -164,4 +163,46 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
+}
+
+
+from machina import get_apps as get_machina_apps
+from machina import MACHINA_MAIN_TEMPLATE_DIR, MACHINA_MAIN_STATIC_DIR
+
+# Machina related apps:
+INSTALLED_APPS += tuple([
+    'mptt',
+    'haystack',
+    'widget_tweaks',
+    'django_markdown',
+] + get_machina_apps())
+
+MIDDLEWARE_CLASSES += (
+    # Machina
+    'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
+)
+
+# Machina
+TEMPLATES[0]['DIRS'] += [ MACHINA_MAIN_TEMPLATE_DIR, ]
+TEMPLATES[0]['OPTIONS']['context_processors'] += [ 'machina.core.context_processors.metadata', ]
+
+STATICFILES_DIRS += (
+    # Machina
+    MACHINA_MAIN_STATIC_DIR,
+)
+
+CACHES = {
+  'default': {
+    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+  },
+  'machina_attachments': {
+    'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    'LOCATION': '/tmp',
+  }
+}
+
+HAYSTACK_CONNECTIONS = {
+  'default': {
+    'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+  },
 }

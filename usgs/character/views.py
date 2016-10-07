@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
-from django.views import View
+from django.views.generic import View
 
 from usgs.character.forms import CharacterForm
 from usgs.character.models import Character

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.utils import timezone
-from django.views import View
+from django.views.generic import View
 
 from usgs.bill.models import Bill, BillVersion, Debate, Vote
 from usgs.character.models import Character

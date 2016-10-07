@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
-from django.views import View
+from django.views.generic import View
 
 from rest_framework_jwt.settings import api_settings
 

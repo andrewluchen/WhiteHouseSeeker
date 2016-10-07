@@ -39,7 +39,11 @@ class Sidebar extends React.Component {
           <SidebarSubItem title='Republican National Committee' link='/rnc'/>
         </SidebarItem>
         <SidebarItem title='Minigames' link='/minigames'/>
-        <SidebarItem title='General Discussion' link='/genpop'/>
+        <div className='sidebar-menu'>
+          <div onClick={() => {window.location='/forum/'}} className='sidebar-link'>
+            General Discussion
+          </div>
+        </div>
         <div className='divider'/>
         <SidebarItem title='About' link='/about'/>
       </div>

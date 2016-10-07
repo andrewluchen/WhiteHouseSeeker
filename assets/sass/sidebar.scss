@@ -33,8 +33,9 @@
     }
 
     &-link {
-        display: block;
         color: $ui_gray_dark;
+        cursor: pointer;
+        display: block;
         text-decoration: none;
 
         &:hover {
