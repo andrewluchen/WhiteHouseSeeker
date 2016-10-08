@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Tabs, Tab } from 'material-ui/Tabs';
 
 import CharacterSummary from './CharacterSummary';
@@ -9,8 +10,13 @@ class Character extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: '',
+      userId: '',
       characterId: props.params.characterId,
       characterSummary: {},
+      yeas: [],
+      nays: [],
+      pres: [],
     };
     this.fetchCharacter = this.fetchCharacter.bind(this);
   }
@@ -31,6 +37,8 @@ class Character extends React.Component {
           response.gender = 'A Mystery';
         }
         this.setState({
+          username: response.username,
+          userId: response.user_id,
           characterSummary: {
             avatar: response.avatar,
             name: response.name,
@@ -44,18 +52,41 @@ class Character extends React.Component {
         });
       },
     );
+    $.get(
+      '/api/character/' + characterId + '/votes/',
+      response => {
+        this.setState({
+          yeas: response.yeas,
+          nays: response.nays,
+          pres: response.pres,
+        })
+      },
+    );
   }
 
   render() {
     return (
-      <Tabs>
-        <Tab label='Character Summary'>
-          <CharacterSummary data={this.state.characterSummary}/>
-        </Tab>
-        <Tab label='Voting Record'>
-          <VotingRecord data={{}}/>
-        </Tab>
-      </Tabs>
+      <div>
+        <div>
+          <strong>User: </strong>
+          <Link to={'/user/' + this.state.userId}>{this.state.username}</Link>
+        </div><br/>
+        <Tabs>
+          <Tab label='Character Summary'>
+            <CharacterSummary data={this.state.characterSummary}/>
+          </Tab>
+          <Tab label='Electoral History'>
+            TODO: implement me
+          </Tab>
+          <Tab label='Voting Record'>
+            <VotingRecord
+              yeas={this.state.yeas}
+              nays={this.state.nays}
+              pres={this.state.pres}
+            />
+          </Tab>
+        </Tabs>
+      </div>
     );
   }
 }

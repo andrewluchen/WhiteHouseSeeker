@@ -6,8 +6,10 @@ from usgs import views
 apipatterns = [
     url(r'^leaders/$', views.Leaders.as_view(), name='leaders'),
 
+    url(r'^user/(?P<pk>[0-9]+)/$', views.UserView.as_view(), name='user'),
     url(r'^character/new/$', views.NewCharacterView.as_view(), name='new-character'),
     url(r'^character/(?P<pk>[0-9]+)/$', views.CharacterView.as_view(), name='character'),
+    url(r'^character/(?P<pk>[0-9]+)/votes/$', views.CharacterVotingRecordView.as_view(), name='character-voting-record'),
     url(r'^characters/$', views.CharactersView.as_view(), name='characters'),
 
     url(r'^bill/new/$', views.NewBillView.as_view(), name='new-bill'),

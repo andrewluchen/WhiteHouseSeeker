@@ -1,3 +1,6 @@
+import json
+
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
@@ -13,7 +16,12 @@ from usgs.bill.views import (
     VoteView,
     VotesView,
 )
-from usgs.character.views import NewCharacterView, CharacterView, CharactersView
+from usgs.character.views import (
+    CharacterView,
+    CharacterVotingRecordView,
+    CharactersView,
+    NewCharacterView,
+)
 
 def echo(request):
     print ('request: ', request)
@@ -26,6 +34,25 @@ class Index(View):
     def get(self, request):
         utils.initialize()
         return render(request, 'index.html')
+
+class UserView(View):
+
+    def get(self, request, pk):
+        userobj = User.objects.get(pk=pk)
+        characterobjs = models.Character.objects.filter(player=userobj)
+        characters =[]
+        for c in list(characterobjs):
+            characters.append({
+                'character_id': c.id,
+                'name': c.description,
+                'party': c.party,
+            })
+        user = {
+            'username': userobj.username,
+            'characters': characters,
+        }
+        response = json.dumps(user)
+        return HttpResponse(response, content_type='application/json')
 
 class Leaders(View):
 

@@ -36,6 +36,8 @@ class CharacterView(View):
     def get(self, request, pk):
         characterobj = Character.objects.get(pk=pk)
         character = model_to_dict(characterobj)
+        character['username'] = characterobj.player.username
+        character['user_id'] = characterobj.player.id
         character['description'] = characterobj.description
         character['birthday'] = str(character['birthday'])
         character['activated'] = str(character['activated'])
@@ -65,6 +67,43 @@ class CharacterView(View):
             character.bio = request.POST.get('bio')
             character.save()
             return HttpResponse(status=200)
+
+
+class CharacterVotingRecordView(View):
+
+    def get(self, request, pk):
+        character = Character.objects.get(pk=pk)
+        yeaobjs = character.yea_votes.all()
+        nayobjs = character.nay_votes.all()
+        presobjs = character.pres_votes.all()
+        yeas = []
+        nays = []
+        pres = []
+        for i, v in enumerate(list(yeaobjs)):
+            yeas.append({
+                'vote_id': v.id,
+                'title': yeaobjs[i].subject.description,
+                'endtime': str(v.endtime),
+            })
+        for i, v in enumerate(list(nayobjs)):
+            nays.append({
+                'vote_id': v.id,
+                'title': nayobjs[i].subject.description,
+                'endtime': str(v.endtime),
+            })
+        for i, v in enumerate(list(presobjs)):
+            pres.append({
+                'vote_id': v.id,
+                'title': presobjs[i].subject.description,
+                'endtime': str(v.endtime),
+            })
+        votingrecord = {
+            'yeas': yeas,
+            'nays': nays,
+            'pres': pres,
+        }
+        response = json.dumps(votingrecord)
+        return HttpResponse(response, content_type='application/json')
 
 
 class CharactersView(View):

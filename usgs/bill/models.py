@@ -47,7 +47,7 @@ class BillVersion(models.Model):
 
     def __unicode__(self):
         return (
-            'S.' + str(self.bill.id) + ' ' + self.bill.title + ' - (rev.' + str(self.id) +')'
+            'S.' + str(self.bill.id) + ' ' + self.bill.title + ' - (id.' + str(self.id) +')'
         )
 
     def __str__(self):
