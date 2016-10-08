@@ -13,7 +13,7 @@
 
 html body {
     background-color: $ui_usgs;
-    font-family: Arial;
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 .main_container {
@@ -30,8 +30,8 @@ html body {
 }
 
 .divider {
-    height: 1px;
-    border-bottom: 1px solid $ui_gray;
+    background-color: $ui_gray_dark;
+    color: $ui_gray_dark;
 }
 
 

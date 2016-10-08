@@ -28,7 +28,7 @@ class ClerkOffice extends React.Component {
       <div className='chamber-clerk'>
         <div className='chamber-header'>{this.props.name}</div>
         <div className='chamber-cornerlink'>
-          <Link to={this.props.newRoute}>New Legislation</Link>
+          <Link to={this.props.newRoute}>+ New Legislation</Link>
         </div>
         <Table bordered={true} striped={true}>
           <thead>

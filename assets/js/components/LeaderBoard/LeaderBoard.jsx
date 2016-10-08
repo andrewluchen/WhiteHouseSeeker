@@ -1,4 +1,5 @@
 import React from 'react';
+import { Table } from 'react-bootstrap';
 
 class LeaderBoard extends React.Component {
 
@@ -6,19 +7,24 @@ class LeaderBoard extends React.Component {
     let data = this.props.data;
     let i = 0;
     return (
-      <div className='leaderboard'>
-      {
-        data.map(datum =>
-          <div className='row' key={i++}>
-            {
-              datum.map(col =>
-                <div className='col' key={i++}>{col ? col : 'None'}</div>
-              )
-            }
-          </div>
-        )
-      }
-      </div>
+      <Table className='leaderboard' bordered={true} striped={true}>
+        <thead>
+        </thead>
+        <tbody>
+          {
+            data.map(datum =>
+              <tr key={datum[0]}>
+                <td>
+                  {datum[0]}
+                </td>
+                <td>
+                  {datum[1]}
+                </td>
+              </tr>
+            )
+          }
+        </tbody>
+      </Table>
     );
   }
 }

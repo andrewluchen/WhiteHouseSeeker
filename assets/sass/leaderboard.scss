@@ -1,25 +1,3 @@
 .leaderboard {
-    display: flex;
-    flex-flow: column;
-
-    .row {
-        border: $ui_gray_dark 1px solid;
-        display: flex;
-        flex-flow: row;
-    }
-
-    .col {
-        flex: 1;
-        padding: 4px;
-        border-right: $ui_gray_dark 1px solid;
-    }
-
-    .row:nth-child(odd) {
-        background: $ui_gray;
-    }
-
-    .row:nth-child(even) {
-        background: $ui_off-white;
-    }
-
+    background-color: $ui_off_white;
 }

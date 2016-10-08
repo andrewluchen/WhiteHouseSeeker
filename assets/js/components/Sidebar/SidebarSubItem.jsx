@@ -1,15 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router';
+import MenuItem from 'material-ui/MenuItem';
 
 class SidebarSubItem extends React.Component {
   render() {
     return (
-      <div className='sidebar-submenu'>
-        <Link to={this.props.link} className='sidebar-link'>
-          {this.props.title}
-        </Link>
-        {this.props.children}
-      </div>
+      <MenuItem>
+        <div className='sidebar-subitem'>
+          <Link to={this.props.link} className='sidebar-link'>
+            {this.props.title}
+          </Link>
+          {this.props.children}
+        </div>
+      </MenuItem>
     )
   }
 }

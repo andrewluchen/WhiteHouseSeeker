@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import LeaderBoard from './LeaderBoard/LeaderBoard';
 
@@ -25,25 +26,24 @@ class Capitol extends React.Component {
 
   componentDidMount() {
     $.get(
-      'api/leaders/',
-      function (data) {
-        let fields = data[0].fields;
+      'api/capitol/',
+      response => {
         this.setState({
           leadership: [
-            ['President', fields.potus],
-            ['Vice President', fields.vpotus],
-            ['Speaker of the House', fields.speaker],
-            ['Senate Majority Leader', fields.housemajorityleader],
-            ['Senate Majority Whip', fields.senatemajoritywhip],
-            ['Senate Minority Leader', fields.senateminorityleader],
-            ['Senate Minority Whip', fields.senateminoritywhip],
-            ['House Majority Leader', fields.housemajorityleader],
-            ['House Majority Whip', fields.housemajoritywhip],
-            ['House Minority Leader', fields.houseminorityleader],
-            ['House Minority Whip', fields.houseminoritywhip],
+            ['President', response.potus],
+            ['Vice President', response.vpotus],
+            ['Speaker of the House', response.speaker],
+            ['Senate Majority Leader', response.housemajorityleader],
+            ['Senate Majority Whip', response.senatemajoritywhip],
+            ['Senate Minority Leader', response.senateminorityleader],
+            ['Senate Minority Whip', response.senateminoritywhip],
+            ['House Majority Leader', response.housemajorityleader],
+            ['House Majority Whip', response.housemajoritywhip],
+            ['House Minority Leader', response.houseminorityleader],
+            ['House Minority Whip', response.houseminoritywhip],
           ],
         });
-      }.bind(this),
+      },
     );
   }
 

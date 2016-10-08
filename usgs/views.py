@@ -54,12 +54,33 @@ class UserView(View):
         response = json.dumps(user)
         return HttpResponse(response, content_type='application/json')
 
-class Leaders(View):
+
+class CapitolView(View):
 
     def get(self, request):
-        obj = models.Leadership.objects.all().first()
-        if (obj == None):
-            obj = models.Leadership()
-            obj.save()
-        response = serializers.serialize('json', [obj,])
+        data = [
+            ('potus', models.Holding.objects.filter(title=models.Holding.POTUS)),
+            ('vpotus', models.Holding.objects.filter(title=models.Holding.VPOTUS)),
+            ('senatemajorityleader', models.Holding.objects.filter(title=models.Holding.SML)),
+            ('senatemajoritywhip', models.Holding.objects.filter(title=models.Holding.SML2)),
+            ('senateminorityleader', models.Holding.objects.filter(title=models.Holding.SML)),
+            ('senateminoritywhip', models.Holding.objects.filter(title=models.Holding.SML2)),
+            ('speaker', models.Holding.objects.filter(title=models.Holding.SPEAKER)),
+            ('housemajorityleader', models.Holding.objects.filter(title=models.Holding.HML)),
+            ('housemajoritywhip', models.Holding.objects.filter(title=models.Holding.HML2)),
+            ('houseminorityleader', models.Holding.objects.filter(title=models.Holding.HmL)),
+            ('houseminoritywhip', models.Holding.objects.filter(title=models.Holding.HmL2)),
+            ('dncchair', models.Holding.objects.filter(title=models.Holding.DNC)),
+            ('dncchair2', models.Holding.objects.filter(title=models.Holding.DNC2)),
+            ('rncchair', models.Holding.objects.filter(title=models.Holding.RNC)),
+            ('rncchair2', models.Holding.objects.filter(title=models.Holding.RNC2)),
+        ]
+        response = {}
+        not_applicable = 'N/A'
+        for (position, filtered) in data:
+            if (filtered.count() != 0):
+                response[position] = filtered.first().holder.short_description()
+            else:
+                response[position] = 'N/A'
+        response = json.dumps(response)
         return HttpResponse(response, content_type='application/json')
