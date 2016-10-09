@@ -33,7 +33,7 @@ class Votes extends React.Component {
       <div className='chamber-votes'>
         <div className='chamber-header'>Roll Call Vote</div>
         <div className='chamber-cornerlink'>
-          <Link to={this.props.newRoute}>+ New Vote</Link>
+          <Link to={this.props.newRoute}>+ New Vote (skip debate)</Link>
         </div>
         <Table bordered={true} striped={true}>
           <thead>

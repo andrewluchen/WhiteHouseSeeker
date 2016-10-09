@@ -17,6 +17,7 @@ apipatterns = [
     url(r'^bill/(?P<bid>[0-9]+)/(?P<vid>[0-9]+)/$', views.BillVersionView.as_view(), name='bill-version'),
     url(r'^bills/$', views.BillsView.as_view(), name='get-bills'),
     url(r'^bills/versions/$', views.BillVersionsView.as_view(), name='get-bill-versions'),
+    url(r'^vote/new/$', views.NewVoteView.as_view(), name='new-vote'),
     url(r'^vote/(?P<pk>[0-9]+)/$', views.VoteView.as_view(), name='vote'),
     url(r'^votes/$', views.VotesView.as_view(), name='get-votes'),
     url(r'^debate/new/$', views.NewDebateView.as_view(), name='new-debate'),

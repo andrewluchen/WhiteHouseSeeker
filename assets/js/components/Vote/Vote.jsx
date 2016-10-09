@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
+import Permission from '../Permission/Permission';
+
 const YEA = 'yea';
 const NAY = 'nay';
 const PRES = 'present';
@@ -20,6 +22,7 @@ class Vote extends React.Component {
       pres: [],
       title: '',
       body: '',
+      location: '',
       endtime: null,
     };
     this.fetchVote = this.fetchVote.bind(this);
@@ -43,6 +46,7 @@ class Vote extends React.Component {
         this.setState({
           title: response.title,
           body: response.body,
+          location: response.location,
           yeas: response.yeas,
           nays: response.nays,
           pres: response.pres,
@@ -87,6 +91,14 @@ class Vote extends React.Component {
         this.fetchVote(this.props.params.voteId);
       },
     });
+  }
+
+  getPermissionGroup(location) {
+    if (location === 'senate') {
+      return 'Senator';
+    } else if (location === 'house') {
+      return 'Representative';
+    }
   }
 
   partyColor(party) {
@@ -138,29 +150,34 @@ class Vote extends React.Component {
     let presStyle = this.state.myvote === PRES ? selectStyle : {};
     return (
       <div>
-        <div className='vote-buttons'>
-          <Button
-            bsSize='large'
-            onClick={() => this.castVote(YEA)}
-            {...ayeStyle}
-          >
-            Yea
-          </Button>
-          <Button
-            bsSize='large'
-            onClick={() => this.castVote(NAY)}
-            {...nayStyle}
-          >
-            Nay
-          </Button>
-          <Button
-            bsSize='large'
-            onClick={() => this.castVote(PRES)}
-            {...presStyle}
-          >
-            Present
-          </Button>
-        </div>
+        <Permission
+          title={this.getPermissionGroup(this.state.location)}
+          substitute={'You must be a ' + this.props.permissionGroup + ' to vote'}
+        >
+          <div className='vote-buttons'>
+            <Button
+              bsSize='large'
+              onClick={() => this.castVote(YEA)}
+              {...ayeStyle}
+            >
+              Yea
+            </Button>
+            <Button
+              bsSize='large'
+              onClick={() => this.castVote(NAY)}
+              {...nayStyle}
+            >
+              Nay
+            </Button>
+            <Button
+              bsSize='large'
+              onClick={() => this.castVote(PRES)}
+              {...presStyle}
+            >
+              Present
+            </Button>
+          </div>
+        </Permission>
         <Grid>
           <Row className='show-grid'>
             <Col sm={8} md={4}>
