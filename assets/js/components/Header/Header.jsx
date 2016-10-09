@@ -1,39 +1,48 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
 
 import { setPrimaryCharacter } from '../../actions/CharacterActions';
 
 import CharacterSelector from '../Character/CharacterSelector';
 
 class Header extends React.Component {
+
+  onLogout() {
+    window.location = '/auth/logout/';
+  }
+
   render() {
     let authenticatedContent = (
-      <div className='topbar-container'>
-        <div className='topbar-notifications'>
-          <i className='fa fa-bell'/>
+      <ToolbarGroup className='topbar-icons' lastChild={true}>
+        <div className='topbar-title'>
+          <i className='fa fa-bell'/>&nbsp;
         </div>
-        <div className='topbar-messages'>
-          <i className='fa fa-envelope'/>
+        <div className='topbar-title'>
+          <i className='fa fa-envelope'/>&nbsp;
         </div>
-        <div className='topbar-settings'>
-          <i className='fa fa-gear header-settings-gear'/>
-        </div>
-      </div>
+        <IconMenu
+          iconButtonElement={<div className='topbar-title'><i className='fa fa-gear'/>&nbsp;</div>}
+          anchorOrigin={{ vertical:'bottom', horizontal:'left' }}
+          onChange={this.onLogout}
+        >
+          <MenuItem value='logout' primaryText='Logout'/>
+        </IconMenu>
+      </ToolbarGroup>
     );
     let logIn = (
-      <div className='topbar-container'>
-        <Link to='/register/' className='topbar-login'>Register</Link>
-        {' / '}
-        <Link to='/login/' className='topbar-login'>Login</Link>
-      </div>
+      <ToolbarGroup lastChild={true}>
+        <Link to='/register/' className='topbar-title topbar-register'>Register</Link>
+        <div className='topbar-title topbar-slash'>/</div>
+        <Link to='/login/' className='topbar-title topbar-login'>Login</Link>
+      </ToolbarGroup>
     );
-    return (
-      <div className='topbar'>
-        <div className='topbar-welcome'>
-          {this.props.user ? 'Welcome Back ' + this.props.user.username + '!' : null}
-        </div>
-        <div className='topbar-characters'>
+    let characters = (
+      <ToolbarGroup>
+        <div className='topbar-title topbar-characters'>
           <div>You are currently: &nbsp;</div>
           <CharacterSelector
             characters={this.props.characters}
@@ -42,8 +51,16 @@ class Header extends React.Component {
             newOption={false}
           />
         </div>
+      </ToolbarGroup>
+    );
+    return (
+      <Toolbar className='topbar'>
+        <ToolbarGroup className='topbar-welcome'>
+          {this.props.user ? <div className='topbar-title'>{'Welcome Back ' + this.props.user.username + '!'}</div> : null}
+        </ToolbarGroup>
+        {this.props.user ? characters : null}
         {this.props.user ? authenticatedContent : logIn}
-      </div>
+      </Toolbar>
     );
   }
 }

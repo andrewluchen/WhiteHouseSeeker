@@ -1,27 +1,21 @@
 .topbar {
-    background-color: $ui_blue;
-    color: $ui_white;
-    display: flex;
-    padding: 10px;
+    background-color: $ui_blue !important;
 
-    &-welcome {
-        font-size: 1.5em;
+    &-title {
+        padding-right: 16px;
+        line-height: 56px;
+        font-size: 20px;
+        position: relative;
+        white-space: nowrap;
     }
 
-    &-logo {
-        flex: 1;
-        text-align: center;
-
-        img {
-            margin: -9px;
-            height: 42px;
-        }
-
+    &-welcome {
+        color: $ui_white;
+        font-weight: bold;
     }
 
     &-characters {
-        flex: 1;
-        height: 1;
+        color: $ui_white;
         text-align: center;
 
         > * {
@@ -30,24 +24,32 @@
 
     }
 
-    &-container {
-        display: flex;
-        font-size: 1.5em;
-        padding: 4px;
+    &-icons {
+        color: $ui_white;
+
+        i {
+            cursor: pointer;
+        }
+
     }
 
-    &-messages {
-        margin: 0 10px;
+    &-slash {
+        color: $ui_white;
+        padding-left: 4px;
+        padding-right: 4px;
     }
 
-    &-notifications {
-        margin: 0 10px;
-    }
+    &-register {
+        color: $ui_white;
+        font-weight: bold;
+        padding-right: 0;
+        text-decoration: none;
 
-    &-settings {
-        border-left: 1px solid $ui_gray;
-        margin-left: 5px;
-        padding-left: 10px;
+        &:hover {
+            color: $ui_gray;
+            text-decoration: none;
+        }
+
     }
 
     &-login {
@@ -57,6 +59,7 @@
 
         &:hover {
             color: $ui_gray;
+            text-decoration: none;
         }
 
     }
