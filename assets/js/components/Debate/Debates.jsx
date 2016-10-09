@@ -16,9 +16,9 @@ class Debates extends React.Component {
     this.props.debates.slice(0).sort(this.momentSort).forEach(debate => {
       let time = moment(debate.endtime).fromNow();
       debates.push(
-        <tr key={debate.debate_id}>
+        <tr key={debate.debateId}>
           <td>
-            <Link to={'/debate/' + debate.debate_id}>
+            <Link to={'/debate/' + debate.debateId}>
               {debate.title}
             </Link>
           </td>
@@ -29,6 +29,9 @@ class Debates extends React.Component {
     return (
       <div className='chamber-debates'>
         <div className='chamber-header'>Debate Floor</div>
+        <div className='chamber-cornerlink'>
+          <Link to={this.props.newRoute}>+ New Debate</Link>
+        </div>
         <Table bordered={true} striped={true}>
           <thead>
             <tr>

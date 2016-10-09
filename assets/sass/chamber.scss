@@ -60,4 +60,34 @@
 
     }
 
+    &-table {
+
+        a {
+            cursor: pointer;
+        }
+
+        thead, tbody {
+            tr {
+                background-color: $ui_off_white;
+            }
+        }
+
+    }
+
+}
+
+.newdebate {
+
+    &-header {
+        background-color: $ui_white;
+        border: 1px solid  $ui_gray_dark;
+        display: flex;
+        padding: 10px;
+
+        &-info {
+            flex: 1
+        }
+
+    }
+
 }

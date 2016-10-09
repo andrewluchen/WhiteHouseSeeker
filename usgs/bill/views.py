@@ -99,7 +99,7 @@ class BillsView(View):
         pass
 
 
-class ClerkView(View):
+class BillVersionsView(View):
 
     def get(self, request):
         billversionobjs = BillVersion.objects.all()
@@ -108,6 +108,8 @@ class ClerkView(View):
             billversionobjs = billversionobjs.filter(location=chamber)
         if (request.GET.get('status')):
             billversionobjs = billversionobjs.filter(status=request.GET.get('status'))
+        if (request.GET.get('active')):
+            billversionobjs = billversionobjs.filter(closed=False)
         bills = list(billversionobjs.values())
         for i, bill in enumerate(bills):
             bill['title'] = billversionobjs[i].bill.description
@@ -195,6 +197,34 @@ class VotesView(View):
             vote['endtime'] = str(vote['endtime'])
         response = json.dumps(votes)
         return HttpResponse(response, content_type='application/json')
+
+
+class NewDebateView(View):
+
+    def post(self, request):
+        version_id = request.POST.get('version_id')
+        chamber = request.POST.get('chamber')
+        hours = request.POST.get('hours')
+        billversion = BillVersion.objects.get(id=version_id)
+        billversion.modified = timezone.now()
+        billversion.closed = True
+        billversion.save()
+        newbillversion = BillVersion(
+            bill=billversion.bill,
+            status=BillVersion.BILL_DEBATE,
+            body=billversion.body,
+            modified=timezone.now(),
+            location=get_legislative_body(chamber),
+        )
+        newbillversion.save()
+        debate = Debate(
+            subject=newbillversion,
+            starttime=timezone.now(),
+            endtime=timezone.now() + timezone.timedelta(hours=int(hours)),
+            location=get_legislative_body(chamber),
+        )
+        debate.save()
+        return HttpResponse(status=200)
 
 
 class DebatesView(View):

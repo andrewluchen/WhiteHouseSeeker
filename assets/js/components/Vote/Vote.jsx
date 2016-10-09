@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import moment from 'moment';
 
 const YEA = 'yea';
 const NAY = 'nay';
@@ -21,7 +20,7 @@ class Vote extends React.Component {
       pres: [],
       title: '',
       body: '',
-      endtime: moment(),
+      endtime: null,
     };
     this.fetchVote = this.fetchVote.bind(this);
     this.findMyVote = this.findMyVote.bind(this);
@@ -37,9 +36,10 @@ class Vote extends React.Component {
   }
 
   fetchVote(voteId) {
-    $.get(
-      '/api/vote/' + voteId + '/',
-      response => {
+    $.ajax({
+      url: '/api/vote/' + voteId + '/',
+      type: 'GET',
+      success: response => {
         this.setState({
           title: response.title,
           body: response.body,
@@ -51,7 +51,7 @@ class Vote extends React.Component {
         });
         this.findMyVote(response.yeas, response.nays, response.pres, this.props.active);
       },
-    );
+    });
   }
 
   findMyVote(yeas, nays, pres, active) {
@@ -132,7 +132,7 @@ class Vote extends React.Component {
         </div>
       );
     })
-    let selectStyle = { bsStyle:'primary' }
+    let selectStyle = { active: true }
     let ayeStyle = this.state.myvote === YEA ? selectStyle : {};
     let nayStyle = this.state.myvote === NAY ? selectStyle : {};
     let presStyle = this.state.myvote === PRES ? selectStyle : {};

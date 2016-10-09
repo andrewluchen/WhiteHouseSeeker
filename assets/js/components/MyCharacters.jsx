@@ -39,15 +39,16 @@ class MyCharacters extends React.Component {
         data: {},
       });
     } else {
-      $.get(
-        '/api/character/' + characterID + '/',
-        response => {
+      $.ajax({
+        url: '/api/character/' + characterID + '/',
+        type: 'GET',
+        success: response => {
           this.setState({
             active: characterID,
             data: response,
           });
         },
-      );
+      });
     }
   }
 

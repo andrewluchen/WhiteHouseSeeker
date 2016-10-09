@@ -17,14 +17,17 @@ function characterSelected(key) {
 
 export function fetchUserCharacters(username) {
   return dispatch => {
-    $.get(
-      '/api/characters/',
-      { username: username },
-      data => {
-        let characters = data;
+    $.ajax({
+      url: '/api/characters/',
+      type: 'GET',
+      data: {
+        username: username,
+      },
+      success: response => {
+        let characters = response;
         dispatch(charactersChanged(characters));
       },
-    );
+    });
   }
 }
 
@@ -38,14 +41,17 @@ export function createCharacter(username, data) {
         window.location = '/my';
       },
     });
-    $.get(
-      '/api/characters/',
-      { username: username },
-      data => {
-        let characters = data;
+    $.ajax({
+      url: '/api/characters/',
+      type: 'GET',
+      data: {
+        username: username,
+      },
+      success: response => {
+        let characters = response;
         dispatch(charactersChanged(characters));
       },
-    );
+    });
   }
 }
 
@@ -56,14 +62,17 @@ export function updateCharacter(username, id, data) {
       type: 'POST',
       data: data,
     });
-    $.get(
-      '/api/characters/',
-      { username: username },
-      data => {
-        let characters = data;
+    $.ajax({
+      url: '/api/characters/',
+      type: 'GET',
+      data: {
+        username: username,
+      },
+      success: response => {
+        let characters = response;
         dispatch(charactersChanged(characters));
       },
-    );
+    });
   }
 }
 

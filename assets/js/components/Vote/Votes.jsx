@@ -16,9 +16,9 @@ class Votes extends React.Component {
     this.props.votes.slice(0).sort(this.momentSort).forEach(vote => {
       let time = moment(vote.endtime).fromNow();
       votes.push(
-        <tr key={vote.vote_id}>
+        <tr key={vote.voteId}>
           <td>
-            <Link to={'/vote/' + vote.vote_id}>
+            <Link to={'/vote/' + vote.voteId}>
               {vote.title}
             </Link>
           </td>
@@ -32,6 +32,9 @@ class Votes extends React.Component {
     return (
       <div className='chamber-votes'>
         <div className='chamber-header'>Roll Call Vote</div>
+        <div className='chamber-cornerlink'>
+          <Link to={this.props.newRoute}>+ New Vote</Link>
+        </div>
         <Table bordered={true} striped={true}>
           <thead>
             <tr>

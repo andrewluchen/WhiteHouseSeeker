@@ -8,6 +8,7 @@ class Senate extends React.Component {
 
   constructor() {
     super();
+    this.chamber = 'senate';
     this.state = {
       clerk: [],
       debates: [],
@@ -26,18 +27,19 @@ class Senate extends React.Component {
 
   getClerk() {
     $.ajax({
-      url: '/api/clerk/',
+      url: '/api/bills/versions/',
       type: 'GET',
       data: {
-        chamber: 'senate',
+        chamber: this.chamber,
         status: 'Introduced',
+        active: true,
       },
       success: response => {
         let clerk = []
         response.forEach(bill => {
           clerk.push({
-            version_id: bill.id,
-            bill_id: bill.bill_id,
+            versionId: bill.id,
+            billId: bill.bill_id,
             title: bill.title,
             sponsor: bill.sponsor
           });
@@ -54,14 +56,14 @@ class Senate extends React.Component {
       url: '/api/debates/',
       type: 'GET',
       data: {
-        chamber: 'senate',
+        chamber: this.chamber,
         active: true,
       },
       success: response => {
         let debates = []
         response.forEach(debate => {
           debates.push({
-            debate_id: debate.id,
+            debateId: debate.id,
             title: debate.title,
             endtime: debate.endtime,
           });
@@ -78,14 +80,14 @@ class Senate extends React.Component {
       url: '/api/votes/',
       type: 'GET',
       data: {
-        chamber: 'senate',
+        chamber: this.chamber,
         active: true,
       },
       success: response => {
         let votes = []
         response.forEach(vote => {
           votes.push({
-            vote_id: vote.id,
+            voteId: vote.id,
             title: vote.title,
             endtime: vote.endtime,
             yeas: vote.yeas,
@@ -103,12 +105,18 @@ class Senate extends React.Component {
   render() {
     return (
       <div>
-        <Votes votes={this.state.votes}/>
-        <Debates debates={this.state.debates}/>
+        <Votes
+          votes={this.state.votes}
+          newRoute='/senate/vote/new'
+        />
+        <Debates
+          debates={this.state.debates}
+          newRoute='/senate/debate/new'
+        />
         <ClerkOffice
           name='Senate Clerk Office'
-          newRoute='/senate/new'
           bills={this.state.clerk}
+          newRoute='/senate/new'
         />
       </div>
     );

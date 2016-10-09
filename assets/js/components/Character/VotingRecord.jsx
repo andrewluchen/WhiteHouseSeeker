@@ -36,22 +36,37 @@ class VotingRecord extends React.Component {
       );
     })
     return (
-      <Grid>
-        <Row className='show-grid'>
-          <Col sm={8} md={4}>
-            <strong>Yeas:</strong>
-            {yeas}
-          </Col>
-          <Col sm={8} md={4}>
-            <strong>Nays:</strong>
-            {nays}
-          </Col>
-          <Col sm={8} md={4}>
-            <strong>Present:</strong>
-            {pres}
-          </Col>
-        </Row>
-      </Grid>
+      <div>
+        <Grid>
+          <Row className='show-grid'>
+            <Col sm={8} md={4}>
+              <strong>Sponsored:</strong>
+              TODO:
+            </Col>
+            <Col sm={8} md={4}>
+              <strong>Cosponsored:</strong>
+              TODO:
+            </Col>
+          </Row>
+        </Grid>
+        <br/>
+        <Grid>
+          <Row className='show-grid'>
+            <Col sm={8} md={4}>
+              <strong>Yeas:</strong>
+              {yeas}
+            </Col>
+            <Col sm={8} md={4}>
+              <strong>Nays:</strong>
+              {nays}
+            </Col>
+            <Col sm={8} md={4}>
+              <strong>Present:</strong>
+              {pres}
+            </Col>
+          </Row>
+        </Grid>
+      </div>
     );
   }
 }

@@ -24,6 +24,8 @@ import Index from './components/Index';
 import House from './components/House';
 import MyCharacters from './components/MyCharacters';
 import NewBill from './components/Bill/NewBill';
+import NewDebate from './components/Debate/NewDebate';
+import NewVote from './components/Vote/NewVote';
 import Senate from './components/Senate';
 import User from './components/User/User';
 import Vote from './components/Vote/Vote';
@@ -55,8 +57,12 @@ class Root extends React.Component {
             <Route path='/capitol' component={Capitol} />
             <Route path='/senate' component={Senate} />
             <Route path='/senate/new' component={() => <NewBill chamber='senate'/>} />
+            <Route path='/senate/debate/new' component={() => <NewDebate chamber='senate'/>} />
+            <Route path='/senate/vote/new' component={() => <NewVote chamber='senate'/>} />
             <Route path='/house' component={House} />
             <Route path='/house/new' component={() => <NewBill chamber='house'/>} />
+            <Route path='/house/debate/new' component={() => <NewDebate chamber='house'/>} />
+            <Route path='/house/vote/new' component={() => <NewVote chamber='house'/>} />
             <Route path='/bill/:billId' component={Bill} />
             <Route path='/bill/:billId/:versionId' component={BillVersion} />
             <Route path='/bill/:billId/:versionId/edit' component={EditBill} />

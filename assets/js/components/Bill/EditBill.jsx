@@ -23,15 +23,16 @@ class EditBill extends React.Component {
   }
 
   fetchBill(billId, versionId) {
-    $.get(
-      '/api/bill/' + billId + '/' + versionId + '/',
-      response => {
+    $.ajax({
+      url: '/api/bill/' + billId + '/' + versionId + '/',
+      type: 'GET',
+      success: response => {
         this.setState({
           title: response.title,
           content: response.body,
         });
       },
-    );
+    });
   }
 
   submitBill(data) {

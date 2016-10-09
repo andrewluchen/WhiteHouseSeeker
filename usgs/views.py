@@ -8,11 +8,12 @@ from django.views.generic import View
 from usgs import models, utils
 from usgs.bill.views import (
     BillView,
-    BillVersionView,
     BillsView,
-    ClerkView,
+    BillVersionView,
+    BillVersionsView,
     DebatesView,
     NewBillView,
+    NewDebateView,
     VoteView,
     VotesView,
 )

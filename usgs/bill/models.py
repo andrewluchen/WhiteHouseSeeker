@@ -26,17 +26,28 @@ class Bill(models.Model):
         verbose_name = 'Bill Summary'
         verbose_name_plural = 'Bill Summaries'
 
+'''
+Every Version should either end in Signed/Failed or spawn an active version
 
+(Senate) Introduced -> Inactive
+(S.Comittee) Referred -> In Debate -> In Vote -> Passed/Failed -> Inactive
+(Senate) Received -> In Debate -> In Vote -> Passed/Failed -> Inactive
+(House) Received -> In Debate -> In Vote -> Passed/Failed -> Inactive
+TODO: (ConCom) Received -> ???
+(Potus) Presented to the President -> Signed/Vetoed -> Inactive
+'''
 class BillVersion(models.Model):
     BILL_CLERK = 'Introduced'
     BILL_DEBATE = 'In Debate'
     BILL_VOTE = 'In Vote'
     BILL_PASS = 'Passed'
     BILL_FAIL = 'Failed'
+    BILL_REFER = 'Referred to Comittee'
+    BILL_RECEIVE = 'Received for Floor Consideration'
     BILL_POTUS = 'Presented to the President'
-    BILL_SIGN = 'Sign into Law'
+    BILL_SIGN = 'Signed into Law'
     BILL_VETO = 'Vetoed by the President'
-    BILL_OVERRIDE = 'Passed over veto'
+    BILL_OVERRIDE = 'Passed over Veto'
 
     bill = models.ForeignKey(Bill, related_name='versions')
     status = models.CharField(max_length=100)
