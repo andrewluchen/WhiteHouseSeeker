@@ -1,13 +1,13 @@
 import json
 
 from django.contrib.auth.models import User
-from django.forms.models import model_to_dict
 from django.http import HttpResponse
+from django.utils import timezone
 from django.views.generic import View
 
 from usgs.utils import validate_character
 from usgs.character.forms import CharacterForm
-from usgs.character.models import Character
+from usgs.character.models import Character, Holding
 
 class NewCharacterView(View):
 
@@ -16,6 +16,7 @@ class NewCharacterView(View):
         if form.is_valid():
             character = Character(
                 player=request.user,
+                activated=timezone.now(),
                 primary=form.cleaned_data['primary'],
                 name=form.cleaned_data['name'],
                 gender=form.cleaned_data['gender'],
@@ -27,6 +28,12 @@ class NewCharacterView(View):
                 bio=form.cleaned_data['bio'],
             )
             character.save()
+            holding = Holding(
+                holder=character,
+                title='Senator',
+                starttime=timezone.now(),
+            )
+            holding.save()
             return HttpResponse(status=201)
         return HttpResponse(form.errors, status=400)
 
@@ -35,13 +42,21 @@ class CharacterView(View):
 
     def get(self, request, pk):
         characterobj = Character.objects.get(pk=pk)
-        character = model_to_dict(characterobj)
-        character['username'] = characterobj.player.username
-        character['user_id'] = characterobj.player.id
-        character['description'] = characterobj.description
-        character['birthday'] = str(character['birthday'])
-        character['activated'] = str(character['activated'])
-        character['deactivated'] = str(character['deactivated'])
+        character = {
+            'username': characterobj.player.username,
+            'user_id': characterobj.player.id,
+            'description': characterobj.description,
+            'name': characterobj.name,
+            'title': characterobj.get_title(),
+            'birthday': str(characterobj.birthday),
+            'gender': characterobj.gender,
+            'residence': characterobj.residence,
+            'party': characterobj.party,
+            'state': characterobj.state,
+            'avatar': characterobj.avatar,
+            'activated': str(characterobj.activated),
+            'deactivated': str(characterobj.deactivated),
+        }
         response = json.dumps(character)
         return HttpResponse(response, content_type='application/json')
 
@@ -113,11 +128,24 @@ class CharactersView(View):
         if (request.GET.get('username')):
             player = User.objects.get(username=request.GET.get('username'))
             characterobjs = characterobjs.filter(player=player)
-        characters = list(characterobjs.values())
-        for i, c in enumerate(characters):
-            c['description'] = characterobjs[i].description
-            c['birthday'] = str(c['birthday'])
-            c['activated'] = str(c['activated'])
-            c['deactivated'] = str(c['deactivated'])
+        characters = []
+        for i, c in enumerate(list(characterobjs)):
+            characters.append({
+                'id': c.id,
+                'username': c.player.username,
+                'user_id': c.player.id,
+                'description': c.description,
+                'primary': c.primary,
+                'name': c.name,
+                'title': c.get_title(),
+                'birthday': str(c.birthday),
+                'gender': c.gender,
+                'residence': c.residence,
+                'party': c.party,
+                'state': c.state,
+                'avatar': c.avatar,
+                'activated': str(c.activated),
+                'deactivated': str(c.deactivated),
+            })
         response = json.dumps(characters)
         return HttpResponse(response, content_type='application/json')

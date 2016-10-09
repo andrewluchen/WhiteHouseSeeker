@@ -21,11 +21,15 @@ class Character(models.Model):
     def short(self):
         return self.name + ' ' + '(' + self.party[0] + '-' + self.state + ')'
 
-    def __unicode__(self):
-        holds = Holding.objects.filter(holder=self)
+    def get_title(self):
+        holds = Holding.objects.filter(holder=self, endtime__isnull=True)
         if (holds.count() != 0):
-            title = holds.first().title
-        else:
+            return holds.first().title
+        return None
+
+    def __unicode__(self):
+        title = self.get_title()
+        if (not title):
             title = 'Private Citizen'
         return title + ' ' + self.short()
 
@@ -55,6 +59,8 @@ class Holding(models.Model):
     HML2 = 'House Majority Whip'
     HmL = 'House Minority Leader'
     HmL2 = 'House Minority Whip'
+
+    # ???
     DNC = 'Democratic Chair'
     DNC2 = 'Democratic Vice Chair'
     RNC = 'Republican Chair'
@@ -63,5 +69,12 @@ class Holding(models.Model):
     holder = models.ForeignKey(Character, related_name='holdings')
     title = models.CharField(max_length=80)
     subtitle = models.CharField(max_length=80, default='', blank=True)
+    partytitle = models.CharField(max_length=80, default='', blank=True)
     starttime = models.DateTimeField(default=timezone.now)
-    endttime = models.DateTimeField(null=True, blank=True)
+    endtime = models.DateTimeField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.title
+
+    def __str__(self):
+        return self.__unicode__()

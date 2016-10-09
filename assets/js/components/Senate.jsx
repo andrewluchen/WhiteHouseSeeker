@@ -115,6 +115,7 @@ class Senate extends React.Component {
         />
         <ClerkOffice
           name='Senate Clerk Office'
+          permissionGroup='Senator'
           bills={this.state.clerk}
           newRoute='/senate/new'
         />

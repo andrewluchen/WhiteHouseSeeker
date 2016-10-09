@@ -105,10 +105,17 @@ class House extends React.Component {
   render() {
     return (
       <div>
-        <Votes votes={this.state.votes}/>
-        <Debates debates={this.state.debates}/>
+        <Votes
+          votes={this.state.votes}
+          newRoute='/senate/vote/new'
+        />
+        <Debates
+          debates={this.state.debates}
+          newRoute='/senate/debate/new'
+        />
         <ClerkOffice
           name='House Hopper'
+          permissionGroup='Representative'
           newRoute='/house/new'
           bills={this.state.clerk}
         />

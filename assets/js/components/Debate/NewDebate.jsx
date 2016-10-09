@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import { Button, ButtonToolbar, Table } from 'react-bootstrap';
 import moment from 'moment';
 
@@ -94,7 +94,11 @@ class NewDebate extends React.Component {
         hours: this.state.hours,
       },
       success: response => {
-
+        if (this.props.chamber === 'senate') {
+          browserHistory.push('/' + this.props.chamber);
+        } else if (this.props.chamber === 'house') {
+          browserHistory.push('/' + this.props.chamber);
+        }
       }
     });
   }

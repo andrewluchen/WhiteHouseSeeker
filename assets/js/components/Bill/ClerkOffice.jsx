@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Table } from 'react-bootstrap';
 
+import Permission from '../Permission/Permission';
+
 class ClerkOffice extends React.Component {
 
   momentSort(left, right) {
@@ -28,7 +30,12 @@ class ClerkOffice extends React.Component {
       <div className='chamber-clerk'>
         <div className='chamber-header'>{this.props.name}</div>
         <div className='chamber-cornerlink'>
-          <Link to={this.props.newRoute}>+ New Legislation</Link>
+          <Permission
+            title={this.props.permissionGroup}
+            substitute={'You must be a ' + this.props.permissionGroup + ' to submit bills'}
+          >
+            <Link to={this.props.newRoute}>+ New Legislation</Link>
+          </Permission>
         </div>
         <Table bordered={true} striped={true}>
           <thead>
@@ -48,6 +55,7 @@ class ClerkOffice extends React.Component {
 
 ClerkOffice.propTypes = {
   name: React.PropTypes.string,
+  permissionGroup: React.PropTypes.string,
   newRoute: React.PropTypes.string,
   bills: React.PropTypes.array,
 }

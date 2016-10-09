@@ -33,6 +33,13 @@
 
     }
 
+    &-gear {
+        font-size: 20px;
+        position: relative;
+        top: 2px;
+        white-space: nowrap;
+    }
+
     &-slash {
         color: $ui_white;
         padding-left: 4px;
