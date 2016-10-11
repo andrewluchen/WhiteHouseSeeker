@@ -1,5 +1,6 @@
 import json
 
+from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.generic import View
@@ -116,7 +117,7 @@ class VotesView(View):
             vote['nays'] = voteobjs[i].nays.count()
             vote['pres'] = voteobjs[i].pres.count()
             vote['starttime'] = str(vote['starttime'])
-            vote['endtime'] = str(vote['endtime'])
+            vote['endtime'] = str(vote['endtime']) if vote['endtime'] else None
         response = json.dumps(votes)
         return HttpResponse(response, content_type='application/json')
 
@@ -139,14 +140,32 @@ class NewDebateView(View):
             location=get_legislative_body(chamber),
         )
         newbillversion.save()
+        endtime = None
+        if (hours):
+            endtime = timezone.now() + timezone.timedelta(hours=int(hours))
         debate = Debate(
             subject=newbillversion,
             starttime=timezone.now(),
-            endtime=timezone.now() + timezone.timedelta(hours=int(hours)),
+            endtime=endtime,
             location=get_legislative_body(chamber),
         )
         debate.save()
         return HttpResponse(status=200)
+
+
+class DebateView(View):
+
+    def get(self, request, pk):
+        debateobj = Debate.objects.get(id=pk)
+        debate = {
+            'title': debateobj.subject.bill.description,
+            'body': debateobj.subject.body,
+            'location': debateobj.subject.location.name,
+            'starttime': str(debateobj.starttime),
+            'starttime': str(debateobj.starttime),
+        }
+        response = json.dumps(debate)
+        return HttpResponse(response, content_type='application/json')
 
 
 class DebatesView(View):
@@ -158,11 +177,11 @@ class DebatesView(View):
             chamber = get_legislative_body(request.GET.get('chamber'))
             debateobjs = debateobjs.filter(location=chamber)
         if (request.GET.get('active')):
-            debateobjs = debateobjs.filter(endtime__gt=now)
+            debateobjs = debateobjs.filter(Q(endtime__gt=now)|Q(endtime__isnull=True))
         debates = list(debateobjs.values())
         for i, debate in enumerate(debates):
             debate['title'] = debateobjs[i].subject.bill.description
             debate['starttime'] = str(debate['starttime'])
-            debate['endtime'] = str(debate['endtime'])
+            debate['endtime'] = str(debate['endtime']) if debate['endtime'] else None
         response = json.dumps(debates)
         return HttpResponse(response, content_type='application/json')

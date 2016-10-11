@@ -152,7 +152,7 @@ class Vote extends React.Component {
       <div>
         <Permission
           title={this.getPermissionGroup(this.state.location)}
-          substitute={'You must be a ' + this.props.permissionGroup + ' to vote'}
+          substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to vote'}
         >
           <div className='vote-buttons'>
             <Button

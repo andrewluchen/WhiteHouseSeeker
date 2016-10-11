@@ -14,7 +14,10 @@ class Debates extends React.Component {
   render() {
     let debates = [];
     this.props.debates.slice(0).sort(this.momentSort).forEach(debate => {
-      let time = moment(debate.endtime).fromNow();
+      let timeleft = 'No time limit';
+      if (debate.endtime) {
+        timeleft = 'Ends in ' + moment(debate.endtime).fromNow();
+      }
       debates.push(
         <tr key={debate.debateId}>
           <td>
@@ -22,7 +25,7 @@ class Debates extends React.Component {
               {debate.title}
             </Link>
           </td>
-          <td>Ends {time}</td>
+          <td>{timeleft}</td>
         </tr>
       );
     })

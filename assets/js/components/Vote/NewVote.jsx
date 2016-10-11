@@ -34,6 +34,7 @@ class NewVote extends React.Component {
       data: {
         chamber: this.props.chamber,
         status: 'Introduced',
+        active: true,
       },
       success: response => {
         let clerk = []
@@ -56,6 +57,7 @@ class NewVote extends React.Component {
       data: {
         chamber: this.props.chamber,
         status: 'Received for Floor Consideration',
+        active: true,
       },
       success: response => {
         let received = []

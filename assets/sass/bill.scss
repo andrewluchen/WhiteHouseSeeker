@@ -9,10 +9,8 @@
     &-preview {
         background-color: white;
         border: 1px solid black;
-        margin: 2px;
+        margin: 10px 0;
         padding: 2px;
-        position:relative;
-        top: 10px;
         white-space: pre-wrap;
     }
 
@@ -27,6 +25,19 @@
             margin: 0 5px;
         }
 
+    }
+
+}
+
+.debate {
+
+    &-comment {
+        min-height: 120px;
+    }
+
+    &-submit {
+        float: right;
+        margin: 5px;
     }
 
 }
