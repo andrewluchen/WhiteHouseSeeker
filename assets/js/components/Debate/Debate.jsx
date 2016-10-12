@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-router';
+import { connect } from 'react-redux';
 import { Button, ControlLabel, Form, FormControl } from 'react-bootstrap';
 
 import Permission from '../Permission/Permission';
@@ -26,8 +26,8 @@ class Debate extends React.Component {
       attachment: null,
     };
     this.fetchDebate = this.fetchDebate.bind(this);
-    this.handleAction = this.handleAction.bind(this);
-    this.submitAction = this.submitAction.bind(this);
+    this.handleMotion = this.handleMotion.bind(this);
+    this.submitMotion = this.submitMotion.bind(this);
   }
 
   componentDidMount() {
@@ -50,9 +50,9 @@ class Debate extends React.Component {
     });
   }
 
-  handleAction(e) {
+  handleMotion(e) {
     this.setState({
-      action: e.target.value,
+      motion: e.target.value,
     });
   }
 
@@ -61,7 +61,6 @@ class Debate extends React.Component {
       url: '/api/debate/' + this.props.params.debateId + '/',
       type: 'POST',
       data: {
-        action: 'motion',
         motion_type: this.state.motion,
         comment: ReactDOM.findDOMNode(this.refs.comment).value,
         attachment: this.state.attachment,
@@ -137,7 +136,7 @@ class Debate extends React.Component {
 
 Debate.propTypes = {
   active: React.PropTypes.number,
-}
+};
 
 function mapStateToProps(state) {
   return {
