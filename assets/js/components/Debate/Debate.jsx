@@ -3,14 +3,10 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { Button, ControlLabel, Form, FormControl } from 'react-bootstrap';
 
+import DebateComments from './DebateComments';
+import DebateMotions from './DebateMotions';
+import { COMMENT, UNANIMOUS, AMEND, CLOTURE, REFER, TABLE } from './DebateMotions';
 import Permission from '../Permission/Permission';
-
-const COMMENT = 'comment';
-const UNANIMOUS = 'unanimous';
-const AMEND = 'amend';
-const CLOTURE = 'cloture';
-const REFER = 'refer';
-const TABLE = 'table';
 
 class Debate extends React.Component {
 
@@ -22,6 +18,8 @@ class Debate extends React.Component {
       body: '',
       location: '',
       endtime: null,
+      comments: [],
+      motions: [],
       motion: COMMENT,
       attachment: null,
     };
@@ -45,6 +43,8 @@ class Debate extends React.Component {
           location: response.location,
           starttime: response.starttime,
           endtime: response.endtime,
+          comments: response.comments,
+          motions: response.motions,
         });
       },
     });
@@ -96,18 +96,20 @@ class Debate extends React.Component {
     let placeholder = 'Add comment:\n\nMr./Mme. Speaker,\n  ...\nI yield.';
     return (
       <div>
+        <DebateMotions motions={this.state.motions}/>
         <div className='bill-title'>{this.state.title}</div>
         <div
           className='bill-preview'
           dangerouslySetInnerHTML={{__html: this.state.body}}
         />
+        <DebateComments comments={this.state.comments}/>
         <Permission
           title={this.getPermissionGroup(this.state.location)}
           substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to debate'}
         >
           <Form inline>
             <ControlLabel>Select Action</ControlLabel>&nbsp;
-              <FormControl componentClass='select' onChange={this.handleAction}>
+              <FormControl componentClass='select' onChange={this.handleMotion}>
                 <option value={COMMENT}>Add Comment</option>
                 <option value={UNANIMOUS}>Motion for Unanimous Consent</option>
                 <option value={AMEND}>Motion to Amend</option>

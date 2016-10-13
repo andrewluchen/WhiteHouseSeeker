@@ -161,6 +161,7 @@ class DebateView(View):
         comments = []
         for c in list(commentobjs):
             comments.append({
+                'id': c.id,
                 'character_id': c.actor.id,
                 'character_name': c.actor.description,
                 'comment': c.comment,
@@ -171,39 +172,41 @@ class DebateView(View):
         for m in list(motionobjs):
             yeaobjs = m.yeas
             yeas = []
-            for ch in list(yeaobjs):
+            for ch in list(yeaobjs.values()):
                 yeas.append({
                     'id': ch.id,
                     'name': ch.description,
                 })
             nayobjs = m.nays
             nays = []
-            for ch in list(nayobjs):
+            for ch in list(nayobjs.values()):
                 nays.append({
                     'id': ch.id,
                     'name': ch.description,
                 })
             presobjs = m.pres
             pres = []
-            for ch in list(presobjs):
+            for ch in list(presobjs.values()):
                 pres.append({
                     'id': ch.id,
                     'name': ch.description,
                 })
-            motions.append({
+            motion = {
                 'actor_id': m.actor.id,
                 'actor': m.actor.description,
-                'seconded_id': m.seconded.id,
-                'seconded': m.seconded.description,
-                'motion_type': m.motion.type,
+                'motion_type': m.motion_type,
                 'amendment': m.amendment,
                 'active': m.active,
                 'starttime': str(m.starttime),
-                'endtime': str(m.endtime),
+                'endtime': str(m.endtime) if m.endtime else None,
                 'yeas': yeas,
                 'nays': nays,
                 'pres': pres,
-            })
+            }
+            if m.seconded:
+                motion['seconded_id'] = m.seconded.id
+                motion['seconded'] = m.seconded.description
+            motions.append(motion)
         debate = {
             'title': debateobj.subject.bill.description,
             'body': debateobj.subject.body,

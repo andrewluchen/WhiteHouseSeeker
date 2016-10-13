@@ -1,0 +1,24 @@
+.comment {
+  background-color: $ui_white;
+  border: 1px solid $ui_gray_dark;
+  margin: 10px 0;
+
+  &-header {
+    background-color: $ui_off_white;
+    display: flex;
+    padding: 5px;
+  }
+
+  &-character {
+    flex: 1;
+  }
+
+  &-timestamp {
+  }
+
+  &-content {
+    padding: 5px;
+    white-space: pre-line;
+  }
+
+}

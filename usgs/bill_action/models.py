@@ -37,7 +37,7 @@ class DebateMotion(models.Model):
 
     debate = models.ForeignKey(Debate, related_name='motions')
     actor = models.ForeignKey(Character, related_name='+')
-    seconded = models.ForeignKey(Character, related_name='+')
+    seconded = models.ForeignKey(Character, related_name='+', null=True, blank=True)
     motion_type = models.CharField(max_length=80)
     amendment = models.TextField(null=True, blank=True)
     active = models.BooleanField(default=True, blank=True)
