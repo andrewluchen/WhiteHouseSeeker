@@ -29,18 +29,27 @@ DEBUG = True
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+]
+from machina import get_apps as get_machina_apps
+# Machina related apps:
+INSTALLED_APPS += [
+    'mptt',
+    'haystack',
+    'widget_tweaks',
+    'django_markdown',
+] + get_machina_apps()
+INSTALLED_APPS +=[
     'webpack_loader',
     'rest_framework',
     'usgs',
-)
+]
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -166,16 +175,7 @@ REST_FRAMEWORK = {
 }
 
 
-from machina import get_apps as get_machina_apps
 from machina import MACHINA_MAIN_TEMPLATE_DIR, MACHINA_MAIN_STATIC_DIR
-
-# Machina related apps:
-INSTALLED_APPS += tuple([
-    'mptt',
-    'haystack',
-    'widget_tweaks',
-    'django_markdown',
-] + get_machina_apps())
 
 MIDDLEWARE_CLASSES += (
     # Machina

@@ -61,6 +61,7 @@ class Debate extends React.Component {
       url: '/api/debate/' + this.props.params.debateId + '/',
       type: 'POST',
       data: {
+        character_id: this.props.active,
         motion_type: this.state.motion,
         comment: ReactDOM.findDOMNode(this.refs.comment).value,
         attachment: this.state.attachment,
@@ -102,7 +103,7 @@ class Debate extends React.Component {
         />
         <Permission
           title={this.getPermissionGroup(this.state.location)}
-          substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to vote'}
+          substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to debate'}
         >
           <Form inline>
             <ControlLabel>Select Action</ControlLabel>&nbsp;

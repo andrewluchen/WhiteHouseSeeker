@@ -18,7 +18,14 @@ class Debate(models.Model):
         return self.__unicode__()
 
 
-class Motion(models.Model):
+class DebateComment(models.Model):
+    debate = models.ForeignKey(Debate, related_name='comments')
+    actor = models.ForeignKey(Character, related_name='comments')
+    comment = models.TextField()
+    timestamp = models.DateTimeField()
+
+
+class DebateMotion(models.Model):
 
     # no second
     UNANIMOUS = 'unanimous'
@@ -28,11 +35,12 @@ class Motion(models.Model):
     REFER = 'refer'
     TABLE = 'table'
 
-    actor = models.ForeignKey(Character, related_name='+')
     debate = models.ForeignKey(Debate, related_name='motions')
+    actor = models.ForeignKey(Character, related_name='+')
+    seconded = models.ForeignKey(Character, related_name='+')
     motion_type = models.CharField(max_length=80)
-    seconded = models.BooleanField(default=False, blank=True)
     amendment = models.TextField(null=True, blank=True)
+    active = models.BooleanField(default=True, blank=True)
     starttime = models.DateTimeField(null=True, blank=True)
     endtime = models.DateTimeField(null=True, blank=True)
     yeas = models.ManyToManyField(Character, related_name='+', blank=True)
