@@ -5,6 +5,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import Permission from '../Permission/Permission';
+import partyColor from '../shared/partyColor';
 
 const YEA = 'yea';
 const NAY = 'nay';
@@ -101,18 +102,6 @@ class Vote extends React.Component {
     }
   }
 
-  partyColor(party) {
-    if (party[0] === 'D') {
-      return 'democratic';
-    }
-    if (party[0] === 'R') {
-      return 'republican';
-    }
-    if (party[0] === 'I') {
-      return 'independent';
-    }
-  }
-
   render() {
     let yeas = [];
     let nays = [];
@@ -138,14 +127,14 @@ class Vote extends React.Component {
     this.state.pres.forEach(vote => {
       pres.push(
         <div key={vote.id}>
-          <Link className={this.partyColor(vote.party)} to={'/character/' + vote.id}>
+          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>
             {vote.name}
           </Link>
         </div>
       );
     })
     let selectStyle = { active: true }
-    let ayeStyle = this.state.myvote === YEA ? selectStyle : {};
+    let yeaStyle = this.state.myvote === YEA ? selectStyle : {};
     let nayStyle = this.state.myvote === NAY ? selectStyle : {};
     let presStyle = this.state.myvote === PRES ? selectStyle : {};
     return (
@@ -158,7 +147,7 @@ class Vote extends React.Component {
             <Button
               bsSize='large'
               onClick={() => this.castVote(YEA)}
-              {...ayeStyle}
+              {...yeaStyle}
             >
               Yea
             </Button>

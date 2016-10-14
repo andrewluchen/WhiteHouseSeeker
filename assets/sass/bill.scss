@@ -41,3 +41,21 @@
     }
 
 }
+
+.motion {
+    background-color: $ui_off_white;
+    padding: 5px;
+
+    &-header {
+        display: flex;
+    }
+
+    &-name {
+        font-size: 24px;
+    }
+
+    &-votes {
+
+    }
+
+}

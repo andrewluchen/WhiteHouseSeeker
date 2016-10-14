@@ -164,6 +164,7 @@ class DebateView(View):
                 'id': c.id,
                 'character_id': c.actor.id,
                 'character_name': c.actor.description,
+                'party': c.actor.party,
                 'comment': c.comment,
                 'timestamp': str(c.timestamp),
             })
@@ -172,28 +173,33 @@ class DebateView(View):
         for m in list(motionobjs):
             yeaobjs = m.yeas
             yeas = []
-            for ch in list(yeaobjs.values()):
+            for ch in list(yeaobjs.all()):
                 yeas.append({
                     'id': ch.id,
                     'name': ch.description,
+                    'party': ch.party,
                 })
             nayobjs = m.nays
             nays = []
-            for ch in list(nayobjs.values()):
+            for ch in list(nayobjs.all()):
                 nays.append({
                     'id': ch.id,
                     'name': ch.description,
+                    'party': ch.party,
                 })
             presobjs = m.pres
             pres = []
-            for ch in list(presobjs.values()):
+            for ch in list(presobjs.all()):
                 pres.append({
                     'id': ch.id,
                     'name': ch.description,
+                    'party': ch.party,
                 })
             motion = {
+                'id': m.id,
                 'actor_id': m.actor.id,
                 'actor': m.actor.description,
+                'actor_party': m.actor.party,
                 'motion_type': m.motion_type,
                 'amendment': m.amendment,
                 'active': m.active,
@@ -206,6 +212,7 @@ class DebateView(View):
             if m.seconded:
                 motion['seconded_id'] = m.seconded.id
                 motion['seconded'] = m.seconded.description
+                motion['seconded_party'] = m.seconded.party
             motions.append(motion)
         debate = {
             'title': debateobj.subject.bill.description,
@@ -277,6 +284,78 @@ class DebateView(View):
                 motion_type=DebateMotion.TABLE,
             )
             debatemotion.save()
+            return HttpResponse(status=200)
+
+
+class DebateMotionView(View):
+
+    def get(self, request, pk):
+        debatemotionobj = DebateMotion.objects.get(id=pk)
+        yeaobjs = debatemotionobj.yeas
+        yeas = []
+        for ch in list(yeaobjs.all()):
+            yeas.append({
+                'id': ch.id,
+                'name': ch.description,
+                'party': ch.party,
+            })
+        nayobjs = debatemotionobj.nays
+        nays = []
+        for ch in list(nayobjs.all()):
+            nays.append({
+                'id': ch.id,
+                'name': ch.description,
+                'party': ch.party,
+            })
+        presobjs = debatemotionobj.pres
+        pres = []
+        for ch in list(presobjs.all()):
+            pres.append({
+                'id': ch.id,
+                'name': ch.description,
+                'party': ch.party,
+            })
+        motion = {
+            'id': debatemotionobj.id,
+            'actor_id': debatemotionobj.actor.id,
+            'actor': debatemotionobj.actor.description,
+            'actor_party': debatemotionobj.actor.party,
+            'motion_type': debatemotionobj.motion_type,
+            'amendment': debatemotionobj.amendment,
+            'active': debatemotionobj.active,
+            'starttime': str(debatemotionobj.starttime),
+            'endtime': str(debatemotionobj.endtime) if debatemotionobj.endtime else None,
+            'yeas': yeas,
+            'nays': nays,
+            'pres': pres,
+        }
+        if debatemotionobj.seconded:
+            motion['seconded_id'] = debatemotionobj.seconded.id
+            motion['seconded'] = debatemotionobj.seconded.description
+            motion['seconded_party'] = debatemotionobj.seconded.party
+        response = json.dumps(motion);
+        return HttpResponse(response, content_type='application/json')
+
+    def post(self, request, pk):
+        character_id = request.POST.get('character_id')
+        character = Character.objects.get(id=character_id)
+        validate_character(request.user, character)
+        debatemotion = DebateMotion.objects.get(id=pk)
+        action = request.POST.get('action')
+        if (action == 'vote'):
+            vote = request.POST.get('vote')
+            if (vote == 'yea'):
+                debatemotion.yeas.add(character)
+                debatemotion.nays.remove(character)
+                debatemotion.pres.remove(character)
+            if (vote == 'nay'):
+                debatemotion.yeas.remove(character)
+                debatemotion.nays.add(character)
+                debatemotion.pres.remove(character)
+            if (vote == 'present'):
+                debatemotion.yeas.remove(character)
+                debatemotion.nays.remove(character)
+                debatemotion.pres.add(character)
             return HttpResponse(status=200)
 
 

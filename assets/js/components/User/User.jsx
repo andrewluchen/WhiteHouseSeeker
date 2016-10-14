@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { ControlLabel } from 'react-bootstrap';
 
+import partyColor from '../shared/partyColor';
+
 class User extends React.Component {
 
   constructor(props) {
@@ -29,25 +31,13 @@ class User extends React.Component {
     );
   }
 
-  partyColor(party) {
-    if (party[0] === 'D') {
-      return 'democratic';
-    }
-    if (party[0] === 'R') {
-      return 'republican';
-    }
-    if (party[0] === 'I') {
-      return 'independent';
-    }
-  }
-
   render() {
     let characters = [];
     this.state.characters.forEach(character => {
       characters.push(
         <Link
           key={character.character_id}
-          className={this.partyColor(character.party)}
+          className={partyColor(character.party)}
           to={'/character/' + character.character_id}
         >
           {character.name}

@@ -1,28 +1,58 @@
 import React from 'react';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
-export const COMMENT = 'comment';
-export const UNANIMOUS = 'unanimous';
-export const AMEND = 'amend';
-export const CLOTURE = 'cloture';
-export const REFER = 'refer';
-export const TABLE = 'table';
+import { UNANIMOUS, AMEND, CLOTURE, REFER, TABLE } from './DebateConstants';
+import MotionUnanimous from './MotionUnanimous';
+import MotionAmend from './MotionAmend';
+import MotionCloture from './MotionCloture';
+import MotionRefer from './MotionRefer';
+import MotionTable from './MotionTable';
 
-class DebateComments extends React.Component {
+class DebateMotions extends React.Component {
 
   render() {
-    let comments = [];
+    let motions = [];
     this.props.motions.forEach(motion => {
-      <div>
-      </div>
+      let component = null;
+      switch (motion.motion_type) {
+        case UNANIMOUS:
+          component = <MotionUnanimous motion={motion}/>;
+          break;
+        case AMEND:
+          component = <MotionAmend motion={motion}/>;
+          break;
+        case CLOTURE:
+          component = <MotionCloture motion={motion}/>;
+          break;
+        case REFER:
+          component = <MotionRefer motion={motion}/>;
+          break;
+        case TABLE:
+          component = <MotionTable motion={motion}/>;
+          break;
+      }
+      motions.push(
+        <div key={motion.id}>
+          {component}
+        </div>
+      );
     });
     return (
-      <div>{comments}</div>
+      <div>{motions}</div>
     );
   }
 }
 
-DebateComments.propTypes = {
+DebateMotions.propTypes = {
   motions: React.PropTypes.array,
+  active: React.PropTypes.number,
 };
 
-export default DebateComments;
+function mapStateToProps(state) {
+  return {
+    active: state.auth.active,
+  };
+}
+
+export default connect(mapStateToProps)(DebateMotions);

@@ -5,8 +5,10 @@ import { Button, ControlLabel, Form, FormControl } from 'react-bootstrap';
 
 import DebateComments from './DebateComments';
 import DebateMotions from './DebateMotions';
-import { COMMENT, UNANIMOUS, AMEND, CLOTURE, REFER, TABLE } from './DebateMotions';
 import Permission from '../Permission/Permission';
+
+export const COMMENT = 'comment';
+import { UNANIMOUS, AMEND, CLOTURE, REFER, TABLE } from './DebateConstants';
 
 class Debate extends React.Component {
 
@@ -77,18 +79,6 @@ class Debate extends React.Component {
       return 'Senator';
     } else if (location === 'house') {
       return 'Representative';
-    }
-  }
-
-  partyColor(party) {
-    if (party[0] === 'D') {
-      return 'democratic';
-    }
-    if (party[0] === 'R') {
-      return 'republican';
-    }
-    if (party[0] === 'I') {
-      return 'independent';
     }
   }
 

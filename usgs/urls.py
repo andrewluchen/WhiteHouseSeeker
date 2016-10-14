@@ -22,6 +22,7 @@ apipatterns = [
     url(r'^votes/$', views.VotesView.as_view(), name='get-votes'),
     url(r'^debate/new/$', views.NewDebateView.as_view(), name='new-debate'),
     url(r'^debate/(?P<pk>[0-9]+)/$$', views.DebateView.as_view(), name='debate'),
+    url(r'^debate/motion/(?P<pk>[0-9]+)/$', views.DebateMotionView.as_view(), name='debate-motion'),
     url(r'^debates/$', views.DebatesView.as_view(), name='get-debates'),
 ]
 
