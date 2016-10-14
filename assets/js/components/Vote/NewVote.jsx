@@ -148,12 +148,6 @@ class NewVote extends React.Component {
               >
                 120 hours
               </Button>
-              <Button
-                active={this.state.hours==null}
-                onClick={() => this.setState({ hours: null })}
-              >
-                No Deadline
-              </Button>
               <Button bsStyle='primary' onClick={this.submitVote}>
                 Start Vote
               </Button>

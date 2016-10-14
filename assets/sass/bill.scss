@@ -31,6 +31,12 @@
 
 .debate {
 
+    &-officer {
+        display: flex;
+        line-height: 32px;
+        margin-bottom: 10px;
+    }
+
     &-comment {
         min-height: 120px;
     }
@@ -48,6 +54,7 @@
 
     &-header {
         display: flex;
+        line-height: 32px;
     }
 
     &-name {

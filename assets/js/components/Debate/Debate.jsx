@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { Button, ControlLabel, Form, FormControl } from 'react-bootstrap';
+import { Button, ButtonToolbar, ControlLabel, DropdownButton, Form, FormControl, MenuItem } from 'react-bootstrap';
 
 import DebateComments from './DebateComments';
 import DebateMotions from './DebateMotions';
@@ -28,6 +29,7 @@ class Debate extends React.Component {
     this.fetchDebate = this.fetchDebate.bind(this);
     this.handleMotion = this.handleMotion.bind(this);
     this.submitMotion = this.submitMotion.bind(this);
+    this.moveToVote = this.moveToVote.bind(this);
   }
 
   componentDidMount() {
@@ -74,6 +76,22 @@ class Debate extends React.Component {
     });
   }
 
+  moveToVote(hours) {
+    $.ajax({
+      url: '/api/debate/' + this.props.params.debateId + '/',
+      type: 'POST',
+      data: {
+        character_id: this.props.active,
+        motion_type: 'officer',
+        officer: 'move_to_vote',
+        hours: hours,
+      },
+      success: () => {
+        browserHistory.push('/' + this.state.location);
+      },
+    });
+  }
+
   getPermissionGroup(location) {
     if (location === 'senate') {
       return 'Senator';
@@ -86,6 +104,18 @@ class Debate extends React.Component {
     let placeholder = 'Add comment:\n\nMr./Mme. Speaker,\n  ...\nI yield.';
     return (
       <div>
+        <div className='debate-officer'>
+          Presiding Officer Actions:&nbsp;&nbsp;
+          <ButtonToolbar>
+            <DropdownButton title='Move To Vote'>
+              <MenuItem eventKey='24' onClick={() => this.moveToVote(24)}>24 hours</MenuItem>
+              <MenuItem eventKey='48' onClick={() => this.moveToVote(48)}>48 hours</MenuItem>
+              <MenuItem eventKey='72' onClick={() => this.moveToVote(72)}>72 hours</MenuItem>
+              <MenuItem eventKey='72' onClick={() => this.moveToVote(96)}>96 hours</MenuItem>
+              <MenuItem eventKey='120' onClick={() => this.moveToVote(120)}>120 hours</MenuItem>
+            </DropdownButton>
+          </ButtonToolbar>
+        </div>
         <DebateMotions motions={this.state.motions}/>
         <div className='bill-title'>{this.state.title}</div>
         <div

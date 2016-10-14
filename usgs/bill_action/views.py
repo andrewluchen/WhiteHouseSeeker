@@ -230,8 +230,23 @@ class DebateView(View):
         character_id = request.POST.get('character_id')
         character = Character.objects.get(id=character_id)
         validate_character(request.user, character)
+
         debateobj = Debate.objects.get(id=pk)
         motion_type = request.POST.get('motion_type')
+        if (motion_type == 'officer'):
+            officer = request.POST.get('officer')
+            hours = int(request.POST.get('hours'))
+            if (officer == 'move_to_vote'):
+                vote = Vote(
+                    subject=debateobj.subject,
+                    starttime=timezone.now(),
+                    endtime=timezone.now() + timezone.timedelta(hours=hours),
+                    location=debateobj.location,
+                )
+                vote.save()
+                debateobj.active = False
+                debateobj.save()
+            return HttpResponse(status=200)
         comment = request.POST.get('comment')
         debatecomment = DebateComment(
             debate=debateobj,
@@ -357,6 +372,9 @@ class DebateMotionView(View):
                 debatemotion.yeas.remove(character)
                 debatemotion.nays.remove(character)
                 debatemotion.pres.add(character)
+            return HttpResponse(status=200)
+        if (action == 'object'):
+            debatemotion.nays.add(character)
             return HttpResponse(status=200)
 
 

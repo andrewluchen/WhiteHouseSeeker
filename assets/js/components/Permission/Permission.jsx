@@ -3,17 +3,21 @@ import { connect } from 'react-redux';
 
 class Permission extends React.Component {
   render() {
-    let title = '';
+    let character = {};
     if (this.props.active !== 0) {
       let characters = this.props.characters;
       for (let i = 0; i < characters.length; i++) {
         if (characters[i].id === this.props.active) {
-          title = characters[i].title;
+          character = characters[i];
           break;
         }
       }
     }
-    if (title === this.props.title) {
+    if (
+      this.props.title === character.title ||
+      this.props.title === character.subtitle ||
+      this.props.title === character.partytitle
+    ) {
       return <div>{this.props.children}</div>;
     } else {
       return <div>{this.props.substitute}</div>;
@@ -23,19 +27,11 @@ class Permission extends React.Component {
 
 Permission.propTypes = {
   title: React.PropTypes.string,
-  subtitle: React.PropTypes.string,
-  partytitle: React.PropTypes.string,
   substitute: React.PropTypes.string,
   user: React.PropTypes.object,
   characters: React.PropTypes.array,
   active: React.PropTypes.number,
 }
-
-Permission.defaultProps = {
-  title: null,
-  subtitle: null,
-  partytitle: null,
-};
 
 function mapStateToProps(state) {
   return {

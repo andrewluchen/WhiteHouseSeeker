@@ -109,7 +109,7 @@ class Vote extends React.Component {
     this.state.yeas.forEach(vote => {
       yeas.push(
         <div key={vote.id}>
-          <Link className={this.partyColor(vote.party)} to={'/character/' + vote.id}>
+          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>
             {vote.name}
           </Link>
         </div>
@@ -118,7 +118,7 @@ class Vote extends React.Component {
     this.state.nays.forEach(vote => {
       nays.push(
         <div key={vote.id}>
-          <Link className={this.partyColor(vote.party)} to={'/character/' + vote.id}>
+          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>
             {vote.name}
           </Link>
         </div>
