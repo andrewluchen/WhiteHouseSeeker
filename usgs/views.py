@@ -65,21 +65,21 @@ class CapitolView(View):
 
     def get(self, request):
         data = [
-            ('potus', models.Holding.objects.filter(title=models.Holding.POTUS)),
-            ('vpotus', models.Holding.objects.filter(title=models.Holding.VPOTUS)),
-            ('senatemajorityleader', models.Holding.objects.filter(subtitle=models.Holding.SML)),
-            ('senatemajoritywhip', models.Holding.objects.filter(subtitle=models.Holding.SML2)),
-            ('senateminorityleader', models.Holding.objects.filter(subtitle=models.Holding.SML)),
-            ('senateminoritywhip', models.Holding.objects.filter(subtitle=models.Holding.SML2)),
-            ('speaker', models.Holding.objects.filter(subtitle=models.Holding.SPEAKER)),
-            ('housemajorityleader', models.Holding.objects.filter(subtitle=models.Holding.HML)),
-            ('housemajoritywhip', models.Holding.objects.filter(subtitle=models.Holding.HML2)),
-            ('houseminorityleader', models.Holding.objects.filter(subtitle=models.Holding.HmL)),
-            ('houseminoritywhip', models.Holding.objects.filter(subtitle=models.Holding.HmL2)),
-            ('dncchair', models.Holding.objects.filter(partytitle=models.Holding.DNC)),
-            ('dncchair2', models.Holding.objects.filter(partytitle=models.Holding.DNC2)),
-            ('rncchair', models.Holding.objects.filter(partytitle=models.Holding.RNC)),
-            ('rncchair2', models.Holding.objects.filter(partytitle=models.Holding.RNC2)),
+            ('potus', models.Holding.objects.filter(title=models.Holding.POTUS, endtime__isnull=True)),
+            ('vpotus', models.Holding.objects.filter(title=models.Holding.VPOTUS, endtime__isnull=True)),
+            ('senatemajorityleader', models.Holding.objects.filter(subtitle=models.Holding.SML, endtime__isnull=True)),
+            ('senatemajoritywhip', models.Holding.objects.filter(subtitle=models.Holding.SML2, endtime__isnull=True)),
+            ('senateminorityleader', models.Holding.objects.filter(subtitle=models.Holding.SML, endtime__isnull=True)),
+            ('senateminoritywhip', models.Holding.objects.filter(subtitle=models.Holding.SML2, endtime__isnull=True)),
+            ('speaker', models.Holding.objects.filter(subtitle=models.Holding.SPEAKER, endtime__isnull=True)),
+            ('housemajorityleader', models.Holding.objects.filter(subtitle=models.Holding.HML, endtime__isnull=True)),
+            ('housemajoritywhip', models.Holding.objects.filter(subtitle=models.Holding.HML2, endtime__isnull=True)),
+            ('houseminorityleader', models.Holding.objects.filter(subtitle=models.Holding.HmL, endtime__isnull=True)),
+            ('houseminoritywhip', models.Holding.objects.filter(subtitle=models.Holding.HmL2, endtime__isnull=True)),
+            ('dncchair', models.Holding.objects.filter(partytitle=models.Holding.DNC, endtime__isnull=True)),
+            ('dncchair2', models.Holding.objects.filter(partytitle=models.Holding.DNC2, endtime__isnull=True)),
+            ('rncchair', models.Holding.objects.filter(partytitle=models.Holding.RNC, endtime__isnull=True)),
+            ('rncchair2', models.Holding.objects.filter(partytitle=models.Holding.RNC2, endtime__isnull=True)),
         ]
         response = {}
         not_applicable = 'N/A'
@@ -88,5 +88,19 @@ class CapitolView(View):
                 response[position] = filtered.first().holder.short_description()
             else:
                 response[position] = 'N/A'
+        response['senators'] = self.get_senators()
         response = json.dumps(response)
         return HttpResponse(response, content_type='application/json')
+
+    def get_senators(self):
+        senators = models.Holding.objects.filter(title=models.Holding.SENATOR, endtime__isnull=True)
+        response = []
+        for s in senators:
+            holder = s.holder
+            response.append({
+                'id': holder.id,
+                'name': holder.description,
+                'state': holder.state,
+                'party': holder.party,
+            })
+        return response

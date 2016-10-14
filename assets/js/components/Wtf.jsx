@@ -6,7 +6,7 @@ class Wtf extends React.Component {
   render() {
     return (
       <div>
-        Welcome to WTF
+        <div>Welcome to WTF!</div>
       </div>
     );
   }

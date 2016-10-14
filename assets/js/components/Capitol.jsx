@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import LeaderBoard from './LeaderBoard/LeaderBoard';
+import SenateMap from './Datamap/SenateMap';
 
 const _test = [
   ['Speaker of the House', 'Mr. Speaker', 'Republican'],
@@ -51,6 +52,9 @@ class Capitol extends React.Component {
     return (
       <div>
         <LeaderBoard data={this.state.leadership}/>
+        <div className='capitol-header'>Senate Map:</div>
+        <SenateMap/>
+        <div className='capitol-header'>Senators:</div>
       </div>
     );
   }

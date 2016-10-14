@@ -1,5 +1,6 @@
 const React = require('react');
 const Raphael = require('raphael');
+require('qtip2');
 
 var paths = {
   HI: "M 233.08751,519.30948 L 235.02744,515.75293 L 237.2907,515.42961 L 237.61402,516.23791 L 235.51242,519.30948 z M 243.27217,515.59127 L 249.4153,518.17784 L 251.51689,517.85452 L 253.1335,513.97465 L 252.48686,510.57977 L 248.28366,510.09479 L 244.24213,511.87306 z M 273.9878,525.61427 L 277.706,531.11074 L 280.13092,530.78742 L 281.26255,530.30244 L 282.7175,531.59573 L 286.43571,531.43407 L 287.40568,529.97912 L 284.49577,528.20085 L 282.55584,524.48263 L 280.45424,520.92609 L 274.63444,523.83599 z M 294.19545,534.50564 L 295.48874,532.5657 L 300.17691,533.53566 L 300.82356,533.05068 L 306.96668,533.69732 L 306.64336,534.99062 L 304.05678,536.44556 L 299.69193,536.12224 z M 299.53027,539.67879 L 301.47021,543.55866 L 304.54176,542.42703 L 304.86509,540.81041 L 303.24848,538.70882 L 299.53027,538.3855 z M 306.4817,538.54716 L 308.74496,535.63726 L 313.43313,538.06218 L 317.79798,539.19381 L 322.16284,541.94205 L 322.16284,543.88198 L 318.6063,545.66026 L 313.75645,546.63022 L 311.33154,545.17527 z M 323.13281,554.06663 L 324.74942,552.77335 L 328.14431,554.38997 L 335.74238,557.94651 L 339.13727,560.0481 L 340.75387,562.47302 L 342.69381,566.83787 L 346.73534,569.42445 L 346.41202,570.71775 L 342.53215,573.95097 L 338.32896,575.40592 L 336.87401,574.75928 L 333.80244,576.53754 L 331.37753,579.77077 L 329.11427,582.68067 L 327.33599,582.51901 L 323.77945,579.93243 L 323.45613,575.40592 L 324.10277,572.981 L 322.48616,567.32286 L 320.38456,565.54458 L 320.2229,562.958 L 322.48616,561.98804 L 324.58776,558.91648 L 325.07274,557.94651 L 323.45613,556.16823 z",
@@ -59,11 +60,12 @@ class Datamap extends React.Component {
 
   constructor() {
     super();
-
+    this.usRaphael = {};
+    this.draw = this.draw.bind(this);
   }
 
   componentDidMount() {
-    let R = Raphael('datamap-stuff', 1000, 900);
+    let R = Raphael('datamap-stuff', this.props.width, this.props.height);
     let attr = {
       'fill': '#d3d3d3',
       'stroke': '#fff',
@@ -73,41 +75,56 @@ class Datamap extends React.Component {
       'stroke-width': '0.75',
       'stroke-dasharray': 'none'
     };
-    let usRaphael = {};
-
     for (let state in paths) {
-      usRaphael[state] = R.path(paths[state]).attr(attr);
+      this.usRaphael[state] = R.path(paths[state]).attr(attr);
     }
-    if (this.props.editable) {
-      for (let state in usRaphael) {
-        let st = usRaphael[state];
-        st.color = this.props.startingColors[state];
-        let onStageChange = this.props.onStageChange;
-          st[0].style.cursor = 'pointer';
-          st[0].onmousedown = function () {
-            if (st.color === 'red') {
-              st.color = 'blue';
-              onStageChange(state, 'blue');
-            } else {
-              st.color = 'red';
-              onStageChange(state, 'red');
-            }
-            st.animate({fill: st.color}, 100);
-            st.toFront();
-          };
+    this.draw(this.props);
+  }
+
+  componentWillReceiveProps(props) {
+    this.draw(props);
+  }
+
+  draw(props) {
+    let usRaphael = this.usRaphael;
+    for (let state in usRaphael) {
+      let st = usRaphael[state];
+      st.stateName = state;
+      let color = props.startingColors[state];
+      if (color) {
+        st.color = color;
+        st.attr({ fill: color });
+      } else {
+        st.color = '#d3d3d3';
       }
+      let onClickState = props.onClickState;
+      st[0].style.cursor = 'pointer';
+      st[0].onmousedown = function () {
+        onClickState(st);
+        st.toFront();
+      };
     }
   }
 
   render() {
-    return <div id='datamap-stuff'>asd</div>;
+    return <div id='datamap-stuff'></div>;
   }
 }
 
 Datamap.propTypes = {
+  width: React.PropTypes.number,
+  height: React.PropTypes.number,
   startingColors: React.PropTypes.object,
-  editable: React.PropTypes.bool,
-  onStateChange: React.PropTypes.func,
+  tooltips: React.PropTypes.object,
+  onClickState: React.PropTypes.func,
+}
+
+Datamap.defaultProps = {
+  width: 1000,
+  height: 600,
+  startingColors: {},
+  tooltips: {},
+  onClickState: st => {},
 }
 
 export default Datamap;

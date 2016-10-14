@@ -30,7 +30,7 @@ class NewCharacterView(View):
             character.save()
             holding = Holding(
                 holder=character,
-                title='Senator',
+                title=Holding.SENATOR,
                 starttime=timezone.now(),
             )
             holding.save()

@@ -244,6 +244,9 @@ class DebateView(View):
                     location=debateobj.location,
                 )
                 vote.save()
+                billversion = debateobj.subject
+                billversion.status = BillVersion.BILL_VOTE
+                billversion.save()
                 debateobj.active = False
                 debateobj.save()
             return HttpResponse(status=200)
