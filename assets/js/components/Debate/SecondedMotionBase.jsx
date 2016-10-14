@@ -125,6 +125,7 @@ class SecondedMotionBase extends React.Component {
         <div>Yea: {yeas}</div>
         <div>Nay: {nays}</div>
         <div>Present: {pres}</div>
+        {this.props.children}
       </div>
     );
   }

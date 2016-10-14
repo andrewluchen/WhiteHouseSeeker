@@ -7,6 +7,7 @@ from usgs.character.models import Character
 
 class Debate(models.Model):
     subject = models.ForeignKey(BillVersion, related_name='debates')
+    active = models.BooleanField(default=True, blank=True)
     starttime = models.DateTimeField()
     endtime = models.DateTimeField(null=True)
     location = models.ForeignKey(LegislativeBody, related_name='debates')
@@ -50,6 +51,7 @@ class DebateMotion(models.Model):
 
 class Vote(models.Model):
     subject = models.ForeignKey(BillVersion, related_name='votes')
+    active = models.BooleanField(default=True, blank=True)
     starttime = models.DateTimeField()
     endtime = models.DateTimeField()
     location = models.ForeignKey(LegislativeBody, related_name='votes')

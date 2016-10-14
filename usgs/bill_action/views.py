@@ -79,12 +79,12 @@ class VoteView(View):
         return HttpResponse(response, content_type='application/json')
 
     def post(self, request, pk):
-        voteobj = Vote.objects.get(id=pk)
-        castvote = request.POST.get('vote')
         character_id = request.POST.get('character_id')
         character = Character.objects.get(id=character_id)
         validate_character(request.user, character)
 
+        voteobj = Vote.objects.get(id=pk)
+        castvote = request.POST.get('vote')
         if (castvote == 'yea'):
             voteobj.yeas.add(character)
             voteobj.nays.remove(character)
@@ -109,7 +109,7 @@ class VotesView(View):
             chamber = get_legislative_body(request.GET.get('chamber'))
             voteobjs = voteobjs.filter(location=chamber)
         if (request.GET.get('active')):
-            voteobjs = voteobjs.filter(endtime__gt=now)
+            voteobjs = voteobjs.filter(active=True)
         votes = list(voteobjs.values())
         for i, vote in enumerate(votes):
             vote['title'] = voteobjs[i].subject.bill.description
@@ -340,6 +340,7 @@ class DebateMotionView(View):
         character_id = request.POST.get('character_id')
         character = Character.objects.get(id=character_id)
         validate_character(request.user, character)
+
         debatemotion = DebateMotion.objects.get(id=pk)
         action = request.POST.get('action')
         if (action == 'vote'):
@@ -368,7 +369,7 @@ class DebatesView(View):
             chamber = get_legislative_body(request.GET.get('chamber'))
             debateobjs = debateobjs.filter(location=chamber)
         if (request.GET.get('active')):
-            debateobjs = debateobjs.filter(Q(endtime__gt=now)|Q(endtime__isnull=True))
+            debateobjs = debateobjs.filter(active=True)
         debates = list(debateobjs.values())
         for i, debate in enumerate(debates):
             debate['title'] = debateobjs[i].subject.bill.description

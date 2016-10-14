@@ -6,9 +6,9 @@ import moment from 'moment';
 class Debates extends React.Component {
 
   momentSort(left, right) {
-    left = left.endtime;
-    right = right.endtime;
-    return moment(left).diff(moment(right))
+    left = left.endtime ? left.endtime : moment();
+    right = right.endtime ? right.endtime : moment();
+    return moment(left).diff(moment(right));
   }
 
   render() {
@@ -16,7 +16,12 @@ class Debates extends React.Component {
     this.props.debates.slice(0).sort(this.momentSort).forEach(debate => {
       let timeleft = 'No time limit';
       if (debate.endtime) {
-        timeleft = 'Ends in ' + moment(debate.endtime).fromNow();
+        let endtime = moment(debate.endtime);
+        if (moment().diff(endtime) > 0) {
+          timeleft = 'Ended ' + moment(debate.endtime).fromNow();
+        } else {
+          timeleft = 'Ends ' + moment(debate.endtime).fromNow();
+        }
       }
       debates.push(
         <tr key={debate.debateId}>

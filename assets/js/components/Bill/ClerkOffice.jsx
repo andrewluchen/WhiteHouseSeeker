@@ -16,9 +16,9 @@ class ClerkOffice extends React.Component {
     let bills = []
     this.props.bills.forEach(bill => {
       bills.push(
-        <tr key={bill.bill_id}>
+        <tr key={bill.billId}>
           <td>
-            <Link to={'/bill/' + bill.bill_id + '/' + bill.version_id}>
+            <Link to={'/bill/' + bill.billId + '/' + bill.versionId}>
               {bill.title}
             </Link>
           </td>
