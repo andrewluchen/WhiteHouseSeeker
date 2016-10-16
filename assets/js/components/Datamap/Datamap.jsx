@@ -107,7 +107,7 @@ class Datamap extends React.Component {
   }
 
   render() {
-    return <div id='datamap-stuff'></div>;
+    return <div id='datamap-stuff' style={{textAlign:'center'}}></div>;
   }
 }
 

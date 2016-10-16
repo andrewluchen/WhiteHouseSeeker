@@ -1,20 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import LeaderBoard from './LeaderBoard/LeaderBoard';
 import SenateMap from './Datamap/SenateMap';
-
-const _test = [
-  ['Speaker of the House', 'Mr. Speaker', 'Republican'],
-  ['House Majority Leader', 'Mr. Majority', 'Republican'],
-  ['House Majority Whip', 'Ms. Majority', 'Republican'],
-  ['House Minority Leader', 'Mr. Minority', 'Democratic'],
-  ['House Minority Whip', 'Ms. Minority', 'Democratic'],
-  ['Senate Majority Leader', 'Mr. Majority', 'Republican'],
-  ['Senate Majority Whip', 'Ms. Majority', 'Republican'],
-  ['Senate Minority Leader', 'Mr. Minority', 'Democratic'],
-  ['Senate Minority Whip', 'Ms. Minority', 'Democratic'],
-]
+import SortableTable from './SortableTable/SortableTable';
 
 class Capitol extends React.Component {
 
@@ -22,6 +12,7 @@ class Capitol extends React.Component {
     super();
     this.state = {
       leadership: [],
+      senators: [],
     }
   }
 
@@ -43,18 +34,39 @@ class Capitol extends React.Component {
             ['House Minority Leader', response.houseminorityleader],
             ['House Minority Whip', response.houseminoritywhip],
           ],
+          senators: response.senators,
         });
       },
     );
   }
 
   render() {
+    let headers = [
+      { name: 'state', width: 50 },
+      { name: 'party', width: 200 },
+      { name: 'name', width: 300 },
+    ];
+    let data = [];
+    this.state.senators.forEach(senator => {
+      data.push({
+        id: senator.id,
+        name: senator.name,
+        state: senator.state,
+        party: senator.party,
+      });
+    });
     return (
       <div>
         <LeaderBoard data={this.state.leadership}/>
         <div className='capitol-header'>Senate Map:</div>
         <SenateMap/>
         <div className='capitol-header'>Senators:</div>
+        <div>
+          <SortableTable
+            headers={headers}
+            data={data}
+          />
+        </div>
       </div>
     );
   }

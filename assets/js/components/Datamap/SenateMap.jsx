@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 
+import partyColor from '../shared/partyColor';
 import Datamap from './Datamap';
 
 class SenateMap extends React.Component {
@@ -45,8 +47,21 @@ class SenateMap extends React.Component {
 
   onClickState(st) {
     let stateName = st.stateName;
+    let stateSenators = [];
+    this.state.senators.forEach(senator => {
+      if (senator.state === stateName) {
+        stateSenators.push(
+          <Link key={senator.id} to={'/character/' + senator.id} className={partyColor(senator.party)}>
+            {senator.name}
+          </Link>
+        )
+      }
+    });
     let modalContents = (
-      stateName
+      <div className='capitol-modal'>
+        Senators:<br/>
+        {stateSenators}
+      </div>
     );
     this.setState({
       modalContents: modalContents,
