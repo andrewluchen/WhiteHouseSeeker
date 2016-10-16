@@ -8,6 +8,8 @@ class VotingRecord extends React.Component {
     let yeas = [];
     let nays = [];
     let pres = [];
+    let sponsored = [];
+    let cosponsored = [];
     this.props.yeas.forEach(vote => {
       yeas.push(
         <div key={vote.vote_id}>
@@ -16,7 +18,7 @@ class VotingRecord extends React.Component {
           </Link>
         </div>
       );
-    })
+    });
     this.props.nays.forEach(vote => {
       nays.push(
         <div key={vote.vote_id}>
@@ -25,7 +27,7 @@ class VotingRecord extends React.Component {
           </Link>
         </div>
       );
-    })
+    });
     this.props.pres.forEach(vote => {
       pres.push(
         <div key={vote.vote_id}>
@@ -34,18 +36,36 @@ class VotingRecord extends React.Component {
           </Link>
         </div>
       );
-    })
+    });
+    this.props.sponsored.forEach(bill => {
+      sponsored.push(
+        <div key={bill.bill_id}>
+          <Link to={'/bill/' + bill.bill_id}>
+            {bill.title}
+          </Link>
+        </div>
+      );
+    });
+    this.props.cosponsored.forEach(bill => {
+      cosponsored.push(
+        <div key={bill.bill_id}>
+          <Link to={'/bill/' + bill.bill_id}>
+            {bill.title}
+          </Link>
+        </div>
+      );
+    });
     return (
       <div>
         <Grid>
           <Row className='show-grid'>
             <Col sm={8} md={4}>
               <strong>Sponsored:</strong>
-              TODO:
+              {sponsored}
             </Col>
             <Col sm={8} md={4}>
               <strong>Cosponsored:</strong>
-              TODO:
+              {cosponsored}
             </Col>
           </Row>
         </Grid>

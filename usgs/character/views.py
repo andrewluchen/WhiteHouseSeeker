@@ -91,31 +91,47 @@ class CharacterVotingRecordView(View):
         yeaobjs = character.yea_votes.all()
         nayobjs = character.nay_votes.all()
         presobjs = character.pres_votes.all()
+        spobjs = character.sponsored_bills.all()
+        csobjs = character.cosponsored_bills.all()
         yeas = []
         nays = []
         pres = []
-        for i, v in enumerate(list(yeaobjs)):
+        sponsored = []
+        cosponsored = []
+        for v in list(yeaobjs):
             yeas.append({
                 'vote_id': v.id,
-                'title': yeaobjs[i].subject.description,
+                'title': v.subject.description,
                 'endtime': str(v.endtime),
             })
-        for i, v in enumerate(list(nayobjs)):
+        for v in list(nayobjs):
             nays.append({
                 'vote_id': v.id,
-                'title': nayobjs[i].subject.description,
+                'title': v.subject.description,
                 'endtime': str(v.endtime),
             })
-        for i, v in enumerate(list(presobjs)):
+        for v in list(presobjs):
             pres.append({
                 'vote_id': v.id,
-                'title': presobjs[i].subject.description,
+                'title': v.subject.description,
                 'endtime': str(v.endtime),
+            })
+        for b in list(spobjs):
+            sponsored.append({
+                'bill_id': b.id,
+                'title': b.title,
+            })
+        for b in list(csobjs):
+            cosponsored.append({
+                'bill_id': b.id,
+                'title': b.title,
             })
         votingrecord = {
             'yeas': yeas,
             'nays': nays,
             'pres': pres,
+            'sponsored': sponsored,
+            'cosponsored': cosponsored,
         }
         response = json.dumps(votingrecord)
         return HttpResponse(response, content_type='application/json')

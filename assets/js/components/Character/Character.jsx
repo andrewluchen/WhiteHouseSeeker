@@ -14,6 +14,8 @@ class Character extends React.Component {
       userId: '',
       characterId: props.params.characterId,
       characterSummary: {},
+      sponsored: [],
+      cosponsored: [],
       yeas: [],
       nays: [],
       pres: [],
@@ -59,6 +61,8 @@ class Character extends React.Component {
           yeas: response.yeas,
           nays: response.nays,
           pres: response.pres,
+          sponsored: response.sponsored,
+          cosponsored: response.cosponsored,
         })
       },
     );
@@ -83,6 +87,8 @@ class Character extends React.Component {
               yeas={this.state.yeas}
               nays={this.state.nays}
               pres={this.state.pres}
+              sponsored={this.state.sponsored}
+              cosponsored={this.state.cosponsored}
             />
           </Tab>
         </Tabs>

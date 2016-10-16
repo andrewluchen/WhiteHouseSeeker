@@ -148,11 +148,11 @@ class SortableTable extends React.Component {
           }
           cell={args => {
             let rowIndex = args['rowIndex'];
-            return (
-              <Cell>
-                {sortedDataList.getObjectAt(rowIndex)[name]}
-              </Cell>
-            );
+            let cellContent = this.props.createCellContent(
+              name,
+              sortedDataList.getObjectAt(rowIndex),
+            )
+            return <Cell>{cellContent}</Cell>;
           }}
           width={width}
           flexGrow={1}
@@ -180,6 +180,11 @@ class SortableTable extends React.Component {
 SortableTable.propTypes = {
   headers: React.PropTypes.array,
   data: React.PropTypes.array,
+  createCellContent: React.PropTypes.func,
 };
+
+SortableTable.defaultProps = {
+  createCellContent: (header, data) => data[header],
+}
 
 export default SortableTable;
