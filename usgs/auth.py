@@ -19,7 +19,7 @@ def jwt(user):
 def user_echo(request):
     if request.user and request.user.is_authenticated():
         data = { 'id_token': jwt(request.user) }
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(json.dumps(data), content_type='application/json')
     else:
         return HttpResponse(status=401)
 
@@ -42,7 +42,7 @@ def user_register(request):
         user.save()
         return HttpResponse(status=201)
     else:
-        return HttpResponse(status=400)
+        return HttpResponse(user_form.errors.as_json(), status=400)
 
 def user_login(request):
     context = RequestContext(request)
@@ -53,9 +53,9 @@ def user_login(request):
     if user and user.is_active:
         login(request, user)
         data = { 'id_token': jwt(user) }
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(json.dumps(data), content_type='application/json')
     else:
-        return HttpResponse(status=401)
+        return HttpResponse('Invalid login details supplied.', status=401)
 
 @login_required
 def user_logout(request):

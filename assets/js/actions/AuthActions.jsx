@@ -42,6 +42,7 @@ export function loginUser(data) {
         browserHistory.push('/');
       },
       error: function(xhr, status, error) {
+        alert(xhr.responseText);
         dispatch(loginError(xhr.responseText));
       },
     });
@@ -136,6 +137,7 @@ export function registerUser(data) {
         dispatch(receiveRegister());
       },
       error: function(xhr, status, error) {
+        alert(xhr.responseText);
         dispatch(registerError(xhr.responseText));
       },
     });
