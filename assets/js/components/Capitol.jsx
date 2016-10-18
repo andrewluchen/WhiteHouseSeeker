@@ -5,6 +5,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import LeaderBoard from './LeaderBoard/LeaderBoard';
 import SenateMap from './Datamap/SenateMap';
 import SortableTable from './SortableTable/SortableTable';
+import partyColor from './shared/partyColor';
 
 class Capitol extends React.Component {
 
@@ -55,18 +56,32 @@ class Capitol extends React.Component {
         party: senator.party,
       });
     });
+    let createCellContent = (header, data) => {
+      if (header === 'name') {
+        return (
+          <Link to={'/character/' + data.id} className={partyColor(data.party)}>
+            {data.name}
+          </Link>
+        );
+      } else if (header === 'party') {
+        return (
+          <div className={partyColor(data.party)}>{data.party}</div>
+        );
+      } else {
+        return data[header];
+      }
+    };
     return (
-      <div>
+      <div className='capitol'>
         <LeaderBoard data={this.state.leadership}/>
         <div className='capitol-header'>Senate Map:</div>
         <SenateMap/>
         <div className='capitol-header'>Senators:</div>
-        <div>
-          <SortableTable
-            headers={headers}
-            data={data}
-          />
-        </div>
+        <SortableTable
+          headers={headers}
+          data={data}
+          createCellContent={createCellContent}
+        />
       </div>
     );
   }
