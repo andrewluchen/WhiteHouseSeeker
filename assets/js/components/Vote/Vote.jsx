@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 
 import Permission from '../Permission/Permission';
+import TimePermission from '../Permission/TimePermission';
 import partyColor from '../shared/partyColor';
 
 const YEA = 'yea';
@@ -139,34 +140,47 @@ class Vote extends React.Component {
     let presStyle = this.state.myvote === PRES ? selectStyle : {};
     return (
       <div>
-        <Permission
-          title={this.getPermissionGroup(this.state.location)}
-          substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to vote'}
+        <div className='vote-officer'>
+          Presiding Officer Actions:&nbsp;&nbsp;
+          <ButtonToolbar>
+            <DropdownButton title='Count Vote'>
+              <MenuItem eventKey='' onClick={() => {}}>???</MenuItem>
+            </DropdownButton>
+          </ButtonToolbar>
+        </div>
+        <TimePermission
+          endtime={this.state.endtime}
+          substitute={'Time for voting has lapsed.'}
         >
-          <div className='vote-buttons'>
-            <Button
-              bsSize='large'
-              onClick={() => this.castVote(YEA)}
-              {...yeaStyle}
-            >
-              Yea
-            </Button>
-            <Button
-              bsSize='large'
-              onClick={() => this.castVote(NAY)}
-              {...nayStyle}
-            >
-              Nay
-            </Button>
-            <Button
-              bsSize='large'
-              onClick={() => this.castVote(PRES)}
-              {...presStyle}
-            >
-              Present
-            </Button>
-          </div>
-        </Permission>
+          <Permission
+            title={this.getPermissionGroup(this.state.location)}
+            substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to vote'}
+          >
+            <div className='vote-buttons'>
+              <Button
+                bsSize='large'
+                onClick={() => this.castVote(YEA)}
+                {...yeaStyle}
+              >
+                Yea
+              </Button>
+              <Button
+                bsSize='large'
+                onClick={() => this.castVote(NAY)}
+                {...nayStyle}
+              >
+                Nay
+              </Button>
+              <Button
+                bsSize='large'
+                onClick={() => this.castVote(PRES)}
+                {...presStyle}
+              >
+                Present
+              </Button>
+            </div>
+          </Permission>
+        </TimePermission>
         <Grid>
           <Row className='show-grid'>
             <Col sm={8} md={4}>

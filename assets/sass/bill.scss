@@ -18,6 +18,12 @@
 
 .vote {
 
+    &-officer {
+        display: flex;
+        line-height: 32px;
+        margin-bottom: 10px;
+    }
+
     &-buttons {
         margin: 10px;
 

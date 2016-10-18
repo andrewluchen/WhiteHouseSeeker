@@ -7,6 +7,7 @@ import { Button, ButtonToolbar, ControlLabel, DropdownButton, Form, FormControl,
 import DebateComments from './DebateComments';
 import DebateMotions from './DebateMotions';
 import Permission from '../Permission/Permission';
+import TimePermission from '../Permission/TimePermission';
 
 export const COMMENT = 'comment';
 import { UNANIMOUS, AMEND, CLOTURE, REFER, TABLE } from './DebateConstants';
@@ -123,35 +124,40 @@ class Debate extends React.Component {
           dangerouslySetInnerHTML={{__html: this.state.body}}
         />
         <DebateComments comments={this.state.comments}/>
-        <Permission
-          title={this.getPermissionGroup(this.state.location)}
-          substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to debate'}
+        <TimePermission
+          endtime={this.state.endtime}
+          substitute='Time for debate has lapsed.'
         >
-          <Form inline>
-            <ControlLabel>Select Action</ControlLabel>&nbsp;
-              <FormControl componentClass='select' onChange={this.handleMotion}>
-                <option value={COMMENT}>Add Comment</option>
-                <option value={UNANIMOUS}>Motion for Unanimous Consent</option>
-                <option value={AMEND}>Motion to Amend</option>
-                <option value={CLOTURE}>Move for Cloture</option>
-                <option value={REFER}>Refer to Committee</option>
-                <option value={TABLE}>Lay on the Table</option>
-              </FormControl>
-          </Form>
-          <FormControl
-            ref='comment'
-            componentClass='textarea'
-            className='debate-comment'
-            placeholder={placeholder}
-          />
-          <Button
-            bsStyle='primary'
-            className='debate-submit'
-            onClick={this.submitMotion}
+          <Permission
+            title={this.getPermissionGroup(this.state.location)}
+            substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to debate'}
           >
-            Submit
-          </Button>
-        </Permission>
+            <Form inline>
+              <ControlLabel>Select Action</ControlLabel>&nbsp;
+                <FormControl componentClass='select' onChange={this.handleMotion}>
+                  <option value={COMMENT}>Add Comment</option>
+                  <option value={UNANIMOUS}>Motion for Unanimous Consent</option>
+                  <option value={AMEND}>Motion to Amend</option>
+                  <option value={CLOTURE}>Move for Cloture</option>
+                  <option value={REFER}>Refer to Committee</option>
+                  <option value={TABLE}>Lay on the Table</option>
+                </FormControl>
+            </Form>
+            <FormControl
+              ref='comment'
+              componentClass='textarea'
+              className='debate-comment'
+              placeholder={placeholder}
+            />
+            <Button
+              bsStyle='primary'
+              className='debate-submit'
+              onClick={this.submitMotion}
+            >
+              Submit
+            </Button>
+          </Permission>
+        </TimePermission>
       </div>
     );
   }

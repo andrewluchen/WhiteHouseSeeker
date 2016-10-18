@@ -73,7 +73,7 @@ class VoteView(View):
             'body': voteobj.subject.body,
             'location': voteobj.subject.location.name,
             'starttime': str(voteobj.starttime),
-            'starttime': str(voteobj.starttime),
+            'endtime': str(voteobj.endtime),
         }
         response = json.dumps(vote)
         return HttpResponse(response, content_type='application/json')
