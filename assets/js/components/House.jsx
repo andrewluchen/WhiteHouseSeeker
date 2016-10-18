@@ -8,7 +8,7 @@ class House extends React.Component {
 
   constructor() {
     super();
-    this.chamber = 'senate';
+    this.chamber = 'house';
     this.state = {
       clerk: [],
       debates: [],
@@ -107,11 +107,11 @@ class House extends React.Component {
       <div>
         <Votes
           votes={this.state.votes}
-          newRoute='/senate/vote/new'
+          newRoute='/house/vote/new'
         />
         <Debates
           debates={this.state.debates}
-          newRoute='/senate/debate/new'
+          newRoute='/house/debate/new'
         />
         <ClerkOffice
           name='House Hopper'

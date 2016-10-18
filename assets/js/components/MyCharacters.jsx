@@ -53,6 +53,11 @@ class MyCharacters extends React.Component {
   }
 
   render() {
+    if (this.props.user) {
+      return (
+        <div>You must be logged in to create a character.</div>
+      );
+    }
     let editor = (
       <CharacterEditor
         data={{}}

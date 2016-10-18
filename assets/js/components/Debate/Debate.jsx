@@ -79,11 +79,10 @@ class Debate extends React.Component {
 
   moveToVote(hours) {
     $.ajax({
-      url: '/api/debate/' + this.props.params.debateId + '/',
+      url: '/api/debate/officer/' + this.props.params.debateId + '/',
       type: 'POST',
       data: {
         character_id: this.props.active,
-        motion_type: 'officer',
         officer: 'move_to_vote',
         hours: hours,
       },

@@ -27,7 +27,7 @@ class Header extends React.Component {
         </div>
         <IconMenu
           iconButtonElement={<IconButton><div className='topbar-gear'><i className='fa fa-gear'/>&nbsp;</div></IconButton>}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           targetOrigin={{ horizontal: 'right', vertical: 'top' }}
           onChange={this.onLogout}
         >

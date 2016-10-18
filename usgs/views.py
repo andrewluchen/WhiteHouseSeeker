@@ -17,9 +17,11 @@ from usgs.bill_action.views import (
     NewDebateView,
     DebateView,
     DebateMotionView,
+    DebateOfficerView,
     DebatesView,
     NewVoteView,
     VoteView,
+    VoteOfficerView,
     VotesView,
 )
 from usgs.character.views import (

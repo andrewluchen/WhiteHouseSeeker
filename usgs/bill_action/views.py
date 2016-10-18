@@ -45,26 +45,30 @@ class VoteView(View):
     def get(self, request, pk):
         voteobj = Vote.objects.get(id=pk)
         yeas = []
-        for i, c in enumerate(voteobj.yeas.all()):
+        for c in list(voteobj.yeas.all()):
             yeas.append({
                 'id': c.id,
                 'name': c.description,
                 'party': c.party,
             })
         nays = []
-        for i, c in enumerate(voteobj.nays.all()):
+        for c in list(voteobj.nays.all()):
             nays.append({
                 'id': c.id,
                 'name': c.description,
                 'party': c.party,
             })
         pres = []
-        for i, c in enumerate(voteobj.pres.all()):
+        for c in list(voteobj.pres.all()):
             pres.append({
                 'id': c.id,
                 'name': c.description,
                 'party': c.party,
             })
+        versions = voteobj.subject.bill.versions.all()
+        past_locations = []
+        for bv in list(versions):
+            past_locations.append(bv.location.name)
         vote = {
             'yeas': yeas,
             'nays': nays,
@@ -74,6 +78,7 @@ class VoteView(View):
             'location': voteobj.subject.location.name,
             'starttime': str(voteobj.starttime),
             'endtime': str(voteobj.endtime),
+            'past_locations': past_locations
         }
         response = json.dumps(vote)
         return HttpResponse(response, content_type='application/json')
@@ -97,6 +102,64 @@ class VoteView(View):
             voteobj.yeas.remove(character)
             voteobj.nays.remove(character)
             voteobj.pres.add(character)
+        return HttpResponse(status=200)
+
+
+class VoteOfficerView(View):
+
+    def post(self, request, pk):
+        character_id = request.POST.get('character_id')
+        character = Character.objects.get(id=character_id)
+        validate_character(request.user, character)
+
+        voteobj = Vote.objects.get(id=pk)
+        billversionobj = voteobj.subject
+        officer = request.POST.get('officer')
+        if (officer == 'move_to_house'):
+            billversionobj.status = BillVersion.BILL_PASS
+            billversion = BillVersion(
+                bill=billversionobj.bill,
+                status=BillVersion.BILL_RECEIVE,
+                body=billversionobj.body,
+                modified=timezone.now(),
+                location=get_legislative_body('house')
+            )
+            billversion.save()
+        elif (officer == 'move_to_senate'):
+            billversionobj.status = BillVersion.BILL_PASS
+            billversion = BillVersion(
+                bill=billversionobj.bill,
+                status=BillVersion.BILL_RECEIVE,
+                body=billversionobj.body,
+                modified=timezone.now(),
+                location=get_legislative_body('senate')
+            )
+            billversion.save()
+        elif (officer == 'move_to_potus'):
+            billversionobj.status = BillVersion.BILL_PASS
+            billversion = BillVersion(
+                bill=billversionobj.bill,
+                status=BillVersion.BILL_POTUS,
+                body=billversionobj.body,
+                modified=timezone.now(),
+                location=get_legislative_body('potusdesk')
+            )
+            billversion.save()
+        elif (officer == 'override_veto'):
+            billversionobj.status = BillVersion.BILL_OVERRIDE
+            billversionobj.location = get_legislative_body('library')
+        elif (officer == 'pass_law'):
+            billversionobj.status = BillVersion.BILL_PASS
+            billversionobj.location = get_legislative_body('library')
+        elif (officer == 'fail'):
+            billversionobj.status = BillVersion.BILL_FAIL
+        else:
+            return
+        billversionobj.modified = timezone.now()
+        billversionobj.closed = False
+        billversionobj.save()
+        voteobj.active = False
+        voteobj.save()
         return HttpResponse(status=200)
 
 
@@ -233,23 +296,6 @@ class DebateView(View):
 
         debateobj = Debate.objects.get(id=pk)
         motion_type = request.POST.get('motion_type')
-        if (motion_type == 'officer'):
-            officer = request.POST.get('officer')
-            hours = int(request.POST.get('hours'))
-            if (officer == 'move_to_vote'):
-                vote = Vote(
-                    subject=debateobj.subject,
-                    starttime=timezone.now(),
-                    endtime=timezone.now() + timezone.timedelta(hours=hours),
-                    location=debateobj.location,
-                )
-                vote.save()
-                billversion = debateobj.subject
-                billversion.status = BillVersion.BILL_VOTE
-                billversion.save()
-                debateobj.active = False
-                debateobj.save()
-            return HttpResponse(status=200)
         comment = request.POST.get('comment')
         debatecomment = DebateComment(
             debate=debateobj,
@@ -378,6 +424,32 @@ class DebateMotionView(View):
             return HttpResponse(status=200)
         if (action == 'object'):
             debatemotion.nays.add(character)
+            return HttpResponse(status=200)
+
+
+class DebateOfficerView(View):
+
+    def post(self, request, pk):
+        character_id = request.POST.get('character_id')
+        character = Character.objects.get(id=character_id)
+        validate_character(request.user, character)
+
+        debateobj = Debate.objects.get(id=pk)
+        officer = request.POST.get('officer')
+        if (officer == 'move_to_vote'):
+            hours = int(request.POST.get('hours'))
+            vote = Vote(
+                subject=debateobj.subject,
+                starttime=timezone.now(),
+                endtime=timezone.now() + timezone.timedelta(hours=hours),
+                location=debateobj.location,
+            )
+            vote.save()
+            billversion = debateobj.subject
+            billversion.status = BillVersion.BILL_VOTE
+            billversion.save()
+            debateobj.active = False
+            debateobj.save()
             return HttpResponse(status=200)
 
 

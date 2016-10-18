@@ -19,10 +19,12 @@ apipatterns = [
     url(r'^bills/versions/$', views.BillVersionsView.as_view(), name='get-bill-versions'),
     url(r'^vote/new/$', views.NewVoteView.as_view(), name='new-vote'),
     url(r'^vote/(?P<pk>[0-9]+)/$', views.VoteView.as_view(), name='vote'),
+    url(r'^vote/officer/(?P<pk>[0-9]+)/$', views.VoteOfficerView.as_view(), name='vote-officer'),
     url(r'^votes/$', views.VotesView.as_view(), name='get-votes'),
     url(r'^debate/new/$', views.NewDebateView.as_view(), name='new-debate'),
     url(r'^debate/(?P<pk>[0-9]+)/$$', views.DebateView.as_view(), name='debate'),
     url(r'^debate/motion/(?P<pk>[0-9]+)/$', views.DebateMotionView.as_view(), name='debate-motion'),
+    url(r'^debate/officer/(?P<pk>[0-9]+)/$', views.DebateOfficerView.as_view(), name='debate-officer'),
     url(r'^debates/$', views.DebatesView.as_view(), name='get-debates'),
 ]
 
