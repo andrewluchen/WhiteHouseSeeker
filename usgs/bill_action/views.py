@@ -70,6 +70,7 @@ class VoteView(View):
         for bv in list(versions):
             past_locations.append(bv.location.name)
         vote = {
+            'bill_id': voteobj.subject.bill.id,
             'yeas': yeas,
             'nays': nays,
             'pres': pres,
@@ -278,6 +279,7 @@ class DebateView(View):
                 motion['seconded_party'] = m.seconded.party
             motions.append(motion)
         debate = {
+            'bill_id': debateobj.subject.bill.id,
             'title': debateobj.subject.bill.description,
             'body': debateobj.subject.body,
             'location': debateobj.subject.location.name,

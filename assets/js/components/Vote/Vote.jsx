@@ -19,6 +19,7 @@ class Vote extends React.Component {
     super(props);
     this.state = {
       voteId: props.params.voteId,
+      billId: 0,
       myvote: '',
       yeas: [],
       nays: [],
@@ -55,6 +56,7 @@ class Vote extends React.Component {
       type: 'GET',
       success: response => {
         this.setState({
+          billId: response.bill_id,
           title: response.title,
           body: response.body,
           location: response.location,
@@ -235,6 +237,9 @@ class Vote extends React.Component {
     let officerActions = null;
     return (
       <div>
+        <Link to={'/bill/' + this.state.billId}>
+          {'< Go to Bill Summary'}
+        </Link>
         <div className='vote-officer'>
           Presiding Officer Actions:&nbsp;&nbsp;
           <VoteActions

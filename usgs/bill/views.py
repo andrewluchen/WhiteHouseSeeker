@@ -38,20 +38,51 @@ class NewBillView(View):
 
 class BillView(View):
 
+    @staticmethod
+    def detail_version(version):
+        debates = []
+        for d in version.debates.all():
+            debates.append({
+                'id': d.id,
+            })
+        votes = []
+        for v in version.votes.all():
+            votes.append({
+                'id': v.id,
+                'yeas': v.yeas.count(),
+                'nays': v.nays.count(),
+                'pres': v.pres.count(),
+            })
+        return {
+            'status': version.status,
+            'location': version.location.name,
+            'debates': debates,
+            'votes': votes,
+        }
+
     def get(self, request, pk):
         billobj = Bill.objects.get(id=pk)
-        bill = model_to_dict(billobj)
-        bill['sponsor'] = {
+        sponsor = {
             'id': billobj.sponsor.id,
             'name': billobj.sponsor.description,
+            'party': billobj.sponsor.party,
         }
         cosponsors = []
         for cs in billobj.cosponsors.all():
             cosponsors.append({
                 'id': cs.id,
                 'name': cs.description,
+                'party': cs.party,
             })
-        bill['cosponsors'] = cosponsors
+        versions = []
+        for bv in billobj.versions.all():
+            versions.append(BillView.detail_version(bv))
+        bill = {
+            'title': billobj.description,
+            'sponsor': sponsor,
+            'cosponsors': cosponsors,
+            'versions': versions,
+        }
         response = json.dumps(bill)
         return HttpResponse(response, content_type='application/json')
 

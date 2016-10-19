@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { browserHistory } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar, ControlLabel, DropdownButton, Form, FormControl, MenuItem } from 'react-bootstrap';
 
@@ -18,6 +18,7 @@ class Debate extends React.Component {
     super(props);
     this.state = {
       debateId: props.params.debateId,
+      billId: 0,
       title: '',
       body: '',
       location: '',
@@ -43,6 +44,7 @@ class Debate extends React.Component {
       type: 'GET',
       success: response => {
         this.setState({
+          billId: response.bill_id,
           title: response.title,
           body: response.body,
           location: response.location,
@@ -104,6 +106,9 @@ class Debate extends React.Component {
     let placeholder = 'Add comment:\n\nMr./Mme. Speaker,\n  ...\nI yield.';
     return (
       <div>
+        <Link to={'/bill/' + this.state.billId}>
+          {'< Go to Bill Summary'}
+        </Link>
         <div className='debate-officer'>
           Presiding Officer Actions:&nbsp;&nbsp;
           <ButtonToolbar>

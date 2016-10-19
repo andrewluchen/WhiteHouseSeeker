@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router';
 
+import partyColor from '../shared/partyColor';
+
 class BillVersion extends React.Component {
 
   constructor(props) {
@@ -39,7 +41,10 @@ class BillVersion extends React.Component {
       sponsorLink = (
         <div>
           <strong>Sponsor:&nbsp;</strong>
-          <Link to={'/character/' + this.state.sponsor.id}>
+          <Link
+            to={'/character/' + this.state.sponsor.id}
+            className={partyColor(this.state.sponsor.party)}
+          >
             {this.state.sponsor.name}
           </Link>
         </div>
@@ -49,7 +54,9 @@ class BillVersion extends React.Component {
     this.state.cosponsors.forEach(cs => {
       cosponsorList.push(
         <span key={cs.id}>
-          <Link to={'/character/' + cs.id}>{cs.name}</Link>,&nbsp;
+          <Link to={'/character/' + cs.id}  className={partyColor(cs.party)}>
+            {cs.name}
+          </Link>,&nbsp;
         </span>
       );
     });
