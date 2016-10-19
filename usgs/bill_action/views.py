@@ -272,6 +272,7 @@ class DebateView(View):
                 'yeas': yeas,
                 'nays': nays,
                 'pres': pres,
+                'seconded': None,
             }
             if m.seconded:
                 motion['seconded_id'] = m.seconded.id
@@ -394,12 +395,13 @@ class DebateMotionView(View):
             'yeas': yeas,
             'nays': nays,
             'pres': pres,
+            'seconded': None,
         }
         if debatemotionobj.seconded:
             motion['seconded_id'] = debatemotionobj.seconded.id
             motion['seconded'] = debatemotionobj.seconded.description
             motion['seconded_party'] = debatemotionobj.seconded.party
-        response = json.dumps(motion);
+        response = json.dumps(motion)
         return HttpResponse(response, content_type='application/json')
 
     def post(self, request, pk):
@@ -409,6 +411,13 @@ class DebateMotionView(View):
 
         debatemotion = DebateMotion.objects.get(id=pk)
         action = request.POST.get('action')
+        if (action == 'second'):
+            hours = int(request.POST.get('hours'))
+            debatemotion.seconded = character
+            debatemotion.starttime = timezone.now()
+            debatemotion.endtime = timezone.now() + timezone.timedelta(hours=hours)
+            debatemotion.save()
+            return HttpResponse(status=200)
         if (action == 'vote'):
             vote = request.POST.get('vote')
             if (vote == 'yea'):

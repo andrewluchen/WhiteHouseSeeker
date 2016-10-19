@@ -12,13 +12,12 @@ class SecondedMotionBase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      motion: null,
       myvote: null,
-      yeas: props.motion.yeas,
-      nays: props.motion.nays,
-      pres: props.motion.pres,
     };
     this.findMyVote = this.findMyVote.bind(this);
     this.submitVote = this.submitVote.bind(this);
+    this.submitSecond = this.submitSecond.bind(this);
   }
 
   componentDidMount() {
@@ -66,9 +65,7 @@ class SecondedMotionBase extends React.Component {
           type: 'GET',
           success: response => {
             this.setState({
-              yeas: response.yeas,
-              nays: response.nays,
-              pres: response.pres,
+              motion: response,
             });
             this.findMyVote(response.yeas, response.nays, response.pres, this.props.active);
           },
@@ -77,12 +74,76 @@ class SecondedMotionBase extends React.Component {
     });
   }
 
+  submitSecond() {
+    $.ajax({
+      url: '/api/debate/motion/' + this.props.motion.id + '/',
+      type: 'POST',
+      data: {
+        character_id: this.props.active,
+        action: 'second',
+        hours: 24,
+      },
+      success: () => {
+        $.ajax({
+          url: '/api/debate/motion/' + this.props.motion.id + '/',
+          type: 'GET',
+          success: response => {
+            this.setState({
+              motion: response,
+            });
+          },
+        });
+      },
+    });
+  }
+
   render() {
-    let motion = this.props.motion;
+    let motion = this.state.motion ? this.state.motion : this.props.motion;
+    if (!motion.seconded) {
+      if (this.props.active === motion.actor_id) {
+        return (
+          <div className='motion'>
+            <div className='motion-header'>
+              <div className='motion-name'>{this.props.motionName}&nbsp;</div>
+            </div>
+            <div>
+              Proposed by&nbsp;
+              <Link
+                className={partyColor(motion.actor_party)}
+                to={'/character/' + motion.actor_id}
+              >
+                You
+              </Link>
+            </div>
+            {this.props.children}
+          </div>
+        );
+      }
+      return (
+        <div className='motion'>
+          <div className='motion-header'>
+            <div className='motion-name'>{this.props.motionName}&nbsp;</div>
+            <ButtonToolbar>
+              <Button onClick={this.submitSecond}>Second Motion</Button>
+            </ButtonToolbar>
+          </div>
+          <div>
+            Proposed by&nbsp;
+            <Link
+              className={partyColor(motion.actor_party)}
+              to={'/character/' + motion.actor_id}
+            >
+              {motion.actor}
+            </Link>
+          </div>
+          {this.props.children}
+        </div>
+      );
+    }
     let timeLeft = moment(motion.endtime).fromNow();
     let selectStyle = { active: true }
     let yeas = [];
-    this.state.yeas.forEach(vote => {
+    motion.yeas.forEach(vote => {
       yeas.push(
         <span key={vote.id}>
           <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>{vote.name}</Link>,&nbsp;
@@ -90,7 +151,7 @@ class SecondedMotionBase extends React.Component {
       );
     });
     let nays = [];
-    this.state.nays.forEach(vote => {
+    motion.nays.forEach(vote => {
       nays.push(
         <span key={vote.id}>
           <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>{vote.name}</Link>,&nbsp;
@@ -98,7 +159,7 @@ class SecondedMotionBase extends React.Component {
       );
     });
     let pres = [];
-    this.state.pres.forEach(vote => {
+    motion.pres.forEach(vote => {
       pres.push(
         <span key={vote.id}>
           <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>{vote.name}</Link>,&nbsp;
@@ -120,11 +181,26 @@ class SecondedMotionBase extends React.Component {
           <div>&nbsp;&nbsp;Vote ends {timeLeft}</div>
         </div>
         <div>
-          Proposed by <Link className={partyColor(motion.actor_party)} to={'/character/' + motion.actor_id}>{motion.actor}</Link>
+          Proposed by&nbsp;
+          <Link
+            className={partyColor(motion.actor_party)}
+            to={'/character/' + motion.actor_id}
+          >
+            {motion.actor}
+          </Link>
         </div>
-        <div>Yea: {yeas}</div>
-        <div>Nay: {nays}</div>
-        <div>Present: {pres}</div>
+        <div>
+          Seconded by&nbsp;
+          <Link
+            className={partyColor(motion.seconded_party)}
+            to={'/character/' + motion.seconded_id}
+          >
+            {motion.seconded}
+          </Link>
+        </div>
+        <div>Yeas ({yeas.length}): {yeas}</div>
+        <div>Nays ({nays.length}): {nays}</div>
+        <div>Presents ({pres.length}): {pres}</div>
         {this.props.children}
       </div>
     );

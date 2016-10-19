@@ -89,6 +89,9 @@ class Bill extends React.Component {
             <Tab label={'Versions (' + this.state.versions.length + ')'} >
               TODO:
             </Tab>
+            <Tab label={'Actions (' + this.state.versions.length + ')'} >
+              TODO:
+            </Tab>
             <Tab label={'Cosponsors (' + this.state.cosponsors.length + ')'} >
               {cosponsorList}
             </Tab>
