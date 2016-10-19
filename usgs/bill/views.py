@@ -75,7 +75,8 @@ class BillView(View):
                 'party': cs.party,
             })
         versions = []
-        for bv in billobj.versions.all():
+        billversionobjs = sorted(billobj.versions.all(), key=lambda bv:bv.id)
+        for bv in billversionobjs:
             versions.append(BillView.detail_version(bv))
         bill = {
             'title': billobj.description,
