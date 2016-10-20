@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router';
 
-import partyColor from '../shared/partyColor';
+import createCharacterLink from '../shared/createCharacterLink';
 
 class BillVersion extends React.Component {
 
@@ -41,12 +41,7 @@ class BillVersion extends React.Component {
       sponsorLink = (
         <div>
           <strong>Sponsor:&nbsp;</strong>
-          <Link
-            to={'/character/' + this.state.sponsor.id}
-            className={partyColor(this.state.sponsor.party)}
-          >
-            {this.state.sponsor.name}
-          </Link>
+          {createCharacterLink(this.state.sponsor.id, this.state.sponsor.party, this.state.sponsor.name)}
         </div>
       );
     }
@@ -54,9 +49,7 @@ class BillVersion extends React.Component {
     this.state.cosponsors.forEach(cs => {
       cosponsorList.push(
         <span key={cs.id}>
-          <Link to={'/character/' + cs.id}  className={partyColor(cs.party)}>
-            {cs.name}
-          </Link>,&nbsp;
+          {createCharacterLink(cs.id, cs.party, cs.name)},&nbsp;
         </span>
       );
     });

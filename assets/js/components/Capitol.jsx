@@ -5,6 +5,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import LeaderBoard from './LeaderBoard/LeaderBoard';
 import SenateMap from './Datamap/SenateMap';
 import SortableTable from './SortableTable/SortableTable';
+import createCharacterLink from './shared/createCharacterLink';
 import partyColor from './shared/partyColor';
 
 class Capitol extends React.Component {
@@ -58,11 +59,7 @@ class Capitol extends React.Component {
     });
     let createCellContent = (header, data) => {
       if (header === 'name') {
-        return (
-          <Link to={'/character/' + data.id} className={partyColor(data.party)}>
-            {data.name}
-          </Link>
-        );
+        return createCharacterLink(data.id, data.party, data.name);
       } else if (header === 'party') {
         return (
           <div className={partyColor(data.party)}>{data.party}</div>

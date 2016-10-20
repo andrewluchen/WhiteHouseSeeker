@@ -16,6 +16,7 @@ admin.site.register(models.Bill, BillAdmin)
 admin.site.register(models.BillVersion)
 admin.site.register(models.Vote, VoteAdmin)
 admin.site.register(models.Debate)
+admin.site.register(models.DebateMotion)
 
 
 

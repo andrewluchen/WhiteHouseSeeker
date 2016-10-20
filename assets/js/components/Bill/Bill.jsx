@@ -47,12 +47,7 @@ class Bill extends React.Component {
             <strong>Sponsor:</strong>
           </Col>
           <Col xs={6} md={4}>
-            <Link
-              to={'/character/' + this.state.sponsor.id}
-              className={partyColor(this.state.sponsor.party)}
-            >
-              {this.state.sponsor.name}
-            </Link>
+            {createCharacterLink(this.state.sponsor.id, this.state.sponsor.party, this.state.sponsor.name)}
           </Col>
         </Row>
       );
@@ -60,9 +55,8 @@ class Bill extends React.Component {
     let cosponsorList = [];
     this.state.cosponsors.forEach(cs => {
       cosponsorList.push(
-        <div>
+        <div key={cs.id}>
           <Link
-            key={cs.id}
             to={'/character/' + cs.id}
             className={'bill-cosponsor' + ' ' + partyColor(this.state.sponsor.party)}
           >

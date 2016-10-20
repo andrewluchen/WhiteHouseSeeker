@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 import Permission from '../Permission/Permission';
 import TimePermission from '../Permission/TimePermission';
 import VoteActions from './VoteActions';
-import partyColor from '../shared/partyColor';
+import createCharacterLink from '../shared/createCharacterLink';
 
 const YEA = 'yea';
 const NAY = 'nay';
@@ -206,27 +206,21 @@ class Vote extends React.Component {
     this.state.yeas.forEach(vote => {
       yeas.push(
         <div key={vote.id}>
-          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>
-            {vote.name}
-          </Link>
+          {createCharacterLink(vote.id, vote.party, vote.name)}
         </div>
       );
     })
     this.state.nays.forEach(vote => {
       nays.push(
         <div key={vote.id}>
-          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>
-            {vote.name}
-          </Link>
+          {createCharacterLink(vote.id, vote.party, vote.name)}
         </div>
       );
     })
     this.state.pres.forEach(vote => {
       pres.push(
         <div key={vote.id}>
-          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>
-            {vote.name}
-          </Link>
+          {createCharacterLink(vote.id, vote.party, vote.name)}
         </div>
       );
     })

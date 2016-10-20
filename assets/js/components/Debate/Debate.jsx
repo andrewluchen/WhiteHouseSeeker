@@ -112,7 +112,7 @@ class Debate extends React.Component {
         <div className='debate-officer'>
           Presiding Officer Actions:&nbsp;&nbsp;
           <ButtonToolbar>
-            <DropdownButton title='Move To Vote'>
+            <DropdownButton title='Move To Vote' id='dropdown-basic'>
               <MenuItem eventKey='24' onClick={() => this.moveToVote(24)}>24 hours</MenuItem>
               <MenuItem eventKey='48' onClick={() => this.moveToVote(48)}>48 hours</MenuItem>
               <MenuItem eventKey='72' onClick={() => this.moveToVote(72)}>72 hours</MenuItem>

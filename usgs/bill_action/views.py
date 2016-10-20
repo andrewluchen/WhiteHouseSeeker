@@ -228,56 +228,14 @@ class DebateView(View):
                 'id': c.id,
                 'character_id': c.actor.id,
                 'character_name': c.actor.description,
-                'party': c.actor.party,
+                'character_party': c.actor.party,
                 'comment': c.comment,
                 'timestamp': str(c.timestamp),
             })
         motionobjs = debateobj.motions.all()
         motions = []
         for m in list(motionobjs):
-            yeaobjs = m.yeas
-            yeas = []
-            for ch in list(yeaobjs.all()):
-                yeas.append({
-                    'id': ch.id,
-                    'name': ch.description,
-                    'party': ch.party,
-                })
-            nayobjs = m.nays
-            nays = []
-            for ch in list(nayobjs.all()):
-                nays.append({
-                    'id': ch.id,
-                    'name': ch.description,
-                    'party': ch.party,
-                })
-            presobjs = m.pres
-            pres = []
-            for ch in list(presobjs.all()):
-                pres.append({
-                    'id': ch.id,
-                    'name': ch.description,
-                    'party': ch.party,
-                })
-            motion = {
-                'id': m.id,
-                'actor_id': m.actor.id,
-                'actor': m.actor.description,
-                'actor_party': m.actor.party,
-                'motion_type': m.motion_type,
-                'amendment': m.amendment,
-                'active': m.active,
-                'starttime': str(m.starttime),
-                'endtime': str(m.endtime) if m.endtime else None,
-                'yeas': yeas,
-                'nays': nays,
-                'pres': pres,
-                'seconded': None,
-            }
-            if m.seconded:
-                motion['seconded_id'] = m.seconded.id
-                motion['seconded'] = m.seconded.description
-                motion['seconded_party'] = m.seconded.party
+            motion = DebateMotionView.serialize_debate_motion(m)
             motions.append(motion)
         debate = {
             'bill_id': debateobj.subject.bill.id,
@@ -356,8 +314,8 @@ class DebateView(View):
 
 class DebateMotionView(View):
 
-    def get(self, request, pk):
-        debatemotionobj = DebateMotion.objects.get(id=pk)
+    @staticmethod
+    def serialize_debate_motion(debatemotionobj):
         yeaobjs = debatemotionobj.yeas
         yeas = []
         for ch in list(yeaobjs.all()):
@@ -392,6 +350,7 @@ class DebateMotionView(View):
             'active': debatemotionobj.active,
             'starttime': str(debatemotionobj.starttime),
             'endtime': str(debatemotionobj.endtime) if debatemotionobj.endtime else None,
+            'location': debatemotionobj.debate.location.name,
             'yeas': yeas,
             'nays': nays,
             'pres': pres,
@@ -401,6 +360,11 @@ class DebateMotionView(View):
             motion['seconded_id'] = debatemotionobj.seconded.id
             motion['seconded'] = debatemotionobj.seconded.description
             motion['seconded_party'] = debatemotionobj.seconded.party
+        return motion
+
+    def get(self, request, pk):
+        debatemotionobj = DebateMotion.objects.get(id=pk)
+        motion = DebateMotionView.serialize_debate_motion(debatemotionobj)
         response = json.dumps(motion)
         return HttpResponse(response, content_type='application/json')
 

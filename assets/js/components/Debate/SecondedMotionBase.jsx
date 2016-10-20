@@ -5,7 +5,9 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import moment from 'moment';
 
 import { YEA, NAY, PRES } from './DebateConstants';
-import partyColor from '../shared/partyColor';
+import Permission from '../Permission/Permission';
+import TimePermission from '../Permission/TimePermission';
+import createCharacterLink from '../shared/createCharacterLink';
 
 class SecondedMotionBase extends React.Component {
 
@@ -48,6 +50,14 @@ class SecondedMotionBase extends React.Component {
         this.setState({ myvote: PRES });
       }
     });
+  }
+
+  getPermissionGroup(location) {
+    if (location === 'senate') {
+      return 'Senator';
+    } else if (location === 'house') {
+      return 'Representative';
+    }
   }
 
   submitVote(vote) {
@@ -107,13 +117,7 @@ class SecondedMotionBase extends React.Component {
               <div className='motion-name'>{this.props.motionName}&nbsp;</div>
             </div>
             <div>
-              Proposed by&nbsp;
-              <Link
-                className={partyColor(motion.actor_party)}
-                to={'/character/' + motion.actor_id}
-              >
-                You
-              </Link>
+              Proposed by {createCharacterLink(motion.actor_id, motion.actor_party, 'You')}
             </div>
             {this.props.children}
           </div>
@@ -128,13 +132,7 @@ class SecondedMotionBase extends React.Component {
             </ButtonToolbar>
           </div>
           <div>
-            Proposed by&nbsp;
-            <Link
-              className={partyColor(motion.actor_party)}
-              to={'/character/' + motion.actor_id}
-            >
-              {motion.actor}
-            </Link>
+            Proposed by {createCharacterLink(motion.actor_id, motion.actor_party, motion.actor)}
           </div>
           {this.props.children}
         </div>
@@ -146,7 +144,7 @@ class SecondedMotionBase extends React.Component {
     motion.yeas.forEach(vote => {
       yeas.push(
         <span key={vote.id}>
-          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>{vote.name}</Link>,&nbsp;
+          {createCharacterLink(vote.id, vote.party, vote.name)},&nbsp;
         </span>
       );
     });
@@ -154,7 +152,7 @@ class SecondedMotionBase extends React.Component {
     motion.nays.forEach(vote => {
       nays.push(
         <span key={vote.id}>
-          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>{vote.name}</Link>,&nbsp;
+          {createCharacterLink(vote.id, vote.party, vote.name)},&nbsp;
         </span>
       );
     });
@@ -162,7 +160,7 @@ class SecondedMotionBase extends React.Component {
     motion.pres.forEach(vote => {
       pres.push(
         <span key={vote.id}>
-          <Link className={partyColor(vote.party)} to={'/character/' + vote.id}>{vote.name}</Link>,&nbsp;
+          {createCharacterLink(vote.id, vote.party, vote.name)},&nbsp;
         </span>
       );
     });
@@ -173,30 +171,30 @@ class SecondedMotionBase extends React.Component {
       <div className='motion'>
         <div className='motion-header'>
           <div className='motion-name'>{this.props.motionName}&nbsp;</div>
-          <ButtonToolbar>
-            <Button onClick={() => this.submitVote(YEA)} {...yeaStyle}>Yea</Button>
-            <Button onClick={() => this.submitVote(NAY)} {...nayStyle}>Nay</Button>
-            <Button onClick={() => this.submitVote(PRES)} {...presStyle}>Present</Button>
-          </ButtonToolbar>
-          <div>&nbsp;&nbsp;Vote ends {timeLeft}</div>
+          <TimePermission
+            endtime={motion.endtime}
+            substitute='Time for voting for has lapsed.'
+          >
+            <Permission
+              title={this.getPermissionGroup(motion.location)}
+              substitute={'You must be a ' + this.getPermissionGroup(motion.location) + ' to vote'}
+            >
+              <ButtonToolbar>
+                <Button onClick={() => this.submitVote(YEA)} {...yeaStyle}>Yea</Button>
+                <Button onClick={() => this.submitVote(NAY)} {...nayStyle}>Nay</Button>
+                <Button onClick={() => this.submitVote(PRES)} {...presStyle}>Present</Button>
+              </ButtonToolbar>
+            </Permission>
+            <div>&nbsp;&nbsp;Vote ends {timeLeft}</div>
+          </TimePermission>
         </div>
         <div>
           Proposed by&nbsp;
-          <Link
-            className={partyColor(motion.actor_party)}
-            to={'/character/' + motion.actor_id}
-          >
-            {motion.actor}
-          </Link>
+          {createCharacterLink(motion.actor_id, motion.actor_party, motion.actor)}
         </div>
         <div>
           Seconded by&nbsp;
-          <Link
-            className={partyColor(motion.seconded_party)}
-            to={'/character/' + motion.seconded_id}
-          >
-            {motion.seconded}
-          </Link>
+          {createCharacterLink(motion.seconded_id, motion.seconded_party, motion.seconded)}
         </div>
         <div>Yeas ({yeas.length}): {yeas}</div>
         <div>Nays ({nays.length}): {nays}</div>
@@ -210,11 +208,13 @@ class SecondedMotionBase extends React.Component {
 SecondedMotionBase.propTypes = {
   motion: React.PropTypes.object,
   motionName: React.PropTypes.string,
+  characters: React.PropTypes.array,
   active: React.PropTypes.number,
 }
 
 function mapStateToProps(state) {
   return {
+    characters: state.characters.characters,
     active: state.characters.active,
   };
 }
