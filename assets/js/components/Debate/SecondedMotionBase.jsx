@@ -110,14 +110,14 @@ class SecondedMotionBase extends React.Component {
   render() {
     let motion = this.state.motion ? this.state.motion : this.props.motion;
     if (!motion.seconded) {
-      if (this.props.active === motion.actor_id) {
+      if (this.props.active === motion.actor.id) {
         return (
           <div className='motion'>
             <div className='motion-header'>
               <div className='motion-name'>{this.props.motionName}&nbsp;</div>
             </div>
             <div>
-              Proposed by {createCharacterLink(motion.actor_id, motion.actor_party, 'You')}
+              Proposed by {createCharacterLink(motion.actor.id, motion.actor.party, 'You')}
             </div>
             {this.props.children}
           </div>
@@ -132,7 +132,7 @@ class SecondedMotionBase extends React.Component {
             </ButtonToolbar>
           </div>
           <div>
-            Proposed by {createCharacterLink(motion.actor_id, motion.actor_party, motion.actor)}
+            Proposed by {createCharacterLink(motion.actor.id, motion.actor.party, motion.actor.name)}
           </div>
           {this.props.children}
         </div>
@@ -175,26 +175,28 @@ class SecondedMotionBase extends React.Component {
             endtime={motion.endtime}
             substitute='Time for voting for has lapsed.'
           >
-            <Permission
-              title={this.getPermissionGroup(motion.location)}
-              substitute={'You must be a ' + this.getPermissionGroup(motion.location) + ' to vote'}
-            >
-              <ButtonToolbar>
-                <Button onClick={() => this.submitVote(YEA)} {...yeaStyle}>Yea</Button>
-                <Button onClick={() => this.submitVote(NAY)} {...nayStyle}>Nay</Button>
-                <Button onClick={() => this.submitVote(PRES)} {...presStyle}>Present</Button>
-              </ButtonToolbar>
-            </Permission>
-            <div>&nbsp;&nbsp;Vote ends {timeLeft}</div>
+            <div className='motion-buttons'>
+              <Permission
+                title={this.getPermissionGroup(motion.location)}
+                substitute={'You must be a ' + this.getPermissionGroup(motion.location) + ' to vote'}
+              >
+                <ButtonToolbar>
+                  <Button onClick={() => this.submitVote(YEA)} {...yeaStyle}>Yea</Button>
+                  <Button onClick={() => this.submitVote(NAY)} {...nayStyle}>Nay</Button>
+                  <Button onClick={() => this.submitVote(PRES)} {...presStyle}>Present</Button>
+                </ButtonToolbar>
+              </Permission>
+              <div>&nbsp;&nbsp;Vote ends {timeLeft}</div>
+            </div>
           </TimePermission>
         </div>
         <div>
           Proposed by&nbsp;
-          {createCharacterLink(motion.actor_id, motion.actor_party, motion.actor)}
+          {createCharacterLink(motion.actor.id, motion.actor.party, motion.actor.name)}
         </div>
         <div>
           Seconded by&nbsp;
-          {createCharacterLink(motion.seconded_id, motion.seconded_party, motion.seconded)}
+          {createCharacterLink(motion.seconded.id, motion.seconded.party, motion.seconded.name)}
         </div>
         <div>Yeas ({yeas.length}): {yeas}</div>
         <div>Nays ({nays.length}): {nays}</div>

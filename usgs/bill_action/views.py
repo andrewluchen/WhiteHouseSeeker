@@ -1,12 +1,12 @@
-import json
-
-from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.generic import View
 
+from rest_framework.renderers import JSONRenderer
+
 from usgs.bill.models import Bill, BillVersion
 from usgs.bill_action.models import Debate, DebateComment, DebateMotion, Vote
+from usgs.bill_action.serializers import DebateSerializer, DebateCommentSerializer, DebateMotionSerializer, VoteSerializer
 from usgs.character.models import Character
 
 from usgs.utils import get_legislative_body, validate_character
@@ -18,14 +18,14 @@ class NewVoteView(View):
         version_id = request.POST.get('version_id')
         chamber = request.POST.get('chamber')
         hours = request.POST.get('hours')
-        billversion = BillVersion.objects.get(id=version_id)
-        billversion.modified = timezone.now()
-        billversion.closed = True
-        billversion.save()
+        billversion_obj = BillVersion.objects.get(id=version_id)
+        billversion_obj.modified = timezone.now()
+        billversion_obj.closed = True
+        billversion_obj.save()
         newbillversion = BillVersion(
-            bill=billversion.bill,
+            bill=billversion_obj.bill,
             status=BillVersion.BILL_VOTE,
-            body=billversion.body,
+            body=billversion_obj.body,
             modified=timezone.now(),
             location=get_legislative_body(chamber),
         )
@@ -43,66 +43,29 @@ class NewVoteView(View):
 class VoteView(View):
 
     def get(self, request, pk):
-        voteobj = Vote.objects.get(id=pk)
-        yeas = []
-        for c in list(voteobj.yeas.all()):
-            yeas.append({
-                'id': c.id,
-                'name': c.description,
-                'party': c.party,
-            })
-        nays = []
-        for c in list(voteobj.nays.all()):
-            nays.append({
-                'id': c.id,
-                'name': c.description,
-                'party': c.party,
-            })
-        pres = []
-        for c in list(voteobj.pres.all()):
-            pres.append({
-                'id': c.id,
-                'name': c.description,
-                'party': c.party,
-            })
-        versions = voteobj.subject.bill.versions.all()
-        past_locations = []
-        for bv in list(versions):
-            past_locations.append(bv.location.name)
-        vote = {
-            'bill_id': voteobj.subject.bill.id,
-            'yeas': yeas,
-            'nays': nays,
-            'pres': pres,
-            'title': voteobj.subject.bill.description,
-            'body': voteobj.subject.body,
-            'location': voteobj.subject.location.name,
-            'starttime': str(voteobj.starttime),
-            'endtime': str(voteobj.endtime),
-            'past_locations': past_locations
-        }
-        response = json.dumps(vote)
-        return HttpResponse(response, content_type='application/json')
+        vote_obj = Vote.objects.get(id=pk)
+        vote = JSONRenderer().render(VoteSerializer(vote_obj).data)
+        return HttpResponse(vote, content_type='application/json')
 
     def post(self, request, pk):
         character_id = request.POST.get('character_id')
         character = Character.objects.get(id=character_id)
         validate_character(request.user, character)
 
-        voteobj = Vote.objects.get(id=pk)
+        vote = Vote.objects.get(id=pk)
         castvote = request.POST.get('vote')
         if (castvote == 'yea'):
-            voteobj.yeas.add(character)
-            voteobj.nays.remove(character)
-            voteobj.pres.remove(character)
+            vote.yeas.add(character)
+            vote.nays.remove(character)
+            vote.pres.remove(character)
         if (castvote == 'nay'):
-            voteobj.yeas.remove(character)
-            voteobj.nays.add(character)
-            voteobj.pres.remove(character)
+            vote.yeas.remove(character)
+            vote.nays.add(character)
+            vote.pres.remove(character)
         if (castvote == 'present'):
-            voteobj.yeas.remove(character)
-            voteobj.nays.remove(character)
-            voteobj.pres.add(character)
+            vote.yeas.remove(character)
+            vote.nays.remove(character)
+            vote.pres.add(character)
         return HttpResponse(status=200)
 
 
@@ -113,77 +76,69 @@ class VoteOfficerView(View):
         character = Character.objects.get(id=character_id)
         validate_character(request.user, character)
 
-        voteobj = Vote.objects.get(id=pk)
-        billversionobj = voteobj.subject
+        vote = Vote.objects.get(id=pk)
+        billversion_obj = vote.subject
         officer = request.POST.get('officer')
         if (officer == 'move_to_house'):
-            billversionobj.status = BillVersion.BILL_PASS
+            billversion_obj.status = BillVersion.BILL_PASS
             billversion = BillVersion(
-                bill=billversionobj.bill,
+                bill=billversion_obj.bill,
                 status=BillVersion.BILL_RECEIVE,
-                body=billversionobj.body,
+                body=billversion_obj.body,
                 modified=timezone.now(),
                 location=get_legislative_body('house')
             )
             billversion.save()
         elif (officer == 'move_to_senate'):
-            billversionobj.status = BillVersion.BILL_PASS
+            billversion_obj.status = BillVersion.BILL_PASS
             billversion = BillVersion(
-                bill=billversionobj.bill,
+                bill=billversion_obj.bill,
                 status=BillVersion.BILL_RECEIVE,
-                body=billversionobj.body,
+                body=billversion_obj.body,
                 modified=timezone.now(),
                 location=get_legislative_body('senate')
             )
             billversion.save()
         elif (officer == 'move_to_potus'):
-            billversionobj.status = BillVersion.BILL_PASS
+            billversion_obj.status = BillVersion.BILL_PASS
             billversion = BillVersion(
-                bill=billversionobj.bill,
+                bill=billversion_obj.bill,
                 status=BillVersion.BILL_POTUS,
-                body=billversionobj.body,
+                body=billversion_obj.body,
                 modified=timezone.now(),
                 location=get_legislative_body('potusdesk')
             )
             billversion.save()
         elif (officer == 'override_veto'):
-            billversionobj.status = BillVersion.BILL_OVERRIDE
-            billversionobj.location = get_legislative_body('library')
+            billversion_obj.status = BillVersion.BILL_OVERRIDE
+            billversion_obj.location = get_legislative_body('library')
         elif (officer == 'pass_law'):
-            billversionobj.status = BillVersion.BILL_PASS
-            billversionobj.location = get_legislative_body('library')
+            billversion_obj.status = BillVersion.BILL_PASS
+            billversion_obj.location = get_legislative_body('library')
         elif (officer == 'fail'):
-            billversionobj.status = BillVersion.BILL_FAIL
+            billversion_obj.status = BillVersion.BILL_FAIL
         else:
             return
-        billversionobj.modified = timezone.now()
-        billversionobj.closed = False
-        billversionobj.save()
-        voteobj.active = False
-        voteobj.save()
+        billversion_obj.modified = timezone.now()
+        billversion_obj.closed = False
+        billversion_obj.save()
+        vote.active = False
+        vote.save()
         return HttpResponse(status=200)
 
 
 class VotesView(View):
 
     def get(self, request):
-        voteobjs = Vote.objects.all()
+        vote_objs = Vote.objects.all()
         now = timezone.now()
         if (request.GET.get('chamber')):
             chamber = get_legislative_body(request.GET.get('chamber'))
-            voteobjs = voteobjs.filter(location=chamber)
+            vote_objs = vote_objs.filter(location=chamber)
         if (request.GET.get('active')):
-            voteobjs = voteobjs.filter(active=True)
-        votes = list(voteobjs.values())
-        for i, vote in enumerate(votes):
-            vote['title'] = voteobjs[i].subject.bill.description
-            vote['yeas'] = voteobjs[i].yeas.count()
-            vote['nays'] = voteobjs[i].nays.count()
-            vote['pres'] = voteobjs[i].pres.count()
-            vote['starttime'] = str(vote['starttime'])
-            vote['endtime'] = str(vote['endtime']) if vote['endtime'] else None
-        response = json.dumps(votes)
-        return HttpResponse(response, content_type='application/json')
+            vote_objs = vote_objs.filter(active=True)
+        votes = JSONRenderer().render(VoteSerializer(vote_objs, many=True).data)
+        return HttpResponse(votes, content_type='application/json')
 
 
 class NewDebateView(View):
@@ -220,46 +175,20 @@ class NewDebateView(View):
 class DebateView(View):
 
     def get(self, request, pk):
-        debateobj = Debate.objects.get(id=pk)
-        commentobjs = debateobj.comments.all()
-        comments = []
-        for c in list(commentobjs):
-            comments.append({
-                'id': c.id,
-                'character_id': c.actor.id,
-                'character_name': c.actor.description,
-                'character_party': c.actor.party,
-                'comment': c.comment,
-                'timestamp': str(c.timestamp),
-            })
-        motionobjs = debateobj.motions.all()
-        motions = []
-        for m in list(motionobjs):
-            motion = DebateMotionView.serialize_debate_motion(m)
-            motions.append(motion)
-        debate = {
-            'bill_id': debateobj.subject.bill.id,
-            'title': debateobj.subject.bill.description,
-            'body': debateobj.subject.body,
-            'location': debateobj.subject.location.name,
-            'starttime': str(debateobj.starttime),
-            'endtime': str(debateobj.endtime),
-            'comments': comments,
-            'motions': motions,
-        }
-        response = json.dumps(debate)
-        return HttpResponse(response, content_type='application/json')
+        debate_obj = Debate.objects.get(id=pk)
+        debate = JSONRenderer().render(DebateSerializer(debate_obj).data)
+        return HttpResponse(debate, content_type='application/json')
 
     def post(self, request, pk):
         character_id = request.POST.get('character_id')
         character = Character.objects.get(id=character_id)
         validate_character(request.user, character)
 
-        debateobj = Debate.objects.get(id=pk)
+        debate = Debate.objects.get(id=pk)
         motion_type = request.POST.get('motion_type')
         comment = request.POST.get('comment')
         debatecomment = DebateComment(
-            debate=debateobj,
+            debate=debate,
             actor=character,
             comment=comment,
             timestamp=timezone.now(),
@@ -269,7 +198,7 @@ class DebateView(View):
             return HttpResponse(status=200)
         elif (motion_type == DebateMotion.UNANIMOUS):
             debatemotion = DebateMotion(
-                debate=debateobj,
+                debate=debate,
                 actor=character,
                 motion_type=DebateMotion.UNANIMOUS,
                 starttime=timezone.now(),
@@ -279,7 +208,7 @@ class DebateView(View):
             return HttpResponse(status=200)
         elif (motion_type == DebateMotion.AMEND):
             debatemotion = DebateMotion(
-                debate=debateobj,
+                debate=debate,
                 actor=character,
                 motion_type=DebateMotion.AMEND,
                 amendment=request.POST.get('attachment'),
@@ -288,7 +217,7 @@ class DebateView(View):
             return HttpResponse(status=200)
         elif (motion_type == DebateMotion.CLOTURE):
             debatemotion = DebateMotion(
-                debate=debateobj,
+                debate=debate,
                 actor=character,
                 motion_type=DebateMotion.CLOTURE,
             )
@@ -296,7 +225,7 @@ class DebateView(View):
             return HttpResponse(status=200)
         elif (motion_type == DebateMotion.REFER):
             debatemotion = DebateMotion(
-                debate=debateobj,
+                debate=debate,
                 actor=character,
                 motion_type=DebateMotion.REFER,
             )
@@ -304,7 +233,7 @@ class DebateView(View):
             return HttpResponse(status=200)
         elif (motion_type == DebateMotion.TABLE):
             debatemotion = DebateMotion(
-                debate=debateobj,
+                debate=debate,
                 actor=character,
                 motion_type=DebateMotion.TABLE,
             )
@@ -314,59 +243,10 @@ class DebateView(View):
 
 class DebateMotionView(View):
 
-    @staticmethod
-    def serialize_debate_motion(debatemotionobj):
-        yeaobjs = debatemotionobj.yeas
-        yeas = []
-        for ch in list(yeaobjs.all()):
-            yeas.append({
-                'id': ch.id,
-                'name': ch.description,
-                'party': ch.party,
-            })
-        nayobjs = debatemotionobj.nays
-        nays = []
-        for ch in list(nayobjs.all()):
-            nays.append({
-                'id': ch.id,
-                'name': ch.description,
-                'party': ch.party,
-            })
-        presobjs = debatemotionobj.pres
-        pres = []
-        for ch in list(presobjs.all()):
-            pres.append({
-                'id': ch.id,
-                'name': ch.description,
-                'party': ch.party,
-            })
-        motion = {
-            'id': debatemotionobj.id,
-            'actor_id': debatemotionobj.actor.id,
-            'actor': debatemotionobj.actor.description,
-            'actor_party': debatemotionobj.actor.party,
-            'motion_type': debatemotionobj.motion_type,
-            'amendment': debatemotionobj.amendment,
-            'active': debatemotionobj.active,
-            'starttime': str(debatemotionobj.starttime),
-            'endtime': str(debatemotionobj.endtime) if debatemotionobj.endtime else None,
-            'location': debatemotionobj.debate.location.name,
-            'yeas': yeas,
-            'nays': nays,
-            'pres': pres,
-            'seconded': None,
-        }
-        if debatemotionobj.seconded:
-            motion['seconded_id'] = debatemotionobj.seconded.id
-            motion['seconded'] = debatemotionobj.seconded.description
-            motion['seconded_party'] = debatemotionobj.seconded.party
-        return motion
-
     def get(self, request, pk):
-        debatemotionobj = DebateMotion.objects.get(id=pk)
-        motion = DebateMotionView.serialize_debate_motion(debatemotionobj)
-        response = json.dumps(motion)
-        return HttpResponse(response, content_type='application/json')
+        debatemotion_obj = DebateMotion.objects.get(id=pk)
+        debatemotion = JSONRenderer().render(DebateMotionSerializer(debatemotion_obj).data)
+        return HttpResponse(debatemotion, content_type='application/json')
 
     def post(self, request, pk):
         character_id = request.POST.get('character_id')
@@ -396,6 +276,7 @@ class DebateMotionView(View):
                 debatemotion.yeas.remove(character)
                 debatemotion.nays.remove(character)
                 debatemotion.pres.add(character)
+            debatemotion = DebateMotion.objects.get(id=pk)
             return HttpResponse(status=200)
         if (action == 'object'):
             debatemotion.nays.add(character)
@@ -409,39 +290,34 @@ class DebateOfficerView(View):
         character = Character.objects.get(id=character_id)
         validate_character(request.user, character)
 
-        debateobj = Debate.objects.get(id=pk)
+        debate = Debate.objects.get(id=pk)
         officer = request.POST.get('officer')
         if (officer == 'move_to_vote'):
             hours = int(request.POST.get('hours'))
             vote = Vote(
-                subject=debateobj.subject,
+                subject=debate.subject,
                 starttime=timezone.now(),
                 endtime=timezone.now() + timezone.timedelta(hours=hours),
-                location=debateobj.location,
+                location=debate.location,
             )
             vote.save()
-            billversion = debateobj.subject
+            billversion = debate.subject
             billversion.status = BillVersion.BILL_VOTE
             billversion.save()
-            debateobj.active = False
-            debateobj.save()
+            debate.active = False
+            debate.save()
             return HttpResponse(status=200)
 
 
 class DebatesView(View):
 
     def get(self, request):
-        debateobjs = Debate.objects.all()
+        debate_objs = Debate.objects.all()
         now = timezone.now()
         if (request.GET.get('chamber')):
             chamber = get_legislative_body(request.GET.get('chamber'))
-            debateobjs = debateobjs.filter(location=chamber)
+            debate_objs = debate_objs.filter(location=chamber)
         if (request.GET.get('active')):
-            debateobjs = debateobjs.filter(active=True)
-        debates = list(debateobjs.values())
-        for i, debate in enumerate(debates):
-            debate['title'] = debateobjs[i].subject.bill.description
-            debate['starttime'] = str(debate['starttime'])
-            debate['endtime'] = str(debate['endtime']) if debate['endtime'] else None
-        response = json.dumps(debates)
-        return HttpResponse(response, content_type='application/json')
+            debate_objs = debate_objs.filter(active=True)
+        debates = JSONRenderer().render(DebateSerializer(debate_objs, many=True).data)
+        return HttpResponse(debates, content_type='application/json')

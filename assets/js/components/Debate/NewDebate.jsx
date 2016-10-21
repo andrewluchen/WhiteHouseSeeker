@@ -114,7 +114,7 @@ class NewDebate extends React.Component {
         <div className='newdebate-header'>
           <div className='newdebate-header-info'>
             <strong>Title:</strong> {this.state.title}<br/>
-            <strong>Sponsor:</strong> {this.state.sponsor}<br/>
+            <strong>Sponsor:</strong> {this.state.sponsor.name}<br/>
           </div>
           <div>
             <ButtonToolbar>

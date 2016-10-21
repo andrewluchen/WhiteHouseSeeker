@@ -4,6 +4,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
 import BillTrackerStepper from './BillTrackerStepper';
+import createCharacterLink from '../shared/createCharacterLink';
 import partyColor from '../shared/partyColor';
 
 class Bill extends React.Component {

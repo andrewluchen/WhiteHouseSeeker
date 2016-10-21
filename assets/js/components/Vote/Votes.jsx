@@ -31,7 +31,7 @@ class Votes extends React.Component {
             </Link>
           </td>
           <td>
-            ({vote.yeas}-{vote.nays}-{vote.pres})
+            ({vote.yeas.length}-{vote.nays.length}-{vote.pres.length})
           </td>
           <td>{timeleft}</td>
         </tr>

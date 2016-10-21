@@ -22,7 +22,7 @@ class ClerkOffice extends React.Component {
               {bill.title}
             </Link>
           </td>
-          <td>{bill.sponsor}</td>
+          <td>{bill.sponsor.name}</td>
         </tr>
       );
     });

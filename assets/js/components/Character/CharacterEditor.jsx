@@ -80,7 +80,7 @@ class CharacterEditor extends React.Component {
       <FormControl ref='party' className={cn} componentClass='select' value={this.state.party} onChange={this.onChange}>
         <option className='democratic' value='Democratic'>Democratic</option>
         <option className='republican' value='Republican'>Republican</option>
-        <option className='independent' value='Independent Democratic'>Independent (Caucus with Democrats)</option>
+        <option className='independent' value='Independent Democrat'>Independent (Caucus with Democrats)</option>
         <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
         <option className='fourthestate' value='Media'>The Fourth Estate</option>
       </FormControl>
@@ -92,7 +92,7 @@ class CharacterEditor extends React.Component {
           <option className='republican' value='Republican'>Republican</option>
           <option className='democratic' value='Democratic'>Democratic</option>
           <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
-          <option className='independent' value='Independent Democratic'>Independent (Caucus with Democrats)</option>
+          <option className='independent' value='Independent Democrat'>Independent (Caucus with Democrats)</option>
           <option className='fourthestate' value='Media'>The Fourth Estate</option>
         </FormControl>
       );

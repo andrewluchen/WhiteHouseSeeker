@@ -14,7 +14,9 @@ class DebateComments extends React.Component {
       comments.push(
         <div key={comment.id} className='comment'>
           <div className='comment-header'>
-            {createCharacterLink(comment.character_id, comment.character_party, comment.character_name)}
+            <div className='comment-character'>
+              {createCharacterLink(comment.character.id, comment.character.party, comment.character.name)}
+            </div>
             <div className='comment-timestamp'>{absoluteTime} ({relativeTime})</div>
           </div>
           <div className='comment-content'>

@@ -64,7 +64,7 @@
 
     &-officer {
         display: flex;
-        line-height: 32px;
+        line-height: 34px;
         margin-bottom: 10px;
     }
 
@@ -83,7 +83,7 @@
 
     &-officer {
         display: flex;
-        line-height: 32px;
+        line-height: 34px;
         margin-bottom: 10px;
     }
 
@@ -104,16 +104,17 @@
 
     &-header {
         display: flex;
-        line-height: 32px;
+        line-height: 34px;
         margin-bottom: 5px;
     }
 
     &-name {
         font-size: 20px;
+        margin-right: 10px;
     }
 
-    &-votes {
-
+    &-buttons {
+        display: flex;
     }
 
 }

@@ -44,7 +44,7 @@ class Capitol extends React.Component {
 
   render() {
     let headers = [
-      { name: 'state', width: 50 },
+      { name: 'state', width: 70 },
       { name: 'party', width: 200 },
       { name: 'name', width: 300 },
     ];

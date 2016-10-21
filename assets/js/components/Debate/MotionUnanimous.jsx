@@ -69,7 +69,7 @@ class MotionUnanimous extends React.Component {
           <div>&nbsp;&nbsp;Ends {timeLeft}</div>
         </div>
         <div>
-          Proposed by {createCharacterLink(motion.actor_id, motion.actor_party, motion.actor)}
+          Proposed by {createCharacterLink(motion.actor.id, motion.actor.party, motion.actor.name)}
           {objected}
         </div>
       </div>
