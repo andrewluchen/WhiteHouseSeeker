@@ -117,7 +117,7 @@ class SecondedMotionBase extends React.Component {
               <div className='motion-name'>{this.props.motionName}&nbsp;</div>
             </div>
             <div>
-              Proposed by {createCharacterLink(motion.actor.id, motion.actor.party, 'You')}
+              Proposed by {createCharacterLink(motion.actor.id, motion.actor.party, motion.actor.name)}
             </div>
             {this.props.children}
           </div>

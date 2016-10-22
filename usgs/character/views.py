@@ -1,13 +1,14 @@
-import json
-
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.generic import View
 
+from rest_framework.renderers import JSONRenderer
+
 from usgs.utils import validate_character
 from usgs.character.forms import CharacterForm
 from usgs.character.models import Character, Holding
+from usgs.character.serializers import CharacterSerializer
 
 class NewCharacterView(View):
 
@@ -41,24 +42,9 @@ class NewCharacterView(View):
 class CharacterView(View):
 
     def get(self, request, pk):
-        characterobj = Character.objects.get(pk=pk)
-        character = {
-            'username': characterobj.player.username,
-            'user_id': characterobj.player.id,
-            'description': characterobj.description,
-            'name': characterobj.name,
-            'title': characterobj.get_title(),
-            'birthday': str(characterobj.birthday),
-            'gender': characterobj.gender,
-            'residence': characterobj.residence,
-            'party': characterobj.party,
-            'state': characterobj.state,
-            'avatar': characterobj.avatar,
-            'activated': str(characterobj.activated),
-            'deactivated': str(characterobj.deactivated),
-        }
-        response = json.dumps(character)
-        return HttpResponse(response, content_type='application/json')
+        character_obj = Character.objects.get(pk=pk)
+        character = JSONRenderer().render(CharacterSerializer(character_obj).data)
+        return HttpResponse(character, content_type='application/json')
 
     def post(self, request, pk):
         character = Character.objects.get(pk=pk)
@@ -124,28 +110,9 @@ class CharacterVotingRecordView(View):
 class CharactersView(View):
 
     def get(self, request):
-        characterobjs = Character.objects.all()
+        character_objs = Character.objects.all()
         if (request.GET.get('username')):
             player = User.objects.get(username=request.GET.get('username'))
-            characterobjs = characterobjs.filter(player=player)
-        characters = []
-        for i, c in enumerate(list(characterobjs)):
-            characters.append({
-                'id': c.id,
-                'username': c.player.username,
-                'user_id': c.player.id,
-                'description': c.description,
-                'primary': c.primary,
-                'name': c.name,
-                'title': c.get_title(),
-                'birthday': str(c.birthday),
-                'gender': c.gender,
-                'residence': c.residence,
-                'party': c.party,
-                'state': c.state,
-                'avatar': c.avatar,
-                'activated': str(c.activated),
-                'deactivated': str(c.deactivated),
-            })
-        response = json.dumps(characters)
-        return HttpResponse(response, content_type='application/json')
+            character_objs = character_objs.filter(player=player)
+        characters = JSONRenderer().render(CharacterSerializer(character_objs, many=True).data)
+        return HttpResponse(characters, content_type='application/json')

@@ -183,4 +183,8 @@ SortableTable.propTypes = {
   createCellContent: React.PropTypes.func,
 };
 
+SortableTable.defaultProps = {
+  createCellContent: (header, data) => data[header],
+};
+
 export default SortableTable;

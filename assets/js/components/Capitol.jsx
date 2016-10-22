@@ -46,7 +46,7 @@ class Capitol extends React.Component {
     let headers = [
       { name: 'state', width: 70 },
       { name: 'party', width: 200 },
-      { name: 'name', width: 300 },
+      { name: 'name', width: 350 },
     ];
     let data = [];
     this.state.senators.forEach(senator => {

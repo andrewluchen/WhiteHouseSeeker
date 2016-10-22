@@ -26,6 +26,7 @@ class Sidebar extends React.Component {
                 <SidebarSubItem title='Announcements' link='/announcements'/>
                 <SidebarSubItem title='Character Sign-In' link='/my'/>
               </SidebarItem>
+              <SidebarItem title='Search' link='/search'/>
               <SidebarItem title='News' link='/news'>
                 <SidebarSubItem title='National News' link='/nationalnews'/>
                 <SidebarSubItem title='International News' link='/internationalnews'/>

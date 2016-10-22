@@ -27,6 +27,7 @@ import MyCharacters from './components/MyCharacters';
 import NewBill from './components/Bill/NewBill';
 import NewDebate from './components/Debate/NewDebate';
 import NewVote from './components/Vote/NewVote';
+import Search from './components/Search';
 import Senate from './components/Senate';
 import User from './components/User/User';
 import Vote from './components/Vote/Vote';
@@ -52,6 +53,7 @@ class Root extends React.Component {
             <Route path='/login/' component={Login} />
             <Route path='/register/' component={Register} />
 
+            <Route path='/search' component={Search} />
             <Route path='/user/:userId' component={User} />
             <Route path='/my' component={MyCharacters} />
             <Route path='/character/:characterId' component={Character} />

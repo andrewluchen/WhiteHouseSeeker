@@ -7,6 +7,8 @@ module.exports = {
   context: __dirname,
   entry: './assets/js/index',
 
+  devtool: process.env.NODE_ENV !== 'production' ? 'inline-source-map' : null,
+
   output: {
     path: path.resolve('./assets/bundles/'),
     filename: '[name].js',

@@ -45,12 +45,19 @@ class MotionUnanimous extends React.Component {
     let objected = null;
     let objectButton = null;
     let nays = this.state.nays.length > 0 ? this.state.nays : motion.nays;
-    if (nays.length === 0 && this.props.active !== motion.actor_id) {
-      objectButton = (
-        <ButtonToolbar>
-          <Button onClick={this.submitObject} disabled={objected !== null}>Object</Button>
-        </ButtonToolbar>
-      );
+    if (nays.length === 0) {
+      if (this.props.active === motion.actor.id) {
+        objectButton = <span>Ends {timeLeft}</span>;
+      } else {
+        objectButton = (
+          <div className='motion-buttons'>
+            <ButtonToolbar>
+              <Button onClick={this.submitObject} disabled={objected !== null}>Object</Button>
+            </ButtonToolbar>
+            <div>&nbsp;&nbsp;Ends {timeLeft}</div>
+          </div>
+        );
+      }
     } else {
       let party = nays[0].party;
       let id = nays[0].id;
@@ -66,7 +73,6 @@ class MotionUnanimous extends React.Component {
         <div className='motion-header'>
           <div className='motion-name'>Motion for Unanimous Consent&nbsp;</div>
           {objectButton}
-          <div>&nbsp;&nbsp;Ends {timeLeft}</div>
         </div>
         <div>
           Proposed by {createCharacterLink(motion.actor.id, motion.actor.party, motion.actor.name)}
