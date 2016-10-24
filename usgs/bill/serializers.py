@@ -31,7 +31,8 @@ class BillSerializer(serializers.Serializer):
         return cosponsors
 
     def get_versions(self, obj):
-        return BillVersionSerializer(obj.versions, many=True).data
+        billversions = sorted(obj.versions.all(), key=lambda bv:bv.id)
+        return BillVersionSerializer(billversions, many=True).data
 
     class Meta:
         model = Bill

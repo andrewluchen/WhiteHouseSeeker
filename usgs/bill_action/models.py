@@ -25,6 +25,10 @@ class DebateComment(models.Model):
     comment = models.TextField()
     timestamp = models.DateTimeField()
 
+    class Meta:
+        verbose_name = 'Bill Comment'
+        verbose_name_plural = 'Bill Comments'
+
 
 class DebateMotion(models.Model):
 
@@ -47,6 +51,10 @@ class DebateMotion(models.Model):
     yeas = models.ManyToManyField(Character, related_name='+', blank=True)
     nays = models.ManyToManyField(Character, related_name='+', blank=True)
     pres = models.ManyToManyField(Character, related_name='+', blank=True)
+
+    class Meta:
+        verbose_name = 'Bill Motion'
+        verbose_name_plural = 'Bill Motions'
 
 
 class Vote(models.Model):

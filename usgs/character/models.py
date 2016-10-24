@@ -6,6 +6,12 @@ from django.utils import timezone
 class ElectionCharacter(models.Model):
     name = models.CharField(max_length=80)
 
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.__unicode__()
+
 
 class Character(ElectionCharacter):
     player = models.ForeignKey(User, related_name='characters')

@@ -41,6 +41,7 @@ class QuillEditor extends React.Component {
           Submit
         </Button>
         <div
+          hidden={!this.props.showPreview}
           className='preview'
           dangerouslySetInnerHTML={{__html: this.state.content}}
         />
@@ -52,6 +53,11 @@ class QuillEditor extends React.Component {
 QuillEditor.propTypes = {
   content: React.PropTypes.string,
   onSubmit: React.PropTypes.func,
-}
+  showPreview: React.PropTypes.bool,
+};
+
+QuillEditor.defaultProps = {
+  showPreview: true,
+};
 
 export default QuillEditor;

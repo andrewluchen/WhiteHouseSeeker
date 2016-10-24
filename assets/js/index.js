@@ -17,11 +17,13 @@ import Register from './components/Register';
 import About from './components/About';
 import Bill from './components/Bill/Bill';
 import BillVersion from './components/Bill/BillVersion';
+import Campaign from './components/Election/Campaign';
 import Capitol from './components/Capitol';
 import Character from './components/Character/Character';
 import Debate from './components/Debate/Debate';
 import EditBill from './components/Bill/EditBill';
-import Elections from './comonents/Elections'
+import Election from './components/Election/Election'
+import Elections from './components/Elections'
 import Home from './components/Home';
 import House from './components/House';
 import MyCharacters from './components/MyCharacters';
@@ -73,6 +75,8 @@ class Root extends React.Component {
             <Route path='/vote/:voteId' component={Vote} />
             <Route path='/debate/:debateId' component={Debate} />
             <Route path='/elections' component={Elections} />
+            <Route path='/election/:electionId' component={Election} />
+            <Route path='/campaign/:campaignId' component={Campaign} />
             <Route path='/about' component={About} />
             <Route path='/wtf' component={Wtf} />
 

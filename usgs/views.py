@@ -31,7 +31,10 @@ from usgs.character.views import (
     NewCharacterView,
 )
 from usgs.election.views import (
+    NewElectionView,
+    ElectionView,
     ElectionsView,
+    CampaignView,
 )
 
 def echo(request):

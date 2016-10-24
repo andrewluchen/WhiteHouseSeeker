@@ -42,7 +42,6 @@ class BillView(View):
         bill_obj = Bill.objects.get(id=pk)
         bill = JSONRenderer().render(BillSerializer(bill_obj).data)
         return HttpResponse(bill, content_type='application/json')
-        billversionobjs = sorted(billobj.versions.all(), key=lambda bv:bv.id)
 
 
 class BillVersionView(View):

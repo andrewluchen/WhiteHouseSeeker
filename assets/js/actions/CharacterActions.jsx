@@ -51,6 +51,10 @@ export function createCharacter(username, data) {
         let characters = response;
         dispatch(charactersChanged(characters));
       },
+      error: function(xhr, status, error) {
+        alert(xhr.responseText);
+        dispatch(loginError(xhr.responseText));
+      },
     });
   }
 }

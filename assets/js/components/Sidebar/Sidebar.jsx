@@ -37,7 +37,6 @@ class Sidebar extends React.Component {
                 <SidebarSubItem title='US Senate' link='/senate'/>
                 <SidebarSubItem title='Senate Comittees' link='/senate/committee'/>
                 <SidebarSubItem title='US House of Representatives' link='/house'/>
-                <SidebarSubItem title='House Comittees' link='/house/committee'/>
                 <SidebarSubItem title='White House' link='/potus'/>
                 <SidebarSubItem title='Federal Judiciary' link='/judiciary'/>
                 <SidebarSubItem title='Library of Congress' link='/library'/>

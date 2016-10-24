@@ -1,0 +1,27 @@
+.elections {
+
+    &-header {
+        display: flex;
+
+        label {
+            line-height: 32px;
+            margin: 5px;
+        }
+
+        input {
+            flex: 1;
+            margin: 5px;
+        }
+
+        select {
+            flex: 1;
+            margin: 5px;
+        }
+
+        button {
+            margin: 5px;
+        }
+
+    }
+
+}

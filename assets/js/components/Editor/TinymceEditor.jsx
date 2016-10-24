@@ -55,6 +55,11 @@ class TinymceEditor extends React.Component {
 TinymceEditor.propTypes = {
   content: React.PropTypes.string,
   onSubmit: React.PropTypes.func,
-}
+  showPreview: React.PropTypes.bool,
+};
+
+QuillEditor.defaultProps = {
+  showPreview: true,
+};
 
 export default TinymceEditor;

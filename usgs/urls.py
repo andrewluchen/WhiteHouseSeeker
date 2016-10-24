@@ -26,6 +26,10 @@ apipatterns = [
     url(r'^debate/motion/(?P<pk>[0-9]+)/$', views.DebateMotionView.as_view(), name='debate-motion'),
     url(r'^debate/officer/(?P<pk>[0-9]+)/$', views.DebateOfficerView.as_view(), name='debate-officer'),
     url(r'^debates/$', views.DebatesView.as_view(), name='get-debates'),
+    url(r'^election/new/$', views.NewElectionView.as_view(), name='new-election'),
+    url(r'^election/(?P<pk>[0-9]+)/$', views.ElectionView.as_view(), name='election'),
+    url(r'^elections/$', views.ElectionsView.as_view(), name='get-elections'),
+    url(r'^campaign/(?P<pk>[0-9]+)/$', views.CampaignView.as_view(), name='campaign'),
 ]
 
 urlpatterns = [

@@ -9,6 +9,7 @@ from usgs.utils import validate_character
 from usgs.character.forms import CharacterForm
 from usgs.character.models import Character, Holding
 from usgs.character.serializers import CharacterSerializer
+from usgs.election.models import Warchest
 
 class NewCharacterView(View):
 
@@ -29,6 +30,8 @@ class NewCharacterView(View):
                 bio=form.cleaned_data['bio'],
             )
             character.save()
+            warchest = Warchest(character=character)
+            warchest.save()
             holding = Holding(
                 holder=character,
                 title=Holding.SENATOR,
@@ -36,7 +39,7 @@ class NewCharacterView(View):
             )
             holding.save()
             return HttpResponse(status=201)
-        return HttpResponse(form.errors, status=400)
+        return HttpResponse(form.errors.as_json(), status=400)
 
 
 class CharacterView(View):
