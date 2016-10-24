@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Index extends React.Component {
+class Home extends React.Component {
 
   render() {
     return (
@@ -12,4 +12,4 @@ class Index extends React.Component {
   }
 }
 
-export default Index;
+export default Home;

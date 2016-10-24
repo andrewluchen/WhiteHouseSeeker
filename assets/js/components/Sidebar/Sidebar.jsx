@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
 
 import SidebarItem from './SidebarItem';
 import SidebarSubItem from './SidebarSubItem';
@@ -15,9 +15,9 @@ class Sidebar extends React.Component {
           <div className='sidebar-container'>
             <div className='sidebar-header'>
               <div className='sidebar-logo'>
-                <a href='/#'>
+                <Link to='/#'>
                   <img src={require('../../../img/logo.png')}/>
-                </a>
+                </Link>
               </div>
             </div>
             <div>
@@ -43,20 +43,16 @@ class Sidebar extends React.Component {
                 <SidebarSubItem title='Library of Congress' link='/library'/>
               </SidebarItem>
               <SidebarItem title='Elections' link='/elections'>
-                <SidebarSubItem title='National' link='/elections/president'/>
-                <SidebarSubItem title='Gubernatorial' link='/elections/governor'/>
-                <SidebarSubItem title='Congressional' link='/elections/congress'/>
+                <SidebarSubItem title='Presidential' link='/elections/president'/>
+                <SidebarSubItem title='Senate' link='/elections/senate'/>
+                <SidebarSubItem title='House' link='/elections/house'/>
               </SidebarItem>
-              <SidebarItem title='Party Warroom' link='/party'>
-                <SidebarSubItem title='Democratic National Committee' link='/dnc'/>
-                <SidebarSubItem title='Republican National Committee' link='/rnc'/>
+              <SidebarItem title='Party Warroom' link='/forum/' noRouter={true}>
+                <SidebarSubItem title='Democratic National Committee' link='/forum/' noRouter={true}/>
+                <SidebarSubItem title='Republican National Committee' link='/forum/' noRouter={true}/>
+                <SidebarItem title='Minigames' link='/forum/' noRouter={true}/>
               </SidebarItem>
-              <SidebarItem title='Minigames' link='/minigames'/>
-              <MenuItem>
-                <div onClick={() => {window.location='/forum/'}} className='sidebar-link'>
-                  General Discussion
-                </div>
-              </MenuItem>
+              <SidebarItem title='General Discussion' link='/forum/' noRouter={true}/>
               <Divider className='divider'/>
               <SidebarItem title='About' link='/about'/>
             </div>

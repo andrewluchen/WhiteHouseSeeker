@@ -7,10 +7,20 @@ class SidebarSubItem extends React.Component {
     return (
       <MenuItem>
         <div className='sidebar-subitem'>
-          <Link to={this.props.link} className='sidebar-link'>
-            {this.props.title}
-          </Link>
-          {this.props.children}
+          {
+            this.props.noRouter
+            ?
+            <a href={this.props.link} className='sidebar-link'>
+              {this.props.title}
+            </a>
+            :
+            <div>
+              <Link to={this.props.link} className='sidebar-link'>
+                {this.props.title}
+              </Link>
+              {this.props.children}
+            </div>
+          }
         </div>
       </MenuItem>
     )
@@ -20,6 +30,11 @@ class SidebarSubItem extends React.Component {
 SidebarSubItem.propTypes = {
   title: React.PropTypes.string,
   link: React.PropTypes.string,
+  noRouter: React.PropTypes.bool,
+};
+
+SidebarSubItem.defaultProps = {
+  noRouter: false,
 };
 
 export default SidebarSubItem;

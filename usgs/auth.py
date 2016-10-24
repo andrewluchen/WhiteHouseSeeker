@@ -39,6 +39,7 @@ def user_register(request):
     if user_form.is_valid():
         user = user_form.save()
         user.set_password(user.password)
+        Group.objects.get(name='Everyone').user_set.add(user)
         user.save()
         return HttpResponse(status=201)
     else:

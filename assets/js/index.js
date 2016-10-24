@@ -21,7 +21,8 @@ import Capitol from './components/Capitol';
 import Character from './components/Character/Character';
 import Debate from './components/Debate/Debate';
 import EditBill from './components/Bill/EditBill';
-import Index from './components/Index';
+import Elections from './comonents/Elections'
+import Home from './components/Home';
 import House from './components/House';
 import MyCharacters from './components/MyCharacters';
 import NewBill from './components/Bill/NewBill';
@@ -49,7 +50,7 @@ class Root extends React.Component {
       <Provider store={store}>
         <Router history={browserHistory}>
           <Route component={App}>
-            <Route path='/' component={Index} />
+            <Route path='/' component={Home} />
             <Route path='/login/' component={Login} />
             <Route path='/register/' component={Register} />
 
@@ -71,6 +72,7 @@ class Root extends React.Component {
             <Route path='/bill/:billId/:versionId/edit' component={EditBill} />
             <Route path='/vote/:voteId' component={Vote} />
             <Route path='/debate/:debateId' component={Debate} />
+            <Route path='/elections' component={Elections} />
             <Route path='/about' component={About} />
             <Route path='/wtf' component={Wtf} />
 

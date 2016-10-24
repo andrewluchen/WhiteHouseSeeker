@@ -2,19 +2,22 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
+# for DNC, RNC, party warchests etc.
+class ElectionCharacter(models.Model):
+    name = models.CharField(max_length=80)
 
-class Character(models.Model):
+
+class Character(ElectionCharacter):
     player = models.ForeignKey(User, related_name='characters')
     primary = models.BooleanField()
     activated = models.DateTimeField(default=timezone.now)
     deactivated = models.DateTimeField(null=True, blank=True)
 
-    name = models.CharField(max_length=80)
     birthday = models.DateField()
-    gender = models.CharField(max_length=2)
+    gender = models.CharField(max_length=1)
     residence = models.CharField(max_length=80)
     party = models.CharField(max_length=80)
-    state = models.CharField(max_length=80)
+    state = models.CharField(max_length=2)
     avatar = models.TextField(default='', blank=True)
     bio = models.TextField(default='', blank=True)
 
