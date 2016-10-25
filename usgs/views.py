@@ -31,6 +31,7 @@ from usgs.character.views import (
     NewCharacterView,
 )
 from usgs.election.views import (
+    WarchestView,
     NewElectionView,
     ElectionView,
     ElectionsView,

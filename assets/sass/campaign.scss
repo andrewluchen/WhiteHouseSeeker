@@ -17,12 +17,55 @@
 
 }
 
-.fundraiser {
+.fundraiser-new {
+    font-size: 20px;
+    margin: 10px 0;
+    text-align: center;
+}
 
-    &-new {
-        font-size: 20px;
-        margin: 10px 0;
-        text-align: center;
+.fundraiser {
+    margin: 10px 0;
+
+    &-header {
+        background-color: $ui_off_white;
+        border: 1px solid $ui_black;
+        display: flex;
+        padding: 5px;
+    }
+
+    &-edit-link {
+        cursor: pointer;
+    }
+
+    &-edit-container {
+        margin: 5px 0;
+    }
+
+    &-grade {
+        display: flex;
+        margin-top: 5px;
+
+        label {
+            line-height: 32px;
+            margin: 0 5px;
+        }
+
+        input {
+            flex: 1;
+        }
+
+        button {
+            margin: 0 5px;
+        }
+
+    }
+
+    .preview {
+        background-color: $ui_white;
+        border: 1px solid $ui_black;
+        border-top: 0px;
+        padding: 5px;
+        white-space: pre-wrap;
     }
 
 }

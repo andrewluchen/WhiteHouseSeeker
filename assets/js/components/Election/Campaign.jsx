@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 
 import Editor from '../Editor/Editor';
+import Fundraiser from './Fundraiser';
 import NewFundraiser from './NewFundraiser';
 import createCharacterLink from '../shared/createCharacterLink'
 
@@ -18,6 +19,7 @@ class Campaign extends React.Component {
       character: {},
       election: {},
       warchest: {},
+      fundraisers: [],
     };
     this.fetchCampaign = this.fetchCampaign.bind(this);
     this.withdrawCampaign = this.withdrawCampaign.bind(this);
@@ -37,6 +39,7 @@ class Campaign extends React.Component {
           character: response.candidate.character,
           election: response.election,
           warchest: response.warchest,
+          fundraisers: response.fundraisers,
           withdrawn: response.withdrawn,
         });
       },
@@ -90,17 +93,28 @@ class Campaign extends React.Component {
       );
     }
     let fundraisers = [];
+    this.state.fundraisers.forEach(fundraiser => {
+      fundraisers.push(
+        <Fundraiser
+          key={fundraiser.id}
+          campaignId={parseInt(this.props.params.campaignId)}
+          fundraiser={fundraiser}
+        />
+      );
+    });
     return (
       <div>
         <div className='campaign-header' style={withdrawStyle}>
           {this.state.title} {withdraw}
         </div>
         <div className='campaign-subheader'>{subheader}</div>
-        <br/>
-        <br/>
         <div className='campaign-warchest'>{warchest}</div>
-        <div className='campagin-fundraisers'>{fundraisers}</div>
-        <NewFundraiser campaignId={this.state.campaignId}/>
+        <br/><br/>
+        <div className='fundraisers'>{fundraisers}</div>
+        <NewFundraiser
+          campaignId={parseInt(this.props.params.campaignId)}
+          onNewFundraiser={() => this.fetchCampaign(this.props.params.campaignId)}
+        />
       </div>
     );
   }

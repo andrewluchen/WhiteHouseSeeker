@@ -1,4 +1,5 @@
 import React from 'react';
+import { refresh } from 'react-router';
 import { connect } from 'react-redux';
 
 import Editor from '../Editor/Editor';
@@ -7,13 +8,15 @@ class NewFundraiser extends React.Component {
 
   constructor() {
     super();
+    this.state = {
+      counter: 0,
+    };
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(fundraiser) {
-    console.log(fundraiser);
     $.ajax({
-      url: '/api/campaign/',
+      url: '/api/campaign/' + this.props.campaignId + '/',
       type: 'POST',
       data: {
         action: 'new-fundraiser',
@@ -21,6 +24,10 @@ class NewFundraiser extends React.Component {
         fundraiser: fundraiser,
       },
       success: () => {
+        this.props.onNewFundraiser();
+        this.setState({
+          counter: this.state.counter + 1,
+        });
       },
     });
   }
@@ -29,11 +36,17 @@ class NewFundraiser extends React.Component {
     return (
       <div>
         <div className='fundraiser-new'>Start New Fundraiser</div>
-        <Editor onSubmit={this.onSubmit} showPreview={false}/>
+        <Editor key={this.state.counter} onSubmit={this.onSubmit} showPreview={false}/>
       </div>
     );
   }
 }
+
+NewFundraiser.propTypes = {
+  campaignId: React.PropTypes.number,
+  active: React.PropTypes.number,
+  onNewFundraiser: React.PropTypes.func,
+};
 
 function mapStateToProps(state) {
   return {

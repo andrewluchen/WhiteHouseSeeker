@@ -30,6 +30,7 @@ apipatterns = [
     url(r'^election/(?P<pk>[0-9]+)/$', views.ElectionView.as_view(), name='election'),
     url(r'^elections/$', views.ElectionsView.as_view(), name='get-elections'),
     url(r'^campaign/(?P<pk>[0-9]+)/$', views.CampaignView.as_view(), name='campaign'),
+    url(r'^warchest/(?P<pk>[0-9]+)/$', views.WarchestView.as_view(), name='warchest'),
 ]
 
 urlpatterns = [

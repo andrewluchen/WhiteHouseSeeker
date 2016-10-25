@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from usgs.character.models import Character
-from usgs.election.models import Campaign, Election, Warchest
+from usgs.election.models import Campaign, Election, Fundraiser, Warchest
 
 
 class WarchestSerializer(serializers.Serializer):
@@ -77,6 +77,33 @@ class ElectionSerializer(serializers.Serializer):
             'started',
             'modified',
             'candidates',
+            'fundraisers',
+        )
+
+
+class FundraiserSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    description = serializers.CharField()
+    amount = serializers.SerializerMethodField()
+    comment = serializers.SerializerMethodField()
+    timestamp = serializers.SerializerMethodField()
+
+    def get_amount(self, obj):
+        return obj.transaction.amount
+
+    def get_comment(self, obj):
+        return obj.transaction.description
+
+    def get_timestamp(self, obj):
+        return str(obj.timestamp)
+
+    class Meta:
+        model = Fundraiser
+        fields = (
+            'id',
+            'description',
+            'amount',
+            'timestamp',
         )
 
 
@@ -87,6 +114,7 @@ class CampaignSerializer(serializers.Serializer):
     election = serializers.SerializerMethodField()
     candidate = serializers.SerializerMethodField()
     warchest = serializers.SerializerMethodField()
+    fundraisers = serializers.SerializerMethodField()
 
     def get_election(self, obj):
         return {
@@ -123,6 +151,9 @@ class CampaignSerializer(serializers.Serializer):
 
     def get_warchest(self, obj):
         return WarchestSerializer(obj.candidate.warchest).data
+
+    def get_fundraisers(self, obj):
+        return FundraiserSerializer(obj.fundraisers, many=True).data
 
     class Meta:
         model = Campaign

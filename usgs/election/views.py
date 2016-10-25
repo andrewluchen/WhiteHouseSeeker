@@ -5,10 +5,16 @@ from django.views.generic import View
 from rest_framework.renderers import JSONRenderer
 
 from usgs.character.models import Character
-from usgs.election.models import Election, Campaign
+from usgs.election.models import Election, Fundraiser, Campaign, Transaction
 from usgs.election.serializers import ElectionSerializer, CampaignSerializer
 
 from usgs.utils import validate_character
+
+
+class WarchestView(View):
+
+    def get(self, request, pk):
+        pass
 
 
 class NewElectionView(View):
@@ -69,5 +75,45 @@ class CampaignView(View):
 
             campaign.withdrawn = True
             campaign.save()
+            return HttpResponse(status=200)
+        elif (action == 'new-fundraiser'):
+            character_id = request.POST.get('character_id')
+            character = Character.objects.get(id=character_id)
+            validate_character(request.user, character)
+            assert(campaign.candidate.id == character.id)
+
+            raised = Transaction(
+                amount=0,
+                receiver=character.warchest,
+                description='',
+            )
+            raised.save()
+            fundraiser = Fundraiser(
+                campaign=campaign,
+                description=request.POST.get('fundraiser'),
+                raised=raised,
+            )
+            fundraiser.save()
+            return HttpResponse(status=200)
+        elif (action == 'edit-fundraiser'):
+            character_id = request.POST.get('character_id')
+            character = Character.objects.get(id=character_id)
+            validate_character(request.user, character)
+            assert(campaign.candidate.id == character.id)
+
+            fundraiser_id = request.POST.get('fundraiser_id')
+            fundraiser = Fundraiser.objects.get(id=fundraiser_id)
+            content = request.POST.get('content')
+            fundraiser.description = content
+            fundraiser.timestamp = timezone.now()
+            fundraiser.save()
+            return HttpResponse(status=200)
+        elif (action == 'grade-fundraiser'):
+            fundraiser_id = request.POST.get('fundraiser_id')
+            fundraiser = Fundraiser.objects.get(id=fundraiser_id)
+            transaction = fundraiser.transaction
+            transaction.amount = request.POST.get('amount')
+            transaction.description = request.POST.get('tag')
+            transaction.save()
             return HttpResponse(status=200)
         return HttpResponse(status=400)

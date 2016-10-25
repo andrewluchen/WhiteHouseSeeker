@@ -36,13 +36,17 @@ class TinymceEditor extends React.Component {
             onChange={this.onChange}
           />
         </div>
-        <Button
-          bsStyle='primary'
-          bsSize='large'
-          onClick={this.onSubmit}
-        >
-          Submit
-        </Button>
+        <div style={{display:'flex'}}>
+          <div style={{flex:'1'}}/>
+          {this.props.onCancel ? <Button bsStyle='warning' bsSize='large' onClick={this.props.onCancel}>Cancel</Button> : null}
+          <Button
+            bsStyle='primary'
+            bsSize='large'
+            onClick={this.onSubmit}
+          >
+            Submit
+          </Button>
+        </div>
         <div
           className='preview'
           dangerouslySetInnerHTML={{__html: this.state.content}}
@@ -54,11 +58,13 @@ class TinymceEditor extends React.Component {
 
 TinymceEditor.propTypes = {
   content: React.PropTypes.string,
+  onCancel: React.PropTypes.func,
   onSubmit: React.PropTypes.func,
   showPreview: React.PropTypes.bool,
 };
 
 QuillEditor.defaultProps = {
+  onCancel: null,
   showPreview: true,
 };
 

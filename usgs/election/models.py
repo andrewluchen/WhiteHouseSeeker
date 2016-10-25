@@ -48,14 +48,14 @@ class Transaction(models.Model):
     amount = models.IntegerField()
     sender = models.ForeignKey(Warchest, null=True, blank=True, related_name='outgoing')
     receiver = models.ForeignKey(Warchest, null=True, blank=True, related_name='incoming')
-    description = models.CharField(max_length=80)
+    description = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now, blank=True)
 
 
 class Fundraiser(models.Model):
     campaign = models.ForeignKey(Campaign, related_name='fundraisers')
     description = models.TextField()
-    raised = models.ForeignKey(Transaction, related_name='+')
+    transaction = models.ForeignKey(Transaction, related_name='+')
     timestamp = models.DateTimeField(default=timezone.now, blank=True)
 
 
@@ -64,5 +64,6 @@ class CampaignDay(models.Model):
     day = models.IntegerField()
     organization_cost = models.ForeignKey(Transaction, related_name='+')
     advertisement_cost = models.ForeignKey(Transaction, null=True, blank=True, related_name='+')
+    fundraiser_income = models.ForeignKey(Transaction, null=True, blank=True, related_name='+')
     description = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now, blank=True)
