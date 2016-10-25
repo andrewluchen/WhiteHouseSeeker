@@ -1,43 +1,57 @@
 .topbar {
     background-color: $ui_blue !important;
+    display: flex !important;
 
-    &-title {
-        padding-right: 16px;
-        line-height: 56px;
-        font-size: 20px;
-        position: relative;
-        white-space: nowrap;
+    &-children {
+        display: flex;
+        flex: 2;
+        margin-top: 14px;
     }
 
-    &-welcome {
-        color: $ui_white;
-        font-weight: bold;
+    &-title {
+        font-size: 24px;
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     &-characters {
         color: $ui_white;
+        display: flex;
+        flex: 1;
         text-align: center;
 
-        > * {
-          display: inline-block;
+        &-label {
+            font-size: 20px;
+            margin-top: 2px;
         }
 
     }
 
     &-icons {
         color: $ui_white;
+        display: flex;
 
         i {
+            font-size: 24px;
             cursor: pointer;
+        }
+
+        > * {
+            margin-left: 12px;
         }
 
     }
 
-    &-gear {
-        font-size: 20px;
-        position: relative;
-        top: 2px;
-        white-space: nowrap;
+    &-settings {
+        font-size: 24px;
+
+        > button {
+            height: 36px !important;
+            padding: 0px !important;
+        }
+
     }
 
     &-slash {
@@ -46,10 +60,14 @@
         padding-right: 4px;
     }
 
+    &-authentication {
+        color: $ui_white;
+        display: inline-block;
+        font-weight: bold;
+    }
+
     &-register {
         color: $ui_white;
-        font-weight: bold;
-        padding-right: 0;
         text-decoration: none;
 
         &:hover {
@@ -61,7 +79,6 @@
 
     &-login {
         color: $ui_white;
-        font-weight: bold;
         text-decoration: none;
 
         &:hover {
