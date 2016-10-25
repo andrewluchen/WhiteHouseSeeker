@@ -5,8 +5,8 @@ from django.views.generic import View
 from rest_framework.renderers import JSONRenderer
 
 from usgs.character.models import Character
-from usgs.election.models import Election, Fundraiser, Campaign, Transaction
-from usgs.election.serializers import ElectionSerializer, CampaignSerializer
+from usgs.election.models import Election, Fundraiser, Campaign, Transaction, Warchest
+from usgs.election.serializers import ElectionSerializer, CampaignSerializer, WarchestSerializer
 
 from usgs.utils import validate_character
 
@@ -14,7 +14,9 @@ from usgs.utils import validate_character
 class WarchestView(View):
 
     def get(self, request, pk):
-        pass
+        warchest_obj = Warchest.objects.get(id=pk)
+        warchest = JSONRenderer().render(WarchestSerializer(warchest_obj).data)
+        return HttpResponse(warchest, content_type='application/json')
 
 
 class NewElectionView(View):
@@ -82,16 +84,16 @@ class CampaignView(View):
             validate_character(request.user, character)
             assert(campaign.candidate.id == character.id)
 
-            raised = Transaction(
+            transaction = Transaction(
                 amount=0,
                 receiver=character.warchest,
                 description='',
             )
-            raised.save()
+            transaction.save()
             fundraiser = Fundraiser(
                 campaign=campaign,
                 description=request.POST.get('fundraiser'),
-                raised=raised,
+                transaction=transaction,
             )
             fundraiser.save()
             return HttpResponse(status=200)

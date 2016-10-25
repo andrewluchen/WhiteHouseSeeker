@@ -7,6 +7,7 @@ from usgs.election.models import Campaign, Election, Fundraiser, Warchest
 class WarchestSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     current = serializers.SerializerMethodField()
+    transactions = serializers.SerializerMethodField()
 
     def get_current(self, obj):
         amount = 0
@@ -15,6 +16,20 @@ class WarchestSerializer(serializers.Serializer):
         for outgoing in obj.outgoing.all():
             amount -= outgoing.amount
         return amount
+
+    def get_transactions(self, obj):
+        transaction_objs = list(obj.incoming.all()) + list(obj.outgoing.all())
+        transaction_objs = reversed(sorted(transaction_objs, key=lambda t: t.timestamp))
+        transactions = []
+        for t in transaction_objs:
+            transactions.append({
+                'id': t.id,
+                'sign': '+' if t.receiver == obj else '-',
+                'amount': t.amount,
+                'description': t.description,
+                'timestamp': t.timestamp,
+            })
+        return transactions
 
     class Meta:
         model = Warchest

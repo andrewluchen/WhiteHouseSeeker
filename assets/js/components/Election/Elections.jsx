@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Table, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
-import createCharacterLink from './shared/createCharacterLink';
+import createCharacterLink from '../shared/createCharacterLink';
 
 class Elections extends React.Component {
 

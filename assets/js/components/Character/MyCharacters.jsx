@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { createCharacter, updateCharacter } from '../actions/CharacterActions';
+import { createCharacter, updateCharacter } from '../../actions/CharacterActions';
 
-import CharacterSelector from './Character/CharacterSelector';
-import CharacterEditor from './Character/CharacterEditor';
+import CharacterSelector from './CharacterSelector';
+import CharacterEditor from './CharacterEditor';
 
 class MyCharacters extends React.Component {
 

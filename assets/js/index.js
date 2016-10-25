@@ -23,10 +23,10 @@ import Character from './components/Character/Character';
 import Debate from './components/Debate/Debate';
 import EditBill from './components/Bill/EditBill';
 import Election from './components/Election/Election'
-import Elections from './components/Elections'
+import Elections from './components/Election/Elections'
 import Home from './components/Home';
 import House from './components/House';
-import MyCharacters from './components/MyCharacters';
+import MyCharacters from './components/Character/MyCharacters';
 import NewBill from './components/Bill/NewBill';
 import NewDebate from './components/Debate/NewDebate';
 import NewVote from './components/Vote/NewVote';
@@ -34,6 +34,7 @@ import Search from './components/Search';
 import Senate from './components/Senate';
 import User from './components/User/User';
 import Vote from './components/Vote/Vote';
+import Warchest from './components/Election/Warchest';
 import Wtf from './components/Wtf';
 
 let store = applyMiddleware(reduxThunk)(createStore)(reducer);
@@ -77,6 +78,7 @@ class Root extends React.Component {
             <Route path='/elections' component={Elections} />
             <Route path='/election/:electionId' component={Election} />
             <Route path='/campaign/:campaignId' component={Campaign} />
+            <Route path='/warchest/:warchestId' component={Warchest} />
             <Route path='/about' component={About} />
             <Route path='/wtf' component={Wtf} />
 
