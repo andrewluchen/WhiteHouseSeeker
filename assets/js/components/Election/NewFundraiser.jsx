@@ -1,5 +1,4 @@
 import React from 'react';
-import { refresh } from 'react-router';
 import { connect } from 'react-redux';
 
 import Editor from '../Editor/Editor';

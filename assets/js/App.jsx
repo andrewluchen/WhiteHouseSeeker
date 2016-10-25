@@ -8,9 +8,16 @@ import { loginJwt } from './actions/AuthActions';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 
-injectTapEventPlugin();
-
 class App extends React.Component {
+
+  constructor() {
+    super();
+    injectTapEventPlugin();
+    this.state = {
+      mediaWidth: document.documentElement.clientWidth,
+    };
+    this.handleResize = this.handleResize.bind(this);
+  }
 
   componentWillMount() {
     let jwt = localStorage.getItem('jwt');
@@ -20,27 +27,52 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
     document.title = 'White House Seeker';
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize() {
+    this.setState({
+      mediaWidth: document.documentElement.clientWidth,
+    });
   }
 
   render() {
     return (
       <MuiThemeProvider>
         <div>
-          <Sidebar/>
 
-          <div className='main_container'>
+          <Sidebar
+            open={this.props.showSidebar}
+            docked={this.state.mediaWidth >= 768}
+          />
+
+          <div className={'main_container' + (this.props.showSidebar ? ' show-sidebar' : '')}>
             <Header/>
-
             <div className='main_layout'>
               {this.props.children}
             </div>
-
           </div>
+
         </div>
       </MuiThemeProvider>
     );
   }
+}
+
+App.propTypes = {
+  showSidebar: React.PropTypes.bool,
+  loginJwt: React.PropTypes.func,
+};
+
+function mapStateToProps(state) {
+  return {
+    showSidebar: state.layout.showSidebar,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -49,4 +81,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

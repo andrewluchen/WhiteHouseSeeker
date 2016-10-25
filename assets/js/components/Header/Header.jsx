@@ -1,17 +1,34 @@
 import React from 'react';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 
-import { toggleLayout } from '../../actions/LayoutActions';
+import { toggleSidebar } from '../../actions/LayoutActions';
 import { setPrimaryCharacter } from '../../actions/CharacterActions';
 
 import CharacterSelector from '../Character/CharacterSelector';
 
 class Header extends React.Component {
+
+  constructor() {
+    super();
+    this.onChange = this.onChange.bind(this);
+    this.onLogout = this.onLogout.bind(this);
+  }
+
+  onChange(value) {
+    switch(value) {
+      case 'control_panel':
+        browserHistory.push('/me');
+        break;
+      case 'logout':
+        this.onLogout();
+        break;
+    }
+  }
 
   onLogout() {
     window.location = '/auth/logout/';
@@ -31,8 +48,9 @@ class Header extends React.Component {
           iconButtonElement={<IconButton><i className='fa fa-ellipsis-v'/></IconButton>}
           targetOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          onChange={this.onLogout}
+          onChange={(event, value) => this.onChange(value)}
         >
+          <MenuItem value='control_panel' primaryText='Control Panel'/>
           <MenuItem value='logout' primaryText='Logout'/>
         </IconMenu>
       </div>
@@ -60,7 +78,7 @@ class Header extends React.Component {
     return (
       <AppBar
         title={this.props.user ? 'Welcome Back ' + this.props.user.username + '!' : null}
-        onLeftIconButtonTouchTap={() => console.log('hihi')}
+        onLeftIconButtonTouchTap={this.props.toggleHamburger}
         className='topbar'
       >
         <div className='topbar-children'>
@@ -90,7 +108,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleLayout: () => dispatch(toggleLayout()),
+    toggleHamburger: () => dispatch(toggleSidebar()),
     setPrimaryCharacter: i => dispatch(setPrimaryCharacter(i)),
   };
 }

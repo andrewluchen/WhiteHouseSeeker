@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import { Tabs, Tab } from 'material-ui/Tabs';
 
 import BillTrackerStepper from './BillTrackerStepper';
 import createCharacterLink from '../shared/createCharacterLink';

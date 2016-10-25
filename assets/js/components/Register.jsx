@@ -12,6 +12,12 @@ class Register extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
+    let password = this.refs.password.value;
+    let password2 = this.refs.password2.value;
+    if (password !== password2) {
+      alert('Passwords do not match!');
+      return;
+    }
     let data = {
       username: this.refs.username.value,
       email: this.refs.email.value,
@@ -22,7 +28,7 @@ class Register extends React.Component {
 
   render() {
     return (
-      <div className="__login">
+      <div className="login__root">
         <div className="login">
           <div className="login__container">
             <div id="content" className="colM">
@@ -41,6 +47,10 @@ class Register extends React.Component {
                 <div className="form-row">
                   <label className="required" htmlFor="id_password">Password:</label>
                   <input ref="password" id="id_password" name="password" required="" type="password"/>
+                </div>
+                <div className="form-row">
+                  <label className="required" htmlFor="id_password2">Password (Again):</label>
+                  <input ref="password2" id="id_password2" name="password2" required="" type="password"/>
                 </div>
                 <div className="submit-row">
                   <label>&nbsp;</label><input value="Register" type="submit"/>

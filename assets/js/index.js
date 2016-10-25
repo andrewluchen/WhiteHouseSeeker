@@ -10,6 +10,7 @@ import reducer from './reducers/reducers';
 
 require('../sass/style.scss');
 
+
 import App from './App';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -20,6 +21,7 @@ import BillVersion from './components/Bill/BillVersion';
 import Campaign from './components/Election/Campaign';
 import Capitol from './components/Capitol';
 import Character from './components/Character/Character';
+import ControlPanel from './components/ControlPanel';
 import Debate from './components/Debate/Debate';
 import EditBill from './components/Bill/EditBill';
 import Election from './components/Election/Election'
@@ -57,6 +59,7 @@ class Root extends React.Component {
             <Route path='/login/' component={Login} />
             <Route path='/register/' component={Register} />
 
+            <Route path='/me' component={ControlPanel} />
             <Route path='/search' component={Search} />
             <Route path='/user/:userId' component={User} />
             <Route path='/my' component={MyCharacters} />

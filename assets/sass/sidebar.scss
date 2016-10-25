@@ -1,13 +1,7 @@
 .sidebar {
 
-    &-root {
-        background-color: $ui_off_white;
-        display: flex;
-        flex-flow: column;
-        height: 100%;
-    }
-
     &-container {
+        background-color: $ui_off_white;
         overflow: auto;
         padding-bottom: 40px;
     }

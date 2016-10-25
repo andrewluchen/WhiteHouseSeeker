@@ -5,6 +5,7 @@
     &-children {
         display: flex;
         flex: 2;
+        margin-right: -24px;
         margin-top: 14px;
     }
 
@@ -64,6 +65,7 @@
         color: $ui_white;
         display: inline-block;
         font-weight: bold;
+        margin-right: 24px;
     }
 
     &-register {
