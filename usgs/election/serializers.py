@@ -6,8 +6,16 @@ from usgs.election.models import Campaign, Election, Fundraiser, Warchest
 
 class WarchestSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
+    character = serializers.SerializerMethodField()
     current = serializers.SerializerMethodField()
     transactions = serializers.SerializerMethodField()
+
+    def get_character(self, obj):
+        character = Character.objects.get(id=obj.character.id)
+        return {
+            'id': character.id,
+            'name': character.name,
+        }
 
     def get_current(self, obj):
         amount = 0
@@ -35,7 +43,9 @@ class WarchestSerializer(serializers.Serializer):
         model = Warchest
         fields = (
             'id',
-            'current'
+            'character',
+            'current',
+            'transactions',
         )
 
 

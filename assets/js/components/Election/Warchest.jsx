@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router';
 import { Table } from 'react-bootstrap';
 
 class Warchest extends React.Component {
@@ -8,6 +8,7 @@ class Warchest extends React.Component {
     super(props);
     this.state = {
       warchestId: props.params.warchestId,
+      character: {},
       current: 0,
       transactions: [],
     };
@@ -24,6 +25,7 @@ class Warchest extends React.Component {
       type: 'GET',
       success: response => {
         this.setState({
+          character: response.character,
           current: response.current,
           transactions: response.transactions,
         })
@@ -47,6 +49,10 @@ class Warchest extends React.Component {
     return (
       <div>
         <div className='warchest-total'>
+          <Link to={'/character/' + this.state.character.id}>
+            {this.state.character.name}
+          </Link>
+          &nbsp;
           Warchest: ${this.state.current.toLocaleString()}
         </div>
         <Table className='usgs-table' bordered={true} striped={true}>

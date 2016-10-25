@@ -11,6 +11,7 @@ class BillAdmin(admin.ModelAdmin):
 class VoteAdmin(admin.ModelAdmin):
     filter_horizontal = ('yeas', 'nays', 'pres',)
 
+admin.site.register(models.ElectionCharacter)
 admin.site.register(models.Character, CharacterAdmin)
 admin.site.register(models.Bill, BillAdmin)
 admin.site.register(models.BillVersion)

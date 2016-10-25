@@ -8,7 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from usgs.utils import validate_character
 from usgs.character.forms import CharacterForm
 from usgs.character.models import Character, Holding
-from usgs.character.serializers import CharacterSerializer
+from usgs.character.serializers import CharacterSerializer, VotingRecordSerializer
 from usgs.election.models import Warchest
 
 class NewCharacterView(View):
@@ -77,37 +77,8 @@ class CharacterVotingRecordView(View):
 
     def get(self, request, pk):
         character = Character.objects.get(pk=pk)
-        yeaobjs = character.yea_votes.all()
-        nayobjs = character.nay_votes.all()
-        presobjs = character.pres_votes.all()
-        yeas = []
-        nays = []
-        pres = []
-        for i, v in enumerate(list(yeaobjs)):
-            yeas.append({
-                'vote_id': v.id,
-                'title': yeaobjs[i].subject.description,
-                'endtime': str(v.endtime),
-            })
-        for i, v in enumerate(list(nayobjs)):
-            nays.append({
-                'vote_id': v.id,
-                'title': nayobjs[i].subject.description,
-                'endtime': str(v.endtime),
-            })
-        for i, v in enumerate(list(presobjs)):
-            pres.append({
-                'vote_id': v.id,
-                'title': presobjs[i].subject.description,
-                'endtime': str(v.endtime),
-            })
-        votingrecord = {
-            'yeas': yeas,
-            'nays': nays,
-            'pres': pres,
-        }
-        response = json.dumps(votingrecord)
-        return HttpResponse(response, content_type='application/json')
+        votingrecord = JSONRenderer().render(VotingRecordSerializer(character).data)
+        return HttpResponse(votingrecord, content_type='application/json')
 
 
 class CharactersView(View):
