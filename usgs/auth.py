@@ -3,7 +3,7 @@ import json
 from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.views.generic import View
@@ -39,8 +39,8 @@ def user_register(request):
     if user_form.is_valid():
         user = user_form.save()
         user.set_password(user.password)
-        Group.objects.get(name='Everyone').user_set.add(user)
         user.save()
+        Group.objects.get(name='Everyone').user_set.add(user)
         return HttpResponse(status=201)
     else:
         return HttpResponse(user_form.errors.as_json(), status=400)
@@ -62,3 +62,17 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+@login_required
+def user_password(request):
+    user = request.user
+    user.set_password(request.POST['password'])
+    user.save()
+    return HttpResponse(status=200)
+
+@login_required
+def user_email(request):
+    user = request.user
+    user.set_email(request.POST['email'])
+    user.save()
+    return HttpResponse(status=200)

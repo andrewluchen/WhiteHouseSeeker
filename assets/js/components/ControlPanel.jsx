@@ -19,6 +19,13 @@ class ControlPanel extends React.Component {
     let data = {
       password: this.refs.password.value,
     }
+    $.ajax({
+      url: '/auth/password/',
+      type: 'POST',
+      data: data,
+      success: response => {
+      },
+    });
   }
 
   onSubmitEmail(e) {
@@ -26,6 +33,13 @@ class ControlPanel extends React.Component {
     let data = {
       email: this.refs.email.value,
     }
+    $.ajax({
+      url: '/auth/email/',
+      type: 'POST',
+      data: data,
+      success: response => {
+      },
+    });
   }
 
   render() {

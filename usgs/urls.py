@@ -38,6 +38,8 @@ urlpatterns = [
     url(r'^auth/register/$', auth.user_register, name='register-user'),
     url(r'^auth/login/$', auth.user_login, name='login-user'),
     url(r'^auth/logout/$', auth.user_logout, name='logout-user'),
+    url(r'^auth/password/$', auth.user_password, name='change-password'),
+    url(r'^auth/email/$', auth.user_email, name='change-email'),
     url(r'^api/', include(apipatterns)),
     url(r'^echo/$', views.echo, name='echo'),
     url(r'^', views.Index.as_view(), name='index'),
