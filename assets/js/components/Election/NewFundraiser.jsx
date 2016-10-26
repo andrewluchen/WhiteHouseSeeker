@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
 import Editor from '../Editor/Editor';
@@ -20,6 +21,7 @@ class NewFundraiser extends React.Component {
       data: {
         action: 'new-fundraiser',
         character_id: this.props.active,
+        title: ReactDOM.findDOMNode(this.refs.title).value,
         fundraiser: fundraiser,
       },
       success: () => {
@@ -34,8 +36,14 @@ class NewFundraiser extends React.Component {
   render() {
     return (
       <div>
-        <div className='fundraiser-new'>Start New Fundraiser</div>
-        <Editor key={this.state.counter} onSubmit={this.onSubmit} showPreview={false}/>
+        <div className='fundraiser-new-title'>
+          <input ref='title' placeholder='New Fundraiser'/>
+        </div>
+        <Editor
+          key={this.state.counter}
+          onSubmit={this.onSubmit}
+          showPreview={false}
+        />
       </div>
     );
   }

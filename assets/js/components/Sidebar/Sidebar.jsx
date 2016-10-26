@@ -46,11 +46,7 @@ class Sidebar extends React.Component {
               <SidebarSubItem title='Federal Judiciary' link='/judiciary'/>
               <SidebarSubItem title='Library of Congress' link='/library'/>
             </SidebarItem>
-            <SidebarItem title='Elections' link='/elections'>
-              <SidebarSubItem title='Presidential' link='/elections/president'/>
-              <SidebarSubItem title='Senate' link='/elections/senate'/>
-              <SidebarSubItem title='House' link='/elections/house'/>
-            </SidebarItem>
+            <SidebarItem title='Elections' link='/elections'/>
             <SidebarItem title='Party Warroom' link='/forum/' noRouter={true}>
               <SidebarSubItem title='Democratic National Committee' link='/forum/' noRouter={true}/>
               <SidebarSubItem title='Republican National Committee' link='/forum/' noRouter={true}/>

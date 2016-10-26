@@ -46,6 +46,18 @@ class Campaign extends React.Component {
     });
   }
 
+  fetchWarchest(warchestId) {
+    $.ajax({
+      url: '/api/warchest/' + warchestId + '/',
+      type: 'GET',
+      success: response => {
+        this.setState({
+          warchest: response,
+        });
+      },
+    });
+  }
+
   withdrawCampaign() {
     $.ajax({
       url: '/api/campaign/' + this.props.params.campaignId + '/',
@@ -99,17 +111,22 @@ class Campaign extends React.Component {
           key={fundraiser.id}
           campaignId={parseInt(this.props.params.campaignId)}
           fundraiser={fundraiser}
+          refreshWarchest={() => this.fetchWarchest(this.state.warchest.id)}
         />
       );
     });
     return (
       <div>
+        <Link to={'/election/' + this.state.election.id}>
+          {'< Go to Election'}
+        </Link>
         <div className='campaign-header' style={withdrawStyle}>
           {this.state.title} {withdraw}
         </div>
         <div className='campaign-subheader'>{subheader}</div>
         <div className='campaign-warchest'>{warchest}</div>
-        <br/><br/>
+        <br/>
+        <div className='campaign-subheader'>Fundraisers</div>
         <div className='fundraisers'>{fundraisers}</div>
         <NewFundraiser
           campaignId={parseInt(this.props.params.campaignId)}

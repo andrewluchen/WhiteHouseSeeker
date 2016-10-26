@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 import TinyMCE from 'react-tinymce';
 
 class TinymceEditor extends React.Component {
@@ -37,15 +37,17 @@ class TinymceEditor extends React.Component {
           />
         </div>
         <div style={{display:'flex'}}>
-          <div style={{flex:'1'}}/>
-          {this.props.onCancel ? <Button bsStyle='warning' bsSize='large' onClick={this.props.onCancel}>Cancel</Button> : null}
-          <Button
-            bsStyle='primary'
-            bsSize='large'
-            onClick={this.onSubmit}
-          >
-            Submit
-          </Button>
+          <ButtonToolbar>
+            <div style={{flex:'1'}}/>
+            {this.props.onCancel ? <Button bsStyle='warning' bsSize='large' onClick={this.props.onCancel}>Cancel</Button> : null}
+            <Button
+              bsStyle='primary'
+              bsSize='large'
+              onClick={this.onSubmit}
+            >
+              Submit
+            </Button>
+          </ButtonToolbar>
         </div>
         <div
           className='preview'

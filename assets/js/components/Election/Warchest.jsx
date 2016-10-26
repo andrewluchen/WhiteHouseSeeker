@@ -36,11 +36,11 @@ class Warchest extends React.Component {
   render() {
     let transactions = [];
     this.state.transactions.forEach(transaction => {
-      let colorStyle = transaction.sign === '-' ? {color:'red'} : {}
+      let colorStyle = transaction.sign === '-' ? { color:'red' } : {}
       transactions.push(
         <tr key={transaction.id}>
-          <td>{transaction.description ? transaction.description : 'unprocessed...'}</td>
-          <td style={colorStyle}>
+          <td>{transaction.description}</td>
+          <td className='warchest-number' style={colorStyle}>
             {transaction.sign + '$' + transaction.amount.toLocaleString()}
           </td>
         </tr>

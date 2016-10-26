@@ -38,7 +38,7 @@ class CharacterSerializer(serializers.Serializer):
         return str(obj.activated)
 
     def get_deactivated(self, obj):
-        return str(obj.deactivated)
+        return str(obj.deactivated) if obj.deactivated else None
 
     def get_warchest(self, obj):
         amount = 0

@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 
 from usgs.character.models import Character
 from usgs.election.models import Election, Fundraiser, Campaign, Transaction, Warchest
-from usgs.election.serializers import ElectionSerializer, CampaignSerializer, WarchestSerializer
+from usgs.election.serializers import CampaignSerializer, ElectionSummarySerializer, ElectionSerializer, WarchestSerializer
 
 from usgs.utils import validate_character
 
@@ -32,6 +32,12 @@ class NewElectionView(View):
 
 class ElectionView(View):
 
+    def get(self, request, pk):
+        election_obj = Election.objects.get(id=pk)
+        election = JSONRenderer().render(ElectionSerializer(election_obj).data)
+        return HttpResponse(election, content_type='application/json')
+
+
     def post(self, request, pk):
         action = request.POST.get('action')
         if (action == 'file-candidate'):
@@ -46,6 +52,15 @@ class ElectionView(View):
             )
             campaign.save()
             return HttpResponse(status=200)
+        elif (action == 'start-general'):
+            election = Election.objects.get(id=pk)
+            election.can_file = False
+            election.save()
+            return HttpResponse(status=200)
+        elif (action == 'add-day'):
+            pass
+        elif (action == 'declare-winner'):
+            pass
 
 
 class ElectionsView(View):
@@ -55,7 +70,7 @@ class ElectionsView(View):
         if (request.GET.get('active')):
             election_objs = election_objs.filter(winner__isnull=True)
         election_objs = sorted(election_objs.all(), key=lambda e:e.year)
-        elections = JSONRenderer().render(ElectionSerializer(election_objs, many=True).data)
+        elections = JSONRenderer().render(ElectionSummarySerializer(election_objs, many=True).data)
         return HttpResponse(elections, content_type='application/json')
 
 
@@ -87,12 +102,12 @@ class CampaignView(View):
             transaction = Transaction(
                 amount=0,
                 receiver=character.warchest,
-                description='',
+                description=request.POST.get('title'),
             )
             transaction.save()
             fundraiser = Fundraiser(
                 campaign=campaign,
-                description=request.POST.get('fundraiser'),
+                body=request.POST.get('fundraiser'),
                 transaction=transaction,
             )
             fundraiser.save()
@@ -106,7 +121,7 @@ class CampaignView(View):
             fundraiser_id = request.POST.get('fundraiser_id')
             fundraiser = Fundraiser.objects.get(id=fundraiser_id)
             content = request.POST.get('content')
-            fundraiser.description = content
+            fundraiser.body = content
             fundraiser.timestamp = timezone.now()
             fundraiser.save()
             return HttpResponse(status=200)
@@ -115,7 +130,6 @@ class CampaignView(View):
             fundraiser = Fundraiser.objects.get(id=fundraiser_id)
             transaction = fundraiser.transaction
             transaction.amount = request.POST.get('amount')
-            transaction.description = request.POST.get('tag')
             transaction.save()
             return HttpResponse(status=200)
         return HttpResponse(status=400)

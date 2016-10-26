@@ -17,12 +17,6 @@
 
 }
 
-.fundraiser-new {
-    font-size: 20px;
-    margin: 10px 0;
-    text-align: center;
-}
-
 .fundraiser {
     margin: 10px 0;
 
@@ -60,6 +54,20 @@
 
     }
 
+    &-new-title {
+        font-size: 20px;
+        margin-bottom: 5px;
+        margin-top: 20px;
+        text-align: center;
+
+        > input {
+            font-size: 16px;
+            margin-bottom: 5px;
+            text-align: center;
+            width: 50%;
+        }
+    }
+
     .preview {
         background-color: $ui_white;
         border: 1px solid $ui_black;
@@ -68,6 +76,10 @@
         white-space: pre-wrap;
     }
 
+}
+
+.warchest-number {
+    font-weight: bold;
 }
 
 .warchest-total {

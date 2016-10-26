@@ -10,7 +10,6 @@ import reducer from './reducers/reducers';
 
 require('../sass/style.scss');
 
-
 import App from './App';
 import Login from './components/Login';
 import Register from './components/Register';

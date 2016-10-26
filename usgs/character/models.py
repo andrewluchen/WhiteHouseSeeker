@@ -5,6 +5,7 @@ from django.utils import timezone
 # for DNC, RNC, party warchests etc.
 class ElectionCharacter(models.Model):
     name = models.CharField(max_length=80)
+    party = models.CharField(max_length=80)
 
     def __unicode__(self):
         return self.name
@@ -22,7 +23,6 @@ class Character(ElectionCharacter):
     birthday = models.DateField()
     gender = models.CharField(max_length=1)
     residence = models.CharField(max_length=80)
-    party = models.CharField(max_length=80)
     state = models.CharField(max_length=2)
     avatar = models.TextField(default='', blank=True)
     bio = models.TextField(default='', blank=True)

@@ -78,10 +78,9 @@ class Fundraiser extends React.Component {
         action: 'grade-fundraiser',
         fundraiser_id: this.props.fundraiser.id,
         amount: ReactDOM.findDOMNode(this.refs.amount).value,
-        tag: ReactDOM.findDOMNode(this.refs.tag).value,
       },
       success: () => {
-        this.fetchFundraiser();
+        this.props.refreshWarchest();
       },
     });
   }
@@ -95,24 +94,19 @@ class Fundraiser extends React.Component {
           <div className='fundraiser-header'>
             <a className='fundraiser-edit-link' onClick={this.beginEdit}>Edit</a>
             <div style={{flex:'1'}}/>
-            <div>{absoluteTime}</div>
+            <div>Last Modified {absoluteTime}</div>
           </div>
           <div
             className='preview'
             dangerouslySetInnerHTML={{__html: this.state.content}}
           />
           <div className='fundraiser-grade'>
-            <ControlLabel>Fundraiser Amount:</ControlLabel>
+            <div style={{flex:'2'}}/>
+            <ControlLabel>Amount Fundraised:</ControlLabel>
             <FormControl
               ref='amount'
               type='number'
               defaultValue={this.state.amount}
-            />
-            <ControlLabel>Fundraiser Tag:</ControlLabel>
-            <FormControl
-              ref='tag'
-              type='text'
-              defaultValue={this.state.comment}
             />
             <Button onClick={this.gradeFundraiser}>Grade</Button>
           </div>
@@ -135,6 +129,7 @@ class Fundraiser extends React.Component {
 Fundraiser.propTypes = {
   campaignId: React.PropTypes.number,
   fundraiser: React.PropTypes.object,
+  refreshWarchest: React.PropTypes.func,
   active: React.PropTypes.number,
 };
 
