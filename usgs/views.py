@@ -36,6 +36,7 @@ from usgs.election.views import (
     ElectionView,
     ElectionsView,
     CampaignView,
+    CampaignDayView,
 )
 
 def echo(request):

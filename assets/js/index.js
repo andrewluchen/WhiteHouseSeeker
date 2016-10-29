@@ -18,6 +18,7 @@ import About from './components/About';
 import Bill from './components/Bill/Bill';
 import BillVersion from './components/Bill/BillVersion';
 import Campaign from './components/Election/Campaign';
+import CampaignDay from './components/Election/CampaignDay';
 import Capitol from './components/Capitol';
 import Character from './components/Character/Character';
 import ControlPanel from './components/ControlPanel';
@@ -80,6 +81,7 @@ class Root extends React.Component {
             <Route path='/elections' component={Elections} />
             <Route path='/election/:electionId' component={Election} />
             <Route path='/campaign/:campaignId' component={Campaign} />
+            <Route path='/campaign/:campaignId/:campaignDayId' component={CampaignDay} />
             <Route path='/warchest/:warchestId' component={Warchest} />
             <Route path='/about' component={About} />
             <Route path='/wtf' component={Wtf} />

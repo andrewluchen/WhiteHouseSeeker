@@ -15,6 +15,41 @@
         text-align: center;
     }
 
+    &-days {
+        text-decoration: underline;
+    }
+
+    &-day-link {
+        cursor: pointer;
+    }
+
+}
+
+.platform {
+
+    &-header {
+        background-color: $ui_off_white;
+        border: 1px solid $ui_black;
+        border-bottom: 0;
+        display: flex;
+        padding: 5px;
+    }
+
+    &-edit-link {
+        cursor: pointer;
+    }
+
+    &-edit-container {
+        margin: 5px 0;
+    }
+
+    .preview {
+        background-color: $ui_white;
+        border: 1px solid $ui_black;
+        padding: 5px;
+        white-space: pre-wrap;
+    }
+
 }
 
 .fundraiser {
@@ -87,5 +122,13 @@
     font-size: 30px;
     margin: 10px 0;
     text-align: center;
+
+}
+
+.campaignday {
+
+    &-links {
+        display: flex;
+    }
 
 }

@@ -14,9 +14,8 @@ class Fundraiser extends React.Component {
       editing: false,
       counter: 0,
       timestamp: props.fundraiser.timestamp,
-      content: props.fundraiser.description,
+      content: props.fundraiser.body,
       amount: props.fundraiser.amount,
-      comment: props.fundraiser.comment,
     };
     this.beginEdit = this.beginEdit.bind(this);
     this.fetchFundraiser = this.fetchFundraiser.bind(this);
@@ -39,13 +38,12 @@ class Fundraiser extends React.Component {
           if (fundraiser.id === this.props.fundraiser.id) {
             this.setState({
               timestamp: fundraiser.timestamp,
-              content: fundraiser.description,
+              content: fundraiser.body,
               amount: fundraiser.amount,
-              comment: fundraiser.comment,
             });
             return true;
           }
-        })
+        });
       },
     });
   }
@@ -89,10 +87,16 @@ class Fundraiser extends React.Component {
     if (!this.state.editing) {
       let timestamp = moment(this.state.timestamp);
       let absoluteTime = timestamp.format("ddd, MMM Do 'YY, h:mm a");
+      let editLink = null;
+      if (this.props.editable) {
+        editLink = (
+          <a className='fundraiser-edit-link' onClick={this.beginEdit}>Edit</a>
+        );
+      }
       return (
         <div className='fundraiser'>
           <div className='fundraiser-header'>
-            <a className='fundraiser-edit-link' onClick={this.beginEdit}>Edit</a>
+            {editLink}
             <div style={{flex:'1'}}/>
             <div>Last Modified {absoluteTime}</div>
           </div>
@@ -129,6 +133,7 @@ class Fundraiser extends React.Component {
 Fundraiser.propTypes = {
   campaignId: React.PropTypes.number,
   fundraiser: React.PropTypes.object,
+  editable: React.PropTypes.bool,
   refreshWarchest: React.PropTypes.func,
   active: React.PropTypes.number,
 };

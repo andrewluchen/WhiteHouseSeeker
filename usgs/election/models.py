@@ -25,7 +25,7 @@ class ElectionDay(models.Model):
     primary = models.BooleanField(default=False, blank=True)
     day = models.IntegerField()
     comments = models.TextField()
-    closed = models.BooleanField(default=False, blank=True)
+    revealed = models.BooleanField(default=False, blank=True)
 
     def __unicode__(self):
         return (
@@ -42,6 +42,7 @@ class Campaign(models.Model):
     election = models.ForeignKey(Election, related_name='campaigns')
     candidate = models.ForeignKey(ElectionCharacter, related_name='campaigns')
     description = models.CharField(max_length=140)
+    platform = models.TextField(default='', blank=True)
     withdrawn = models.BooleanField(default=False, blank=True)
 
     def __unicode__(self):
@@ -49,6 +50,14 @@ class Campaign(models.Model):
 
     def __str__(self):
         return self.__unicode__()
+
+
+class CampaignDay(models.Model):
+    campaign = models.ForeignKey(Campaign, related_name='days')
+    day = models.ForeignKey(ElectionDay, related_name='campaigns')
+    body = models.TextField()
+    costs = models.IntegerField(default=0, blank=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
 
 class Warchest(models.Model):
@@ -86,11 +95,3 @@ class Fundraiser(models.Model):
 
     def __str__(self):
         return self.__unicode__()
-
-
-class CampaignDay(models.Model):
-    campaign = models.ForeignKey(Campaign, related_name='days')
-    day = models.ForeignKey(ElectionDay, related_name='campaigns')
-    body = models.TextField()
-    costs = models.IntegerField(default=0, blank=True)
-    timestamp = models.DateTimeField(default=timezone.now, blank=True)

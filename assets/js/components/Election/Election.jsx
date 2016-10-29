@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 
+import ElectionDay from './ElectionDay';
 import partyColor from '../shared/partyColor';
 
 class Election extends React.Component {
@@ -97,10 +98,9 @@ class Election extends React.Component {
     for (let i = 0; i < candidates.length; i++) {
       let candidate = candidates[i];
       candidateViews.push(
-        <span>
+        <span key={candidate.campaign_id}>
           {i === 0 ? null : <span>&nbsp;v.&nbsp;</span>}
           <Link
-            key={candidate.campaign_id}
             to={'/campaign/' + candidate.campaign_id}
             className={partyColor(candidate.character.party)}
           >
@@ -114,6 +114,12 @@ class Election extends React.Component {
         </MenuItem>
       )
     }
+    let electionDays = [];
+    this.state.days.forEach(day => {
+      electionDays.push(
+        <ElectionDay key={day.id} day={day}/>
+      );
+    });
     return (
       <div>
         <div className='election-title'>{this.state.description}</div>
@@ -124,13 +130,17 @@ class Election extends React.Component {
           Latest Results: {this.state.summary}
         </div>
         <br/>
-        <Button onClick={this.addDay}>Add Day</Button>: {this.state.days.length}
-        <br/>
-        <div>
-          <DropdownButton title='Declare Winner' id='dropdown-basic'>
+        <div className='election-buttons'>
+          <div className='election-add-day'>
+            Days in Election: {this.state.days.length} &nbsp;
+            <Button onClick={this.addDay} bsSize='small'>Add Day</Button>
+          </div>
+          <DropdownButton title='Declare Winner' pullRight id='dropdown-basic'>
             {candidateButtons}
           </DropdownButton>
         </div>
+        <br/>
+        {electionDays}
       </div>
     );
   }

@@ -33,10 +33,10 @@ class Sidebar extends React.Component {
             </SidebarItem>
             <SidebarItem title='Search' link='/search'/>
             <SidebarItem title='News' link='/news'>
-              <SidebarSubItem title='National News' link='/nationalnews'/>
-              <SidebarSubItem title='International News' link='/internationalnews'/>
-              <SidebarSubItem title='Press Office' link='/pressoffice'/>
-              <SidebarSubItem title='Social Media' link='/socialmedia'/>
+              <SidebarSubItem title='Mainstream Media' link='/news/media'/>
+              <SidebarSubItem title='Fourth Estate' link='/news/fourthestate'/>
+              <SidebarSubItem title='Social Media' link='/news/social'/>
+              <SidebarSubItem title='Press Relations' link='/news/press'/>
             </SidebarItem>
             <SidebarItem title='Capitol Hill' link='/capitol'>
               <SidebarSubItem title='US Senate' link='/senate'/>
@@ -46,12 +46,9 @@ class Sidebar extends React.Component {
               <SidebarSubItem title='Federal Judiciary' link='/judiciary'/>
               <SidebarSubItem title='Library of Congress' link='/library'/>
             </SidebarItem>
+            <SidebarItem title='Party Warroom' link='/forum/' noRouter={true}/>
             <SidebarItem title='Elections' link='/elections'/>
-            <SidebarItem title='Party Warroom' link='/forum/' noRouter={true}>
-              <SidebarSubItem title='Democratic National Committee' link='/forum/' noRouter={true}/>
-              <SidebarSubItem title='Republican National Committee' link='/forum/' noRouter={true}/>
-              <SidebarItem title='Minigames' link='/forum/' noRouter={true}/>
-            </SidebarItem>
+            <SidebarItem title='Minigames' link='/forum/' noRouter={true}/>
             <SidebarItem title='General Discussion' link='/forum/' noRouter={true}/>
             <Divider className='divider'/>
             <SidebarItem title='About' link='/about'/>

@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import Editor from '../Editor/Editor';
 import Fundraiser from './Fundraiser';
 import NewFundraiser from './NewFundraiser';
+import Platform from './Platform';
 import createCharacterLink from '../shared/createCharacterLink'
 
 class Campaign extends React.Component {
@@ -14,11 +15,13 @@ class Campaign extends React.Component {
     super(props);
     this.state = {
       campaignId: props.params.campaignId,
+      election: {},
       title: '',
       withdrawn: false,
       character: {},
-      election: {},
       warchest: {},
+      days: [],
+      platform: '',
       fundraisers: [],
     };
     this.fetchCampaign = this.fetchCampaign.bind(this);
@@ -35,12 +38,14 @@ class Campaign extends React.Component {
       type: 'GET',
       success: response => {
         this.setState({
-          title: response.description,
-          character: response.candidate.character,
           election: response.election,
-          warchest: response.warchest,
-          fundraisers: response.fundraisers,
+          title: response.description,
           withdrawn: response.withdrawn,
+          character: response.candidate.character,
+          warchest: response.warchest,
+          days: response.days,
+          platform: response.platform,
+          fundraisers: response.fundraisers,
         });
       },
     });
@@ -104,6 +109,30 @@ class Campaign extends React.Component {
         </span>
       );
     }
+    let campaignDays = [];
+    this.state.days.forEach(day => {
+      if (day.editable) {
+        campaignDays.push(
+          <Link
+            key={day.id}
+            className='campaign-day-link'
+            to={'/campaign/' + this.state.campaignId + '/' + day.id}
+          >
+            Day {day.day} (Editable)
+          </Link>
+        );
+      } else {
+        campaignDays.push(
+          <Link
+            key={day.id}
+            className='campaign-day-link'
+            to={'/election/' + this.state.election.id}
+          >
+            Day {day.day}
+          </Link>
+        );
+      }
+    });
     let fundraisers = [];
     this.state.fundraisers.forEach(fundraiser => {
       fundraisers.push(
@@ -111,6 +140,7 @@ class Campaign extends React.Component {
           key={fundraiser.id}
           campaignId={parseInt(this.props.params.campaignId)}
           fundraiser={fundraiser}
+          editable={this.state.can_edit}
           refreshWarchest={() => this.fetchWarchest(this.state.warchest.id)}
         />
       );
@@ -126,12 +156,26 @@ class Campaign extends React.Component {
         <div className='campaign-subheader'>{subheader}</div>
         <div className='campaign-warchest'>{warchest}</div>
         <br/>
+        <div className='campaign-days'>Campaign Days:</div>
+        {campaignDays}
+        <br/><br/>
+        <div className='campaign-subheader'>Platform</div>
+        <Platform
+          campaignId={parseInt(this.props.params.campaignId)}
+          platform={this.state.platform}
+          editable={this.state.can_edit}
+        />
+        <br/>
         <div className='campaign-subheader'>Fundraisers</div>
         <div className='fundraisers'>{fundraisers}</div>
-        <NewFundraiser
-          campaignId={parseInt(this.props.params.campaignId)}
-          onNewFundraiser={() => this.fetchCampaign(this.props.params.campaignId)}
-        />
+        {
+          this.state.can_edit ?
+          <NewFundraiser
+            campaignId={parseInt(this.props.params.campaignId)}
+            onNewFundraiser={() => this.fetchCampaign(this.props.params.campaignId)}
+          /> :
+          null
+        }
       </div>
     );
   }

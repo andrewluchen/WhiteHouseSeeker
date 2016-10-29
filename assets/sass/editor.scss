@@ -26,6 +26,15 @@
         resize: vertical;
     }
 
+    &-buttons {
+        display: flex;
+        padding: 5px;
+
+        button {
+            margin: 0 5px;
+        }
+    }
+
 }
 
 .billeditor {

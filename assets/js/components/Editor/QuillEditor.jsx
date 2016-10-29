@@ -33,7 +33,7 @@ class QuillEditor extends React.Component {
             onChange={this.onChange}
           />
         </div>
-        <div style={{display:'flex'}}>
+        <div className='editor-buttons'>
           <div style={{flex:'1'}}/>
 
           <ButtonToolbar>

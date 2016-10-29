@@ -36,7 +36,7 @@ class TinymceEditor extends React.Component {
             onChange={this.onChange}
           />
         </div>
-        <div style={{display:'flex'}}>
+        <div className='editor-buttons'>
           <ButtonToolbar>
             <div style={{flex:'1'}}/>
             {this.props.onCancel ? <Button bsStyle='warning' bsSize='large' onClick={this.props.onCancel}>Cancel</Button> : null}

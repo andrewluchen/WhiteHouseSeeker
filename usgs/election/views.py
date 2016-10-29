@@ -5,8 +5,8 @@ from django.views.generic import View
 from rest_framework.renderers import JSONRenderer
 
 from usgs.character.models import Character
-from usgs.election.models import Election, Fundraiser, Campaign, Transaction, Warchest
-from usgs.election.serializers import CampaignSerializer, ElectionSummarySerializer, ElectionSerializer, WarchestSerializer
+from usgs.election.models import Campaign, CampaignDay, Election, ElectionDay, Fundraiser, Transaction, Warchest
+from usgs.election.serializers import CampaignSerializer, CampaignDaySerializer, ElectionSummarySerializer, ElectionSerializer, WarchestSerializer
 
 from usgs.utils import validate_character
 
@@ -58,9 +58,28 @@ class ElectionView(View):
             election.save()
             return HttpResponse(status=200)
         elif (action == 'add-day'):
-            pass
+            election = Election.objects.get(id=pk)
+            election_day = ElectionDay(
+                election=election,
+                day=election.days.count()+1,
+                comments='',
+            )
+            election_day.save()
+            for c in election.campaigns.all():
+                day = CampaignDay(
+                    campaign=c,
+                    day=election_day,
+                    body='',
+                )
+                day.save()
+            return HttpResponse(status=200)
         elif (action == 'declare-winner'):
-            pass
+            character_id = request.POST.get('character_id')
+            character = Character.objects.get(id=character_id)
+            election = Election.objects.get(id=pk)
+            election.winner = character
+            election.save()
+            return HttpResponse(status=200)
 
 
 class ElectionsView(View):
@@ -91,6 +110,16 @@ class CampaignView(View):
             assert(campaign.candidate.id == character.id)
 
             campaign.withdrawn = True
+            campaign.save()
+            return HttpResponse(status=200)
+        elif (action == 'edit-platform'):
+            character_id = request.POST.get('character_id')
+            character = Character.objects.get(id=character_id)
+            validate_character(request.user, character)
+            assert(campaign.candidate.id == character.id)
+
+            campaign = Campaign.objects.get(id=pk)
+            campaign.platform = request.POST.get('platform')
             campaign.save()
             return HttpResponse(status=200)
         elif (action == 'new-fundraiser'):
@@ -133,3 +162,13 @@ class CampaignView(View):
             transaction.save()
             return HttpResponse(status=200)
         return HttpResponse(status=400)
+
+class CampaignDayView(View):
+
+    def get(self, request, pk):
+        campaignday_obj = CampaignDay.objects.get(id=pk)
+        campaignday = JSONRenderer().render(CampaignDaySerializer(campaignday_obj).data)
+        return HttpResponse(campaignday, content_type='application/json')
+
+    def post(self, request, pk):
+        pass

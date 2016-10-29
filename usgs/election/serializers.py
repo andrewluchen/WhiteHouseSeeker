@@ -174,12 +174,15 @@ class ElectionDaySerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     primary = serializers.BooleanField()
     day = serializers.IntegerField()
-    closed = serializers.BooleanField()
-    campaigns = serializers.ReadOnlyField()
+    revealed = serializers.BooleanField()
+    campaigns = serializers.SerializerMethodField()
     comments = serializers.CharField()
 
-    def get_campagins(self, obj):
-        return CampaignDaySerializer(obj.campaigns.all(), many=True).data
+    def get_campaigns(self, obj):
+        if (obj.revealed):
+            return CampaignDaySerializer(obj.campaigns.all(), many=True).data
+        else:
+            return []
 
     class Meta:
         model = ElectionDay
@@ -187,64 +190,9 @@ class ElectionDaySerializer(serializers.Serializer):
             'id',
             'primary',
             'day',
-            'closed',
+            'revealed',
             'campaigns',
             'comments',
-        )
-
-
-class CampaignDaySerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    elction_id = serializers.SerializerMethodField()
-    body = serializers.CharField()
-    costs = serializers.IntegerField()
-    closed = serializers.SerializerMethodField()
-    timestamp = serializers.DateTimeField()
-
-    def get_election_id(self, obj):
-        return obj.day.election.id
-
-    def get_closed(self, obj):
-        return obj.day.closed
-
-    def get_timestamp(self, obj):
-        return str(obj.timestamp)
-
-    class Meta:
-        model = ElectionDay
-        fields = (
-            'id',
-            'election_id',
-            'body',
-            'costs',
-            'closed',
-            'timestamp',
-        )
-
-
-class FundraiserSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    description = serializers.CharField()
-    amount = serializers.SerializerMethodField()
-    comment = serializers.SerializerMethodField()
-    timestamp = serializers.SerializerMethodField()
-
-    def get_amount(self, obj):
-        return obj.transaction.amount
-
-    def get_comment(self, obj):
-        return obj.transaction.description
-
-    def get_timestamp(self, obj):
-        return str(obj.timestamp)
-
-    class Meta:
-        model = Fundraiser
-        fields = (
-            'id',
-            'description',
-            'amount',
-            'timestamp',
         )
 
 
@@ -252,15 +200,18 @@ class CampaignSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     withdrawn = serializers.BooleanField()
     description = serializers.CharField()
+    platform = serializers.CharField()
     election = serializers.SerializerMethodField()
     candidate = serializers.SerializerMethodField()
     warchest = serializers.SerializerMethodField()
     fundraisers = serializers.SerializerMethodField()
+    days = serializers.SerializerMethodField()
 
     def get_election(self, obj):
         return {
             'id': obj.election.id,
             'name': obj.election.description,
+            'can_edit': obj.election.can_file,
         }
 
     def get_candidate(self, obj):
@@ -291,13 +242,82 @@ class CampaignSerializer(serializers.Serializer):
     def get_fundraisers(self, obj):
         return FundraiserSerializer(obj.fundraisers, many=True).data
 
+    def get_days(self, obj):
+        days = []
+        for d in obj.days.all():
+            days.append({
+                'id': d.id,
+                'editable': not d.day.revealed,
+                'primary': d.day.primary,
+                'day': d.day.day,
+            })
+        return days
+
     class Meta:
         model = Campaign
         fields = (
             'id',
             'withdrawn',
             'description',
+            'platform',
             'election',
             'candidate',
-            'warchest'
+            'warchest',
+            'fundraisers',
+            'days',
+        )
+
+
+class CampaignDaySerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    campaign_id = serializers.SerializerMethodField()
+    election_id = serializers.SerializerMethodField()
+    body = serializers.CharField()
+    costs = serializers.IntegerField()
+    editable = serializers.SerializerMethodField()
+    timestamp = serializers.DateTimeField()
+
+    def get_campaign_id(self, obj):
+        return obj.campaign.id
+
+    def get_election_id(self, obj):
+        return obj.day.election.id
+
+    def get_editable(self, obj):
+        return not obj.day.revealed
+
+    def get_timestamp(self, obj):
+        return str(obj.timestamp)
+
+    class Meta:
+        model = ElectionDay
+        fields = (
+            'id',
+            'election_id',
+            'body',
+            'costs',
+            'editable',
+            'timestamp',
+        )
+
+
+class FundraiserSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    body = serializers.CharField()
+    amount = serializers.SerializerMethodField()
+    timestamp = serializers.SerializerMethodField()
+
+    def get_amount(self, obj):
+        return obj.transaction.amount
+
+    def get_timestamp(self, obj):
+        return str(obj.timestamp)
+
+    class Meta:
+        model = Fundraiser
+        fields = (
+            'id',
+            'body',
+            'amount',
+            'timestamp',
         )

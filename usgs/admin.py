@@ -20,7 +20,9 @@ admin.site.register(models.Debate)
 admin.site.register(models.DebateMotion)
 admin.site.register(models.Transaction)
 admin.site.register(models.Election)
+admin.site.register(models.ElectionDay)
 admin.site.register(models.Campaign)
+admin.site.register(models.CampaignDay)
 
 
 
