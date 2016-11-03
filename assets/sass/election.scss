@@ -46,17 +46,34 @@
 
     &-buttons {
         display: flex;
-        margin: 0 20px;
-    }
-
-    &-add-day {
-        flex: 1;
-        font-size: 16px;
+        margin: 10px 20px;
     }
 
     &-day {
         border: 1px dashed $ui_black;
         padding: 5px;
+    }
+
+    &-day-name {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    &-day-candidate {
+        font-size: 20px;
+        text-align: center;
+    }
+
+}
+
+.election-day {
+
+    .preview {
+        background-color: $ui_white;
+        border: 1px solid $ui_black;
+        margin-bottom: 10px;
+        padding: 5px;
+        white-space: pre-wrap;
     }
 
 }

@@ -36,7 +36,6 @@ class Platform extends React.Component {
   }
 
   beginEdit() {
-    console.log('d');
     this.setState({
       editing: true,
     });

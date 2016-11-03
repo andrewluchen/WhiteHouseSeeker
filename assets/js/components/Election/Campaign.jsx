@@ -118,7 +118,7 @@ class Campaign extends React.Component {
             className='campaign-day-link'
             to={'/campaign/' + this.state.campaignId + '/' + day.id}
           >
-            Day {day.day} (Editable)
+            Day {day.day}
           </Link>
         );
       } else {
@@ -128,7 +128,7 @@ class Campaign extends React.Component {
             className='campaign-day-link'
             to={'/election/' + this.state.election.id}
           >
-            Day {day.day}
+            Day {day.day} (*ENDED*)
           </Link>
         );
       }

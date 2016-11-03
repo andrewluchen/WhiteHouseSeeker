@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 
 from usgs.character.models import Character
 from usgs.election.models import Campaign, CampaignDay, Election, ElectionDay, Fundraiser, Transaction, Warchest
-from usgs.election.serializers import CampaignSerializer, CampaignDaySerializer, ElectionSummarySerializer, ElectionSerializer, WarchestSerializer
+from usgs.election.serializers import CampaignSerializer, CampaignDaySerializer, ElectionSummarySerializer, ElectionSerializer, ElectionDaySerializer, WarchestSerializer
 
 from usgs.utils import validate_character
 
@@ -79,6 +79,22 @@ class ElectionView(View):
             election = Election.objects.get(id=pk)
             election.winner = character
             election.save()
+            return HttpResponse(status=200)
+
+
+class ElectionDayView(View):
+
+    def get(self, request, pk):
+        electionday_obj = ElectionDay.objects.get(id=pk)
+        electionday = JSONRenderer().render(ElectionDaySerializer(electionday_obj).data)
+        return HttpResponse(electionday, content_type='application/json')
+
+    def post(self, request, pk):
+        action = request.POST.get('action')
+        if (action == 'reveal_day'):
+            electionday = ElectionDay.objects.get(id=pk)
+            electionday.revealed = True
+            electionday.save()
             return HttpResponse(status=200)
 
 
@@ -167,8 +183,21 @@ class CampaignDayView(View):
 
     def get(self, request, pk):
         campaignday_obj = CampaignDay.objects.get(id=pk)
+        character_id = request.GET.get('character_id')
+        character = Character.objects.get(id=character_id)
+        validate_character(request.user, character)
+        if (campaignday_obj.campaign.candidate.id != character.id):
+            return HttpResponse('', status=200)
         campaignday = JSONRenderer().render(CampaignDaySerializer(campaignday_obj).data)
         return HttpResponse(campaignday, content_type='application/json')
 
     def post(self, request, pk):
-        pass
+        campaignday = CampaignDay.objects.get(id=pk)
+        character_id = request.POST.get('character_id')
+        character = Character.objects.get(id=character_id)
+        validate_character(request.user, character)
+        assert(campaignday.campaign.candidate.id == character.id)
+
+        campaignday.body = request.POST.get('content')
+        campaignday.save()
+        return HttpResponse(status=200)

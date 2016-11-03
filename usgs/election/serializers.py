@@ -154,7 +154,7 @@ class ElectionSerializer(serializers.Serializer):
 
     def get_days(self, obj):
         days = obj.days.all()
-        days = sorted(days, lambda ed: (-100 if ed.primary else 0) + ed.day)
+        days = sorted(days, key=lambda ed: (-100 if ed.primary else 0) + ed.day)
         return ElectionDaySerializer(days, many=True).data
 
     class Meta:
@@ -272,6 +272,7 @@ class CampaignDaySerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     campaign_id = serializers.SerializerMethodField()
     election_id = serializers.SerializerMethodField()
+    character = serializers.SerializerMethodField()
     body = serializers.CharField()
     costs = serializers.IntegerField()
     editable = serializers.SerializerMethodField()
@@ -282,6 +283,14 @@ class CampaignDaySerializer(serializers.Serializer):
 
     def get_election_id(self, obj):
         return obj.day.election.id
+
+    def get_character(self, obj):
+        character = Character.objects.get(id=obj.campaign.candidate.id)
+        return {
+            'id': obj.campaign.candidate.id,
+            'name': character.description,
+            'party': character.party,
+        }
 
     def get_editable(self, obj):
         return not obj.day.revealed

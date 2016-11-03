@@ -34,6 +34,7 @@ from usgs.election.views import (
     WarchestView,
     NewElectionView,
     ElectionView,
+    ElectionDayView,
     ElectionsView,
     CampaignView,
     CampaignDayView,

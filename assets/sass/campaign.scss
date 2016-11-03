@@ -131,4 +131,27 @@
         display: flex;
     }
 
+    &-container {
+        margin-top: 20px;
+    }
+
+    &-header {
+        background-color: $ui_off_white;
+        border: 1px solid $ui_black;
+        display: flex;
+        padding: 5px;
+    }
+
+    &-edit-link {
+        cursor: pointer;
+    }
+
+    .preview {
+        background-color: $ui_white;
+        border: 1px solid $ui_black;
+        border-top: 0px;
+        padding: 5px;
+        white-space: pre-wrap;
+    }
+
 }

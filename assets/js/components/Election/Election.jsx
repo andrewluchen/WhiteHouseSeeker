@@ -109,7 +109,7 @@ class Election extends React.Component {
         </span>
       );
       candidateButtons.push(
-        <MenuItem eventKey={i} onClick={() => this.declareWinner(candidate.character.id)}>
+        <MenuItem key={i} eventKey={i} onClick={() => this.declareWinner(candidate.character.id)}>
           {candidate.character.name}
         </MenuItem>
       )
@@ -130,17 +130,14 @@ class Election extends React.Component {
           Latest Results: {this.state.summary}
         </div>
         <br/>
+        {electionDays}
         <div className='election-buttons'>
-          <div className='election-add-day'>
-            Days in Election: {this.state.days.length} &nbsp;
-            <Button onClick={this.addDay} bsSize='small'>Add Day</Button>
-          </div>
+          <Button onClick={this.addDay}>Add Day {this.state.days.length + 1}</Button>
+          <div style={{flex:'1'}}/>
           <DropdownButton title='Declare Winner' pullRight id='dropdown-basic'>
             {candidateButtons}
           </DropdownButton>
         </div>
-        <br/>
-        {electionDays}
       </div>
     );
   }
