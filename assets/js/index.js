@@ -34,6 +34,7 @@ import NewDebate from './components/Debate/NewDebate';
 import NewVote from './components/Vote/NewVote';
 import Search from './components/Search';
 import Senate from './components/Senate';
+import Twitter from './components/Media/Twitter'
 import User from './components/User/User';
 import Vote from './components/Vote/Vote';
 import Warchest from './components/Election/Warchest';
@@ -64,6 +65,7 @@ class Root extends React.Component {
             <Route path='/user/:userId' component={User} />
             <Route path='/my' component={MyCharacters} />
             <Route path='/character/:characterId' component={Character} />
+            <Route path='/news/twitter' component={Twitter} />
             <Route path='/capitol' component={Capitol} />
             <Route path='/senate' component={Senate} />
             <Route path='/senate/new' component={() => <NewBill chamber='senate'/>} />

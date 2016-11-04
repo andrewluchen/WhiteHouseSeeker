@@ -39,6 +39,11 @@ from usgs.election.views import (
     CampaignView,
     CampaignDayView,
 )
+from usgs.news.views import (
+    NewTweetView,
+    TweetView,
+    TweetsView,
+)
 
 def echo(request):
     print ('request: ', request)

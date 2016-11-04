@@ -12,6 +12,11 @@ apipatterns = [
     url(r'^character/(?P<pk>[0-9]+)/votes/$', views.CharacterVotingRecordView.as_view(), name='character-voting-record'),
     url(r'^characters/$', views.CharactersView.as_view(), name='characters'),
 
+
+    url(r'^tweet/new/$', views.NewTweetView.as_view(), name='new-tweet'),
+    url(r'^tweet/(?P<pk>[0-9]+)/$', views.TweetView.as_view(), name='tweet'),
+    url(r'^tweets/$', views.TweetsView.as_view(), name='twitter'),
+
     url(r'^bill/new/$', views.NewBillView.as_view(), name='new-bill'),
     url(r'^bill/(?P<pk>[0-9]+)/$', views.BillView.as_view(), name='bill'),
     url(r'^bill/(?P<bid>[0-9]+)/(?P<vid>[0-9]+)/$', views.BillVersionView.as_view(), name='bill-version'),

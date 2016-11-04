@@ -113,23 +113,25 @@ class Campaign extends React.Component {
     this.state.days.forEach(day => {
       if (day.editable) {
         campaignDays.push(
-          <Link
-            key={day.id}
-            className='campaign-day-link'
-            to={'/campaign/' + this.state.campaignId + '/' + day.id}
-          >
-            Day {day.day}
-          </Link>
+          <div key={day.id}>
+            <Link
+              className='campaign-day-link'
+              to={'/campaign/' + this.state.campaignId + '/' + day.id}
+            >
+              Day {day.day}
+            </Link>
+          </div>
         );
       } else {
         campaignDays.push(
-          <Link
-            key={day.id}
-            className='campaign-day-link'
-            to={'/election/' + this.state.election.id}
-          >
-            Day {day.day} (*ENDED*)
-          </Link>
+          <div key={day.id}>
+            <Link
+              className='campaign-day-link'
+              to={'/election/' + this.state.election.id}
+            >
+              Day {day.day} (*ENDED*)
+            </Link>
+          </div>
         );
       }
     });

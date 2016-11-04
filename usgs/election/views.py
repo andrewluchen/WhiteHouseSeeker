@@ -179,6 +179,7 @@ class CampaignView(View):
             return HttpResponse(status=200)
         return HttpResponse(status=400)
 
+
 class CampaignDayView(View):
 
     def get(self, request, pk):

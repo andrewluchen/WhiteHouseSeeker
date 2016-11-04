@@ -23,7 +23,7 @@ admin.site.register(models.Election)
 admin.site.register(models.ElectionDay)
 admin.site.register(models.Campaign)
 admin.site.register(models.CampaignDay)
-
+admin.site.register(models.Tweet)
 
 
 from machina.core.db.models import get_model
