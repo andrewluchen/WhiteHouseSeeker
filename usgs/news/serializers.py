@@ -27,9 +27,9 @@ class TweetSerializer(serializers.Serializer):
     # higher ==> more relevant
     def get_relevance(self, obj):
         delta = timezone.now() - obj.created
-        freshness = -30 * (delta.days / 3)
-        votes = 5 * (obj.ups.count() + obj.downs.count())
-        return freshness + votes
+        freshness = -60 * (delta.days / 3)
+        votes = 10 * (obj.ups.count() + obj.downs.count())
+        return freshness + votes + obj.ups.count() - obj.downs.count()
 
     class Meta:
         model = Tweet
