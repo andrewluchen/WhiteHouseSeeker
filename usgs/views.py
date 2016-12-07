@@ -104,9 +104,23 @@ class CapitolView(View):
                 response[position] = filtered.first().holder.short_description()
             else:
                 response[position] = 'N/A'
+        response['senate_seats'] = self.get_senate_seats()
         response['senators'] = self.get_senators()
         response = json.dumps(response)
         return HttpResponse(response, content_type='application/json')
+
+    def get_senate_seats(self):
+        seats = models.SenateSeat.objects.all()
+        response = []
+        for s in seats:
+            response.append({
+                'id': s.id,
+                'hodler': s.holder,
+                'state': s.state,
+                'class': s.senate_class,
+                'party': s.party,
+            })
+        return response
 
     def get_senators(self):
         senators = models.Holding.objects.filter(title=models.Holding.SENATOR, endtime__isnull=True)

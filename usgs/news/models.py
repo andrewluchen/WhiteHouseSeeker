@@ -2,6 +2,17 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class NewsNetwork(models.Model):
+    is_admin = models.BooleanField(default=False)
+    title = models.CharField(max_length=200)
+    body = models.TextField()
+
+
+class Article(models.Model):
+    author = models.ForeignKey(User, related_name='+')
+    body = models.TextField()
+
+
 class Tweet(models.Model):
     author = models.ForeignKey(User, related_name='+')
     handle = models.CharField(max_length=80)

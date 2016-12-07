@@ -69,21 +69,21 @@ class Holding(models.Model):
     HmL = 'House Minority Leader'
     HmL2 = 'House Minority Whip'
 
-    # ???
+    # Party titles
     DNC = 'Democratic Chair'
     DNC2 = 'Democratic Vice Chair'
     RNC = 'Republican Chair'
     RNC2 = 'Republican Vice Chair'
 
     holder = models.ForeignKey(Character, related_name='holdings')
-    title = models.CharField(max_length=80)
+    title = models.CharField(max_length=80, default='', blank=True)
     subtitle = models.CharField(max_length=80, default='', blank=True)
     partytitle = models.CharField(max_length=80, default='', blank=True)
     starttime = models.DateTimeField(default=timezone.now)
     endtime = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.title
+        return  self.title + '(' + self.holder.name + ')'
 
     def __str__(self):
         return self.__unicode__()

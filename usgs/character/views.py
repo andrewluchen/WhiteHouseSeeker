@@ -9,7 +9,7 @@ from usgs.utils import validate_character
 from usgs.character.forms import CharacterForm
 from usgs.character.models import Character, Holding
 from usgs.character.serializers import CharacterSerializer, VotingRecordSerializer
-from usgs.election.models import Warchest
+from usgs.election.models import SenateSeat, Warchest
 
 class NewCharacterView(View):
 
@@ -32,12 +32,12 @@ class NewCharacterView(View):
             character.save()
             warchest = Warchest(character=character)
             warchest.save()
-            holding = Holding(
-                holder=character,
-                title=Holding.SENATOR,
-                starttime=timezone.now(),
-            )
-            holding.save()
+            if (request.POST.get('senator')):
+                seat = SenateSeat.objects.get(id=request.POST.get('senator'))
+                seat.holder = character
+                seat.save()
+                holding = Holding(holder=character, title=Holding.SENATOR)
+                holding.save()
             return HttpResponse(status=201)
         return HttpResponse(form.errors.as_json(), status=400)
 

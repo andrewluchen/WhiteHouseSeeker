@@ -4,6 +4,7 @@ import { Col, Grid, Row } from 'react-bootstrap';
 import { Button, ControlLabel, FormControl, Radio } from 'react-bootstrap';
 
 import { STATES } from '../../StateConstants';
+import SenateSeatsPicker from './SenateSeatsPicker';
 
 class CharacterEditor extends React.Component {
 
@@ -22,9 +23,12 @@ class CharacterEditor extends React.Component {
       party: this.rand > 0.5 ? 'Republican' : 'Democratic',
       avatar: '',
       bio: '',
+      senateSeatId: null,
+      showSenate: false,
     }
     this.saveCharacter = this.saveCharacter.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.chooseSenate = this.chooseSenate.bind(this);
   }
 
   componentWillReceiveProps(props) {
@@ -53,6 +57,7 @@ class CharacterEditor extends React.Component {
       party: this.state.party,
       avatar: this.state.avatar,
       bio: this.state.bio,
+      senator: this.state.senateSeatId,
    });
   }
 
@@ -61,20 +66,55 @@ class CharacterEditor extends React.Component {
       name: ReactDOM.findDOMNode(this.refs.name).value,
       birthday: ReactDOM.findDOMNode(this.refs.birthday).value,
       residence: ReactDOM.findDOMNode(this.refs.residence).value,
-      state: ReactDOM.findDOMNode(this.refs.state).value,
-      party: ReactDOM.findDOMNode(this.refs.party).value,
       avatar: ReactDOM.findDOMNode(this.refs.avatar).value,
       bio: ReactDOM.findDOMNode(this.refs.bio).value,
+    });
+    if (!this.state.showSenate) {
+      this.setState({
+        state: ReactDOM.findDOMNode(this.refs.state).value,
+        party: ReactDOM.findDOMNode(this.refs.party).value,
+      })
+    }
+  }
+
+  chooseSenate(senatSeatId, state, party) {
+    this.setState({
+      state: state,
+      party: party,
+      senateSeatId: senatSeatId,
     });
   }
 
   render() {
+    let makeSenator = <div>Only one Senator per account</div>;
+    if (this.props.senatorOption) {
+      makeSenator = (
+        <div>
+          {
+            this.state.showSenate
+            ?
+            <SenateSeatsPicker
+              onSelect={this.chooseSenate}
+            />
+            :
+            <Button onClick={() => {this.setState({showSenate: true});}}>
+              Make me a Senator
+            </Button>
+          }
+        </div>
+      );
+    }
     let stateOptions = []
     for (let key in STATES){
       stateOptions.push(
         <option value={STATES[key]} key={key}>{key + ' (' + STATES[key] + ')'}</option>
       );
     }
+    let states = (
+      <FormControl ref='state' value={this.state.state} onChange={this.onChange} componentClass='select'>
+        {stateOptions}
+      </FormControl>
+    );
     let cn = this.state.party.toLowerCase().split(' ')[0];
     let parties = (
       <FormControl ref='party' className={cn} componentClass='select' value={this.state.party} onChange={this.onChange}>
@@ -123,13 +163,21 @@ class CharacterEditor extends React.Component {
               <ControlLabel>Residence:</ControlLabel>
               <FormControl ref='residence' value={this.state.residence} onChange={this.onChange} type='text'/>
 
-              <ControlLabel>State:</ControlLabel>
-              <FormControl ref='state' value={this.state.state} onChange={this.onChange} componentClass='select'>
-                {stateOptions}
-              </FormControl>
+              <br/>
+              {makeSenator}
 
-              <ControlLabel>Party (all your characters must be from the same party):</ControlLabel>
-              {parties}
+              {
+                !this.state.showSenate
+                ?
+                <div>
+                  <ControlLabel>State:</ControlLabel>
+                  {states}
+                  <ControlLabel>Party (all your characters must be from the same party):</ControlLabel>
+                  {parties}
+                </div>
+                :
+                null
+              }
             </Col>
           </Row>
 
@@ -137,12 +185,18 @@ class CharacterEditor extends React.Component {
           <FormControl ref='bio' value={this.state.bio} onChange={this.onChange} componentClass='textarea'/>
 
           <div className='character-buttons'>
-            <Button
-              bsStyle='danger'
-              bsSize='large'
-            >
-              Retire Character
-            </Button>
+            {
+              this.props.data.id
+              ?
+              <Button
+                bsStyle='danger'
+                bsSize='large'
+              >
+                Retire Character
+              </Button>
+              :
+              null
+            }
             <Button
               bsStyle='primary'
               bsSize='large'
@@ -159,6 +213,7 @@ class CharacterEditor extends React.Component {
 
 CharacterEditor.propTypes = {
   data: React.PropTypes.object,
+  senatorOption: React.PropTypes.bool,
   onSave: React.PropTypes.func,
 }
 

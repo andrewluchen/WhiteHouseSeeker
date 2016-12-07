@@ -5,6 +5,7 @@ import { createCharacter, updateCharacter } from '../../actions/CharacterActions
 
 import CharacterSelector from './CharacterSelector';
 import CharacterEditor from './CharacterEditor';
+import LoggedInPermission from '../Permission/LoggedInPermission';
 
 class MyCharacters extends React.Component {
 
@@ -53,15 +54,17 @@ class MyCharacters extends React.Component {
   }
 
   render() {
-    if (!this.props.user) {
-      return (
-        <div>You must be logged in to create a character.</div>
-      );
-    }
+    let allowSenator = true;
+    this.props.characters.forEach(character => {
+      if (character.title === '') {
+        allowSenator = false;
+      }
+    });
     let editor = (
       <CharacterEditor
         data={{}}
         onSave={data => this.createCharacter(data)}
+        senatorOption={allowSenator}
       />
     );
     if (this.state.active !== 0) {
@@ -69,11 +72,12 @@ class MyCharacters extends React.Component {
         <CharacterEditor
           data={this.state.data}
           onSave={data => this.updateCharacter(data)}
+          senatorOption={allowSenator}
         />
       );
     }
     return (
-      <div>
+      <LoggedInPermission substitute='You must be logged in to create a character.'>
         <div className='character-header'>
           <span className='character-header-label'>Select a Character:</span>
           <div className='character-header-selector'>
@@ -86,7 +90,7 @@ class MyCharacters extends React.Component {
           </div>
         </div>
         {editor}
-      </div>
+      </LoggedInPermission>
     );
   }
 }

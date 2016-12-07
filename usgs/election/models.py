@@ -4,6 +4,21 @@ from django.utils import timezone
 
 from usgs.character.models import ElectionCharacter
 
+class Seat(models.Model):
+    holder = models.ForeignKey(ElectionCharacter, null=True, blank=True, related_name='+')
+
+
+class SenateSeat(Seat):
+    state = models.CharField(max_length=2)
+    senate_class = models.IntegerField()
+    party = models.CharField(max_length=80)
+
+    def __unicode__(self):
+        return self.state + '-' + str(self.class_num)
+
+    def __str__(self):
+        return self.__unicode__()
+
 
 class Election(models.Model):
     description = models.TextField()

@@ -15,6 +15,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 
 import About from './components/About';
+import AdminNews from './components/Media/AdminNews';
 import Bill from './components/Bill/Bill';
 import BillVersion from './components/Bill/BillVersion';
 import Campaign from './components/Election/Campaign';
@@ -24,14 +25,15 @@ import Character from './components/Character/Character';
 import ControlPanel from './components/ControlPanel';
 import Debate from './components/Debate/Debate';
 import EditBill from './components/Bill/EditBill';
-import Election from './components/Election/Election'
-import Elections from './components/Election/Elections'
+import Election from './components/Election/Election';
+import Elections from './components/Election/Elections';
 import Home from './components/Home';
 import House from './components/House';
 import MyCharacters from './components/Character/MyCharacters';
 import NewBill from './components/Bill/NewBill';
 import NewDebate from './components/Debate/NewDebate';
 import NewVote from './components/Vote/NewVote';
+import PlayerNews from './components/Media/PlayerNews';
 import Search from './components/Search';
 import Senate from './components/Senate';
 import Twitter from './components/Media/Twitter'
@@ -65,6 +67,8 @@ class Root extends React.Component {
             <Route path='/user/:userId' component={User} />
             <Route path='/my' component={MyCharacters} />
             <Route path='/character/:characterId' component={Character} />
+            <Route path='/news/admin_news' component={AdminNews} />
+            <Route path='/news/player_news' component={PlayerNews} />
             <Route path='/news/twitter' component={Twitter} />
             <Route path='/capitol' component={Capitol} />
             <Route path='/senate' component={Senate} />

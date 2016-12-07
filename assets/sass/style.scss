@@ -53,6 +53,14 @@ html body {
     color: $ui_gray_dark;
 }
 
+.modal-container {
+  position: relative;
+}
+
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
+
 
 .democratic {
     color: $ui_democratic !important;
