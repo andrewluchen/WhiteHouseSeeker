@@ -22,7 +22,7 @@ class Character(ElectionCharacter):
 
     birthday = models.DateField()
     gender = models.CharField(max_length=1)
-    residence = models.CharField(max_length=80)
+    residence = models.CharField(max_length=80, default='', blank=True)
     state = models.CharField(max_length=2)
     avatar = models.TextField(default='', blank=True)
     bio = models.TextField(default='', blank=True)
@@ -33,7 +33,16 @@ class Character(ElectionCharacter):
     def get_title(self):
         holds = Holding.objects.filter(holder=self, endtime__isnull=True)
         if (holds.count() != 0):
-            return holds.first().title
+            title = None
+            for h in holds.all():
+                if (h.subtitle):
+                    return h.title
+            for h in holds.all():
+                if (h.title):
+                    return h.title
+            for h in holds.all():
+                if (h.partytitle):
+                    return h.title
         return None
 
     def __unicode__(self):

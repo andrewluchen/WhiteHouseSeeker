@@ -55,8 +55,15 @@ class MyCharacters extends React.Component {
 
   render() {
     let allowSenator = true;
+    let partyOption = null;
     this.props.characters.forEach(character => {
-      if (character.title === '') {
+      if (character.party.indexOf('Democratic') !== -1) {
+        partyOption = 'Democratic';
+      }
+      if (character.party.indexOf('Republican') !== -1) {
+        partyOption = 'Republican';
+      }
+      if (character.titles.includes('Senator')) {
         allowSenator = false;
       }
     });
@@ -65,6 +72,7 @@ class MyCharacters extends React.Component {
         data={{}}
         onSave={data => this.createCharacter(data)}
         senatorOption={allowSenator}
+        partyOption={partyOption}
       />
     );
     if (this.state.active !== 0) {
@@ -73,6 +81,7 @@ class MyCharacters extends React.Component {
           data={this.state.data}
           onSave={data => this.updateCharacter(data)}
           senatorOption={allowSenator}
+          partyOption={partyOption}
         />
       );
     }

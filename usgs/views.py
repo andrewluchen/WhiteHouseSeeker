@@ -115,7 +115,7 @@ class CapitolView(View):
         for s in seats:
             response.append({
                 'id': s.id,
-                'hodler': s.holder,
+                'holder': s.holder.id if s.holder else None,
                 'state': s.state,
                 'class': s.senate_class,
                 'party': s.party,

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from usgs.character.models import Character
+from usgs.character.models import Character, Holding
 
 
 class CharacterSerializer(serializers.Serializer):
@@ -10,7 +10,7 @@ class CharacterSerializer(serializers.Serializer):
     description = serializers.CharField()
     primary = serializers.BooleanField()
     name = serializers.CharField()
-    title = serializers.SerializerMethodField()
+    titles = serializers.SerializerMethodField()
     birthday = serializers.SerializerMethodField()
     gender = serializers.CharField()
     residence = serializers.CharField()
@@ -28,8 +28,19 @@ class CharacterSerializer(serializers.Serializer):
     def get_user_id(self, obj):
         return obj.player.id
 
-    def get_title(self, obj):
-        return obj.get_title()
+    def get_titles(self, obj):
+        holds = Holding.objects.filter(holder=obj, endtime__isnull=True)
+        if (holds.count() != 0):
+            holdings = []
+            for h in holds.all():
+                t = h.title
+                if (not t):
+                    t = h.subtitle
+                if (not t):
+                    t = h.partytitle
+                holdings.append(t)
+            return holdings
+        return []
 
     def get_birthday(self, obj):
         return str(obj.birthday)
@@ -60,7 +71,7 @@ class CharacterSerializer(serializers.Serializer):
             'description',
             'primary',
             'name',
-            'title',
+            'titles'
             'birthday',
             'gender',
             'residence',

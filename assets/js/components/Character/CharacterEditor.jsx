@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import { Col, Grid, Row } from 'react-bootstrap';
 import { Button, ControlLabel, FormControl, Radio } from 'react-bootstrap';
 
-import { STATES } from '../../StateConstants';
+import { STATES, FROM_STATES } from '../../StateConstants';
 import SenateSeatsPicker from './SenateSeatsPicker';
 
 class CharacterEditor extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.rand = Math.random();
     this.randState = STATES[
       Object.keys(STATES)[Math.floor(this.rand * Object.keys(STATES).length)]
@@ -20,11 +20,15 @@ class CharacterEditor extends React.Component {
       gender: this.rand > 0.5 ? 'M' : 'F',
       residence: '',
       state: this.randState,
-      party: this.rand > 0.5 ? 'Republican' : 'Democratic',
+      party: this.rand < 0.25 || this.rand > 0.75 ? 'Republican' : 'Democratic',
       avatar: '',
       bio: '',
+      titles: [],
       senateSeatId: null,
       showSenate: false,
+    }
+    if (props.partyOption) {
+      this.state.party = props.partyOption;
     }
     this.saveCharacter = this.saveCharacter.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -43,7 +47,25 @@ class CharacterEditor extends React.Component {
         party: data.party,
         avatar: data.avatar,
         bio: data.bio,
+        titles: data.titles,
       });
+    } else {
+      this.setState({
+        name: '',
+        birthday: '',
+        gender: this.rand > 0.5 ? 'M' : 'F',
+        residence: '',
+        state: this.randState,
+        party: this.rand < 0.25 || this.rand > 0.75 ? 'Republican' : 'Democratic',
+        avatar: '',
+        bio: '',
+        titles: [],
+      });
+      if (props.partyOption) {
+        this.setState({
+          party: props.partyOption,
+        });
+      }
     }
   }
 
@@ -104,6 +126,11 @@ class CharacterEditor extends React.Component {
         </div>
       );
     }
+    if (this.state.titles.includes('Senator')) {
+      makeSenator = (
+        <div>You are <strong>{this.state.party} Senator</strong> from <strong>{FROM_STATES[this.state.state]}</strong></div>
+      );
+    }
     let stateOptions = []
     for (let key in STATES){
       stateOptions.push(
@@ -122,18 +149,26 @@ class CharacterEditor extends React.Component {
         <option className='republican' value='Republican'>Republican</option>
         <option className='independent' value='Independent Democrat'>Independent (Caucus with Democrats)</option>
         <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
-        <option className='fourthestate' value='Media'>The Fourth Estate</option>
+        <option className='fourthestate' value='Media'>The Fourth Estate (don't pick me)</option>
       </FormControl>
     );
-    if (this.rand > 0.5) {
-      parties =
-      (
+    if (this.props.partyOption) {
+      let party = null;
+      if (this.props.partyOption === 'Democratic') {
+        party = [
+          <option key={'d'} className='democratic' value='Democratic'>Democratic</option>,
+          <option key={'id'} className='independent' value='Independent Democrat'>Independent (Caucus with Democrats)</option>,
+        ];
+      }
+      if (this.props.partyOption === 'Republican') {
+        party = [
+          <option key={'r'} className='republican' value='Republican'>Republican</option>,
+          <option key={'ir'} className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>,
+        ];
+      }
+      parties = (
         <FormControl ref='party' className={cn} componentClass='select' value={this.state.party} onChange={this.onChange}>
-          <option className='republican' value='Republican'>Republican</option>
-          <option className='democratic' value='Democratic'>Democratic</option>
-          <option className='independent' value='Independent Republican'>Independent (Caucus with Republicans)</option>
-          <option className='independent' value='Independent Democrat'>Independent (Caucus with Democrats)</option>
-          <option className='fourthestate' value='Media'>The Fourth Estate</option>
+          {party}
         </FormControl>
       );
     }
@@ -167,7 +202,7 @@ class CharacterEditor extends React.Component {
               {makeSenator}
 
               {
-                !this.state.showSenate
+                !this.state.showSenate && !this.state.titles.includes('Senator')
                 ?
                 <div>
                   <ControlLabel>State:</ControlLabel>
@@ -213,6 +248,7 @@ class CharacterEditor extends React.Component {
 
 CharacterEditor.propTypes = {
   data: React.PropTypes.object,
+  partyOption: React.PropTypes.string,
   senatorOption: React.PropTypes.bool,
   onSave: React.PropTypes.func,
 }
