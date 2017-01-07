@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { ControlLabel } from 'react-bootstrap';
 
-import partyColor from '../shared/partyColor';
+import createCharacterLink from '../shared/createCharacterLink';
 
 class User extends React.Component {
 
@@ -35,13 +35,9 @@ class User extends React.Component {
     let characters = [];
     this.state.characters.forEach(character => {
       characters.push(
-        <Link
-          key={character.character_id}
-          className={partyColor(character.party)}
-          to={'/character/' + character.character_id}
-        >
-          {character.name}
-        </Link>
+        <div key={character.character_id}>
+          {createCharacterLink(character.character_id, character.party, character.name)}
+        </div>
       );
     })
     return (

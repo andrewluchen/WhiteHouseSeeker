@@ -13,9 +13,9 @@ class Bill(models.Model):
     cosponsors = models.ManyToManyField(Character, related_name='cosponsored_bills', blank=True)
 
     def __unicode__(self):
-        return (
-            'S.' + str(self.id) + ' ' + self.title
-        )
+        starting_location = BillVersion.objects.filter(bill=self, status=BillVersion.BILL_CLERK).first().location
+        prefix = 'S.' if starting_location.name == 'senate' else 'H.R.'
+        return prefix + str(self.id) + ' ' + self.title
 
     def __str__(self):
         return self.__unicode__()
@@ -34,7 +34,7 @@ Every Version should either end in Signed/Failed or spawn an active version
 (Senate) Received -> In Debate -> In Vote -> Passed/Failed -> Inactive
 (House) Received -> In Debate -> In Vote -> Passed/Failed -> Inactive
 TODO: (ConCom) Received -> ???
-(Potus) Presented to the President -> Signed/Vetoed -> Inactive
+(Potus) Presented to the President -> Signed/Vetoed -> Override/Failed -> Inactive
 '''
 class BillVersion(models.Model):
     BILL_CLERK = 'Introduced'
@@ -58,7 +58,7 @@ class BillVersion(models.Model):
 
     def __unicode__(self):
         return (
-            'S.' + str(self.bill.id) + ' ' + self.bill.title + ' - (id.' + str(self.id) +')'
+            str(self.bill.id) + ' ' + self.bill.title + ' - (id.' + str(self.id) +')'
         )
 
     def __str__(self):

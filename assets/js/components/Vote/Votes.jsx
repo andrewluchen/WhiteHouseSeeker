@@ -15,6 +15,14 @@ class Votes extends React.Component {
     let votes = [];
     this.props.votes.slice(0).sort(this.momentSort).forEach(vote => {
       let time = moment(vote.endtime).fromNow();
+      let timeleft = 'No time limit';
+      if (vote.endtime) {
+        let endtime = moment(vote.endtime);
+        timeleft = 'Ends ' + moment(vote.endtime).fromNow();
+        if (moment().diff(endtime) > 0) {
+          timeleft = 'Ended ' + moment(vote.endtime).fromNow();
+        }
+      }
       votes.push(
         <tr key={vote.voteId}>
           <td>
@@ -23,9 +31,9 @@ class Votes extends React.Component {
             </Link>
           </td>
           <td>
-            ({vote.yeas}-{vote.nays}-{vote.pres})
+            ({vote.yeas.length}-{vote.nays.length}-{vote.pres.length})
           </td>
-          <td>Ends {time}</td>
+          <td>{timeleft}</td>
         </tr>
       );
     })

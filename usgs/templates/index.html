@@ -1,13 +1,15 @@
 <html>
 <head>
   {% csrf_token %}
-  {% load render_bundle from webpack_loader %}
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  {% load webpack_static from webpack_loader %}
+  <link rel="shortcut icon" href="{% webpack_static 'bundles/favicon.ico' %}">
+  <!--<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>-->
 </head>
 <body>
   <div id="container"></div>
+  {% load render_bundle from webpack_loader %}
   {% render_bundle 'main' %}
 </body>
 </html>

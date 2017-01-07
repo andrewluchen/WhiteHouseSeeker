@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
 
-import partyColor from '../shared/partyColor';
+import createCharacterLink from '../shared/createCharacterLink';
 
 class DebateComments extends React.Component {
 
@@ -15,12 +15,9 @@ class DebateComments extends React.Component {
       comments.push(
         <div key={comment.id} className='comment'>
           <div className='comment-header'>
-            <Link
-              className={'comment-character' + ' ' + partyColor(comment.party)}
-              to={'/character/' + comment.character_id}
-            >
-              {comment.character_name}
-            </Link>
+            <div className='comment-character'>
+              {createCharacterLink(comment.character.id, comment.character.party, comment.character.name)}
+            </div>
             <div className='comment-timestamp'>{absoluteTime} ({relativeTime})</div>
           </div>
           <div className='comment-content'>

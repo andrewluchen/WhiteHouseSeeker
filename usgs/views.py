@@ -17,9 +17,11 @@ from usgs.bill_action.views import (
     NewDebateView,
     DebateView,
     DebateMotionView,
+    DebateOfficerView,
     DebatesView,
     NewVoteView,
     VoteView,
+    VoteOfficerView,
     VotesView,
 )
 from usgs.character.views import (
@@ -27,6 +29,20 @@ from usgs.character.views import (
     CharacterVotingRecordView,
     CharactersView,
     NewCharacterView,
+)
+from usgs.election.views import (
+    WarchestView,
+    NewElectionView,
+    ElectionView,
+    ElectionDayView,
+    ElectionsView,
+    CampaignView,
+    CampaignDayView,
+)
+from usgs.news.views import (
+    NewTweetView,
+    TweetView,
+    TweetsView,
 )
 
 def echo(request):
@@ -88,9 +104,23 @@ class CapitolView(View):
                 response[position] = filtered.first().holder.short_description()
             else:
                 response[position] = 'N/A'
+        response['senate_seats'] = self.get_senate_seats()
         response['senators'] = self.get_senators()
         response = json.dumps(response)
         return HttpResponse(response, content_type='application/json')
+
+    def get_senate_seats(self):
+        seats = models.SenateSeat.objects.all()
+        response = []
+        for s in seats:
+            response.append({
+                'id': s.id,
+                'holder': s.holder.id if s.holder else None,
+                'state': s.state,
+                'class': s.senate_class,
+                'party': s.party,
+            })
+        return response
 
     def get_senators(self):
         senators = models.Holding.objects.filter(title=models.Holding.SENATOR, endtime__isnull=True)

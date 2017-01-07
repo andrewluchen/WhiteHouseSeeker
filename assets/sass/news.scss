@@ -1,0 +1,115 @@
+.twitter {
+
+    &-controls {
+        display: flex;
+        line-height: 32px;
+        margin: 5px;
+    }
+
+    &-handle {
+        display: flex;
+        flex: 1;
+    }
+
+    &-count {
+        color: $ui_gray;
+        font-size: small;
+    }
+
+    &-textarea {
+        font-size: x-large !important;
+    }
+
+    &-buttons {
+        margin-top: 5px;
+        display: flex;
+    }
+
+    &-hottest {
+        text-align: center;
+        font-size: 30px;
+    }
+
+    &-trending {
+        font-size: 16px;
+
+        > span {
+            color: $ui_blue;
+            font-weight: bold;
+        }
+
+    }
+
+    &-pagination {
+
+    }
+
+}
+
+.tweet {
+    background-color: $ui_white;
+    border: 1px solid $ui_gray;
+    display: flex;
+    padding: 5px;
+
+    &-vote {
+        display: flex;
+        flex-direction: column;
+        margin: 0 10px;
+        width: 60px;
+    }
+
+    &-up {
+        cursor: pointer;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid $ui_gray;
+        margin: auto;
+
+        &:hover {
+            border-bottom-color: $ui_black;
+        }
+
+    }
+
+    &-down {
+        cursor: pointer;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid $ui_gray;
+        margin: auto;
+
+        &:hover {
+            border-top-color: $ui_black;
+        }
+
+    }
+
+    &-number {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    &-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &-title {
+        font-size: 20px;
+    }
+
+    .hashtag {
+        font-weight: bold;
+        color: $ui_blue;
+    }
+
+    &-author {
+
+    }
+
+}

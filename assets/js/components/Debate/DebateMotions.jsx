@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
-import { connect } from 'react-redux';
 
 import { UNANIMOUS, AMEND, CLOTURE, REFER, TABLE } from './DebateConstants';
 import MotionUnanimous from './MotionUnanimous';
@@ -46,13 +44,6 @@ class DebateMotions extends React.Component {
 
 DebateMotions.propTypes = {
   motions: React.PropTypes.array,
-  active: React.PropTypes.number,
 };
 
-function mapStateToProps(state) {
-  return {
-    active: state.auth.active,
-  };
-}
-
-export default connect(mapStateToProps)(DebateMotions);
+export default DebateMotions;

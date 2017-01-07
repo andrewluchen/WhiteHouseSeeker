@@ -8,7 +8,10 @@ class MotionTable extends React.Component {
 
   render() {
     return (
-      <SecondedMotionBase motionName='Motion for Lay on the Table'/>
+      <SecondedMotionBase
+        motionName='Motion for Lay on the Table'
+        motion={this.props.motion}
+      />
     );
   }
 }

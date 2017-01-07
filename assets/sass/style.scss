@@ -4,14 +4,18 @@
 @import 'quill.snow';
 
 @import 'bill';
+@import 'campaign';
 @import 'capitol';
 @import 'chamber';
 @import 'character';
 @import 'comment';
 @import 'editor';
+@import 'election';
+@import 'news';
+@import 'table';
 @import 'topbar';
-@import 'leaderboard';
 @import 'login';
+@import 'search';
 @import 'sidebar';
 
 html body {
@@ -23,7 +27,19 @@ html body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-left: 256px;
+}
+
+@media (min-width: 768px) {
+
+    .main_container {
+        transition: margin-left 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+        &.show-sidebar {
+            margin-left: 256px;
+        }
+
+    }
+
 }
 
 .main_layout {
@@ -35,6 +51,14 @@ html body {
 .divider {
     background-color: $ui_gray_dark;
     color: $ui_gray_dark;
+}
+
+.modal-container {
+  position: relative;
+}
+
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
 }
 
 

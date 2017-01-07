@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { createCharacter, updateCharacter } from '../actions/CharacterActions';
+import { createCharacter, updateCharacter } from '../../actions/CharacterActions';
 
-import CharacterSelector from './Character/CharacterSelector';
-import CharacterEditor from './Character/CharacterEditor';
+import CharacterSelector from './CharacterSelector';
+import CharacterEditor from './CharacterEditor';
+import LoggedInPermission from '../Permission/LoggedInPermission';
 
 class MyCharacters extends React.Component {
 
@@ -53,10 +54,25 @@ class MyCharacters extends React.Component {
   }
 
   render() {
+    let allowSenator = true;
+    let partyOption = null;
+    this.props.characters.forEach(character => {
+      if (character.party.indexOf('Democratic') !== -1) {
+        partyOption = 'Democratic';
+      }
+      if (character.party.indexOf('Republican') !== -1) {
+        partyOption = 'Republican';
+      }
+      if (character.titles.includes('Senator')) {
+        allowSenator = false;
+      }
+    });
     let editor = (
       <CharacterEditor
         data={{}}
         onSave={data => this.createCharacter(data)}
+        senatorOption={allowSenator}
+        partyOption={partyOption}
       />
     );
     if (this.state.active !== 0) {
@@ -64,11 +80,13 @@ class MyCharacters extends React.Component {
         <CharacterEditor
           data={this.state.data}
           onSave={data => this.updateCharacter(data)}
+          senatorOption={allowSenator}
+          partyOption={partyOption}
         />
       );
     }
     return (
-      <div>
+      <LoggedInPermission substitute='You must be logged in to create a character.'>
         <div className='character-header'>
           <span className='character-header-label'>Select a Character:</span>
           <div className='character-header-selector'>
@@ -81,7 +99,7 @@ class MyCharacters extends React.Component {
           </div>
         </div>
         {editor}
-      </div>
+      </LoggedInPermission>
     );
   }
 }

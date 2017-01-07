@@ -1,4 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router';
+import { Grid, Row, Col } from 'react-bootstrap';
+import { Tabs, Tab } from 'material-ui/Tabs';
+
+import BillTrackerStepper from './BillTrackerStepper';
+import createCharacterLink from '../shared/createCharacterLink';
+import partyColor from '../shared/partyColor';
 
 class Bill extends React.Component {
 
@@ -6,8 +13,10 @@ class Bill extends React.Component {
     super(props);
     this.state = {
       billId: props.params.billId,
+      billTitle: '',
       sponsor: '',
       cosponsors: [],
+      versions: [],
     };
     this.fetchBill = this.fetchBill.bind(this);
   }
@@ -21,8 +30,10 @@ class Bill extends React.Component {
       '/api/bill/' + billId + '/',
       response => {
         this.setState({
+          billTitle: response.title,
           sponsor: response.sponsor,
           cosponsors: response.cosponsors,
+          versions: response.versions,
         })
       },
     );
@@ -32,30 +43,56 @@ class Bill extends React.Component {
     let sponsorLink = null;
     if (this.state.sponsor) {
       sponsorLink = (
-        <div>
-          <strong>Sponsor:&nbsp;</strong>
-          <Link to={'/character/' + this.state.sponsor.id}>
-            {this.state.sponsor.name}
-          </Link>
-        </div>
+        <Row className='show-grid'>
+          <Col xs={3} md={2}>
+            <strong>Sponsor:</strong>
+          </Col>
+          <Col xs={6} md={4}>
+            {createCharacterLink(this.state.sponsor.id, this.state.sponsor.party, this.state.sponsor.name)}
+          </Col>
+        </Row>
       );
     }
     let cosponsorList = [];
     this.state.cosponsors.forEach(cs => {
       cosponsorList.push(
-        <Link key={cs.id} to={'/character/' + cs.id}>{cs.name}</Link>
+        <div key={cs.id}>
+          <Link
+            to={'/character/' + cs.id}
+            className={'bill-cosponsor' + ' ' + partyColor(this.state.sponsor.party)}
+          >
+            {cs.name}
+          </Link>
+        </div>
       );
     });
+    let latestAction = null;
     return (
-      <div>
-        {sponsorLink}
-        <div>Latest Action:</div>
-        <div>Tracker:</div>
-        <div>___</div>
-        <div>There are versions: [dropdown]</div>
-        <div>Cosponsors:</div>
-        {cosponsorList}
-      </div>
+      <Grid>
+        <Row className = 'bill-overview'>
+          <div className='bill-overview-header'>{this.state.billTitle}</div>
+          <div className='bill-overview-label'>BILL</div>
+          <div className='bill-overview-panel'>
+            {sponsorLink}
+            {latestAction}
+            <div><strong>Tracker:</strong></div>
+            <BillTrackerStepper versions={this.state.versions}/>
+          </div>
+        </Row>
+        <Row>
+          <Tabs>
+            <Tab label={'Versions (' + this.state.versions.length + ')'} >
+              TODO:
+            </Tab>
+            <Tab label={'Actions (' + this.state.versions.length + ')'} >
+              TODO:
+            </Tab>
+            <Tab label={'Cosponsors (' + this.state.cosponsors.length + ')'} >
+              {cosponsorList}
+            </Tab>
+          </Tabs>
+        </Row>
+      </Grid>
     );
   }
 }

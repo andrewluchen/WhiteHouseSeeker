@@ -1,16 +1,34 @@
 import React from 'react';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
 
+import { toggleSidebar } from '../../actions/LayoutActions';
 import { setPrimaryCharacter } from '../../actions/CharacterActions';
 
 import CharacterSelector from '../Character/CharacterSelector';
 
 class Header extends React.Component {
+
+  constructor() {
+    super();
+    this.onChange = this.onChange.bind(this);
+    this.onLogout = this.onLogout.bind(this);
+  }
+
+  onChange(value) {
+    switch(value) {
+      case 'control_panel':
+        browserHistory.push('/me');
+        break;
+      case 'logout':
+        this.onLogout();
+        break;
+    }
+  }
 
   onLogout() {
     window.location = '/auth/logout/';
@@ -18,7 +36,7 @@ class Header extends React.Component {
 
   render() {
     let authenticatedContent = (
-      <ToolbarGroup className='topbar-icons' lastChild={true}>
+      <div className='topbar-icons'>
         <div className='topbar-title'>
           <i className='fa fa-bell'/>&nbsp;
         </div>
@@ -26,42 +44,48 @@ class Header extends React.Component {
           <i className='fa fa-envelope'/>&nbsp;
         </div>
         <IconMenu
-          iconButtonElement={<IconButton><div className='topbar-gear'><i className='fa fa-gear'/>&nbsp;</div></IconButton>}
-          anchorOrigin={{ vertical:'bottom', horizontal:'left' }}
-          onChange={this.onLogout}
+          className='topbar-settings'
+          iconButtonElement={<IconButton><i className='fa fa-ellipsis-v'/></IconButton>}
+          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          onChange={(event, value) => this.onChange(value)}
         >
+          <MenuItem value='control_panel' primaryText='Control Panel'/>
           <MenuItem value='logout' primaryText='Logout'/>
         </IconMenu>
-      </ToolbarGroup>
+      </div>
     );
     let logIn = (
-      <ToolbarGroup lastChild={true}>
-        <Link to='/register/' className='topbar-title topbar-register'>Register</Link>
-        <div className='topbar-title topbar-slash'>/</div>
-        <Link to='/login/' className='topbar-title topbar-login'>Login</Link>
-      </ToolbarGroup>
+      <div className='topbar-title topbar-authentication'>
+        <Link to='/register/' className='topbar-register'>Register</Link>
+        &nbsp;/&nbsp;
+        <Link to='/login/' className='topbar-login'>Login</Link>
+      </div>
     );
     let characters = (
-      <ToolbarGroup>
-        <div className='topbar-title topbar-characters'>
-          <div>You are currently: &nbsp;</div>
-          <CharacterSelector
-            characters={this.props.characters}
-            active={this.props.active}
-            onSelect={this.props.setPrimaryCharacter}
-            newOption={false}
-          />
+      <div className='topbar-characters'>
+        <div className='topbar-characters-label'>
+          You are currently:&nbsp;
         </div>
-      </ToolbarGroup>
+        <CharacterSelector
+          characters={this.props.characters}
+          active={this.props.active}
+          onSelect={this.props.setPrimaryCharacter}
+          newOption={false}
+        />
+      </div>
     );
     return (
-      <Toolbar className='topbar'>
-        <ToolbarGroup className='topbar-welcome'>
-          {this.props.user ? <div className='topbar-title'>{'Welcome Back ' + this.props.user.username + '!'}</div> : null}
-        </ToolbarGroup>
-        {this.props.user ? characters : null}
-        {this.props.user ? authenticatedContent : logIn}
-      </Toolbar>
+      <AppBar
+        title={this.props.user ? 'Welcome Back ' + this.props.user.username + '!' : null}
+        onLeftIconButtonTouchTap={this.props.toggleHamburger}
+        className='topbar'
+      >
+        <div className='topbar-children'>
+          {this.props.user ? characters : <div style={{flex:'1'}}/>}
+          {this.props.user ? authenticatedContent : logIn}
+        </div>
+      </AppBar>
     );
   }
 }
@@ -70,6 +94,7 @@ Header.propTypes = {
   user: React.PropTypes.object,
   characters: React.PropTypes.array,
   active: React.PropTypes.number,
+  toggleLayout: React.PropTypes.func,
   setPrimaryCharacter: React.PropTypes.func,
 };
 
@@ -83,6 +108,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    toggleHamburger: () => dispatch(toggleSidebar()),
     setPrimaryCharacter: i => dispatch(setPrimaryCharacter(i)),
   };
 }

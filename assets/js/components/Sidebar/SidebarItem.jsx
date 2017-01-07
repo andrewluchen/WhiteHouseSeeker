@@ -8,9 +8,17 @@ class SidebarItem extends React.Component {
       <div>
         <MenuItem>
           <div className='sidebar-item'>
-            <Link to={this.props.link} className='sidebar-link'>
-              {this.props.title}
-            </Link>
+            {
+              this.props.noRouter
+              ?
+              <a href={this.props.link} className='sidebar-link'>
+                {this.props.title}
+              </a>
+              :
+              <Link to={this.props.link} className='sidebar-link'>
+                {this.props.title}
+              </Link>
+            }
           </div>
         </MenuItem>
         {this.props.children}
@@ -22,6 +30,11 @@ class SidebarItem extends React.Component {
 SidebarItem.propTypes = {
   title: React.PropTypes.string,
   link: React.PropTypes.string,
+  noRouter: React.PropTypes.bool,
+};
+
+SidebarItem.defaultProps = {
+  noRouter: false,
 };
 
 export default SidebarItem;

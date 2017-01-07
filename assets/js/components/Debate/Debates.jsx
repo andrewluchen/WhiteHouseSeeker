@@ -17,10 +17,9 @@ class Debates extends React.Component {
       let timeleft = 'No time limit';
       if (debate.endtime) {
         let endtime = moment(debate.endtime);
+        timeleft = 'Ends ' + moment(debate.endtime).fromNow();
         if (moment().diff(endtime) > 0) {
           timeleft = 'Ended ' + moment(debate.endtime).fromNow();
-        } else {
-          timeleft = 'Ends ' + moment(debate.endtime).fromNow();
         }
       }
       debates.push(

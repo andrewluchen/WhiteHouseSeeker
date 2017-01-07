@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 
 class QuillEditor extends React.Component {
@@ -33,14 +33,22 @@ class QuillEditor extends React.Component {
             onChange={this.onChange}
           />
         </div>
-        <Button
-          bsStyle='primary'
-          bsSize='large'
-          onClick={this.onSubmit}
-        >
-          Submit
-        </Button>
+        <div className='editor-buttons'>
+          <div style={{flex:'1'}}/>
+
+          <ButtonToolbar>
+            {this.props.onCancel ? <Button bsStyle='warning' bsSize='large' onClick={this.props.onCancel}>Cancel</Button> : null}
+            <Button
+              bsStyle='primary'
+              bsSize='large'
+              onClick={this.onSubmit}
+            >
+              Submit
+            </Button>
+          </ButtonToolbar>
+        </div>
         <div
+          hidden={!this.props.showPreview}
           className='preview'
           dangerouslySetInnerHTML={{__html: this.state.content}}
         />
@@ -51,7 +59,14 @@ class QuillEditor extends React.Component {
 
 QuillEditor.propTypes = {
   content: React.PropTypes.string,
+  onCancel: React.PropTypes.func,
   onSubmit: React.PropTypes.func,
-}
+  showPreview: React.PropTypes.bool,
+};
+
+QuillEditor.defaultProps = {
+  onCancel: null,
+  showPreview: true,
+};
 
 export default QuillEditor;

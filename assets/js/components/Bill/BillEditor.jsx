@@ -31,9 +31,9 @@ class BillEditor extends React.Component {
   render() {
     return (
       <div>
-        <div className='bill-header'>{this.props.header}</div>
+        <div className='billeditor-header'>{this.props.header}</div>
         <input
-          className='bill-title'
+          className='billeditor-title'
           placeholder={this.props.titlePlaceholder}
           value={this.state.title}
           onChange={this.onChange}

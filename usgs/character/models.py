@@ -2,19 +2,28 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
+# for DNC, RNC, party warchests etc.
+class ElectionCharacter(models.Model):
+    name = models.CharField(max_length=80)
+    party = models.CharField(max_length=80)
 
-class Character(models.Model):
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.__unicode__()
+
+
+class Character(ElectionCharacter):
     player = models.ForeignKey(User, related_name='characters')
     primary = models.BooleanField()
     activated = models.DateTimeField(default=timezone.now)
     deactivated = models.DateTimeField(null=True, blank=True)
 
-    name = models.CharField(max_length=80)
     birthday = models.DateField()
-    gender = models.CharField(max_length=2)
-    residence = models.CharField(max_length=80)
-    party = models.CharField(max_length=80)
-    state = models.CharField(max_length=80)
+    gender = models.CharField(max_length=1)
+    residence = models.CharField(max_length=80, default='', blank=True)
+    state = models.CharField(max_length=2)
     avatar = models.TextField(default='', blank=True)
     bio = models.TextField(default='', blank=True)
 
@@ -24,7 +33,16 @@ class Character(models.Model):
     def get_title(self):
         holds = Holding.objects.filter(holder=self, endtime__isnull=True)
         if (holds.count() != 0):
-            return holds.first().title
+            title = None
+            for h in holds.all():
+                if (h.subtitle):
+                    return h.title
+            for h in holds.all():
+                if (h.title):
+                    return h.title
+            for h in holds.all():
+                if (h.partytitle):
+                    return h.title
         return None
 
     def __unicode__(self):
@@ -60,21 +78,21 @@ class Holding(models.Model):
     HmL = 'House Minority Leader'
     HmL2 = 'House Minority Whip'
 
-    # ???
+    # Party titles
     DNC = 'Democratic Chair'
     DNC2 = 'Democratic Vice Chair'
     RNC = 'Republican Chair'
     RNC2 = 'Republican Vice Chair'
 
     holder = models.ForeignKey(Character, related_name='holdings')
-    title = models.CharField(max_length=80)
+    title = models.CharField(max_length=80, default='', blank=True)
     subtitle = models.CharField(max_length=80, default='', blank=True)
     partytitle = models.CharField(max_length=80, default='', blank=True)
     starttime = models.DateTimeField(default=timezone.now)
     endtime = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.title
+        return  self.title + '(' + self.holder.name + ')'
 
     def __str__(self):
         return self.__unicode__()

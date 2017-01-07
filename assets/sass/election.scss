@@ -1,0 +1,79 @@
+.elections {
+
+    &-header {
+        display: flex;
+
+        label {
+            line-height: 32px;
+            margin: 5px;
+        }
+
+        input {
+            flex: 1;
+            margin: 5px;
+        }
+
+        select {
+            flex: 1;
+            margin: 5px;
+        }
+
+        button {
+            margin: 5px;
+        }
+
+    }
+
+}
+
+.election {
+
+    &-title {
+        font-size: 40px;
+        text-align: center;
+    }
+
+    &-candidates {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    &-summary {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    &-buttons {
+        display: flex;
+        margin: 10px 20px;
+    }
+
+    &-day {
+        border: 1px dashed $ui_black;
+        padding: 5px;
+    }
+
+    &-day-name {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    &-day-candidate {
+        font-size: 20px;
+        text-align: center;
+    }
+
+}
+
+.election-day {
+
+    .preview {
+        background-color: $ui_white;
+        border: 1px solid $ui_black;
+        margin-bottom: 10px;
+        padding: 5px;
+        white-space: pre-wrap;
+    }
+
+}

@@ -11,12 +11,19 @@ class BillAdmin(admin.ModelAdmin):
 class VoteAdmin(admin.ModelAdmin):
     filter_horizontal = ('yeas', 'nays', 'pres',)
 
+admin.site.register(models.ElectionCharacter)
 admin.site.register(models.Character, CharacterAdmin)
 admin.site.register(models.Bill, BillAdmin)
 admin.site.register(models.BillVersion)
 admin.site.register(models.Vote, VoteAdmin)
 admin.site.register(models.Debate)
-
+admin.site.register(models.DebateMotion)
+admin.site.register(models.Transaction)
+admin.site.register(models.Election)
+admin.site.register(models.ElectionDay)
+admin.site.register(models.Campaign)
+admin.site.register(models.CampaignDay)
+admin.site.register(models.Tweet)
 
 
 from machina.core.db.models import get_model

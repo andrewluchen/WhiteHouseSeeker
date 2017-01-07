@@ -1,12 +1,12 @@
-import json
-
 from django.contrib.auth.models import User
-from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.generic import View
 
+from rest_framework.renderers import JSONRenderer
+
 from usgs.bill.models import Bill, BillVersion
+from usgs.bill.serializers import BillSerializer, BillVersionSerializer
 from usgs.character.models import Character
 
 from usgs.utils import get_legislative_body, validate_character, validate_bill_version
@@ -39,57 +39,28 @@ class NewBillView(View):
 class BillView(View):
 
     def get(self, request, pk):
-        billobj = Bill.objects.get(id=pk)
-        bill = model_to_dict(billobj)
-        bill['sponsor'] = {
-            'id': billobj.sponsor.id,
-            'name': billobj.sponsor.description,
-        }
-        cosponsors = []
-        for cs in billobj.cosponsors.all():
-            cosponsors.append({
-                'id': cs.id,
-                'name': cs.description,
-            })
-        bill['cosponsors'] = cosponsors
-        response = json.dumps(bill)
-        return HttpResponse(response, content_type='application/json')
+        bill_obj = Bill.objects.get(id=pk)
+        bill = JSONRenderer().render(BillSerializer(bill_obj).data)
+        return HttpResponse(bill, content_type='application/json')
 
 
 class BillVersionView(View):
 
     def get(self, request, bid, vid):
-        billobj = Bill.objects.get(id=bid)
-        bill = model_to_dict(BillVersion.objects.get(id=vid))
-        bill['title'] = billobj.title
-        bill['sponsor'] = {
-            'id': billobj.sponsor.id,
-            'name': billobj.sponsor.description,
-            'party': billobj.sponsor.party,
-        }
-        cosponsors = []
-        for cs in billobj.cosponsors.all():
-            cosponsors.append({
-                'id': cs.id,
-                'name': cs.description,
-                'party': cs.party,
-            })
-        bill['cosponsors'] = cosponsors
-        bill['modified'] = str(bill['modified'])
-        response = json.dumps(bill)
-        return HttpResponse(response, content_type='application/json')
+        billversion_obj = BillVersion.objects.get(id=vid)
+        billversion = JSONRenderer().render(BillVersionSerializer(billversion_obj).data)
+        return HttpResponse(billversion, content_type='application/json')
 
     def post(self, request, bid, vid):
-        billobj = Bill.objects.get(id=bid)
-        billversionobj = BillVersion.objects.get(id=vid)
-        validate_bill_version(billobj, billversionobj)
+        bill = Bill.objects.get(id=bid)
+        billversion = BillVersion.objects.get(id=vid)
+        validate_bill_version(bill, billversion)
 
-        bill = billversionobj
         title = request.POST.get('title')
         body = request.POST.get('body')
-        bill.title = title
-        bill.body = body
-        bill.save()
+        billversion.title = title
+        billversion.body = body
+        billversion.save()
         return HttpResponse(status=200)
 
 
@@ -102,18 +73,13 @@ class BillsView(View):
 class BillVersionsView(View):
 
     def get(self, request):
-        billversionobjs = BillVersion.objects.all()
+        billversion_objs = BillVersion.objects.all()
         if (request.GET.get('chamber')):
             chamber = get_legislative_body(request.GET.get('chamber'))
-            billversionobjs = billversionobjs.filter(location=chamber)
+            billversion_objs = billversion_objs.filter(location=chamber)
         if (request.GET.get('status')):
-            billversionobjs = billversionobjs.filter(status=request.GET.get('status'))
+            billversion_objs = billversion_objs.filter(status=request.GET.get('status'))
         if (request.GET.get('active')):
-            billversionobjs = billversionobjs.filter(closed=False)
-        bills = list(billversionobjs.values())
-        for i, bill in enumerate(bills):
-            bill['title'] = billversionobjs[i].bill.description
-            bill['sponsor'] = billversionobjs[i].bill.sponsor.__str__()
-            bill['modified'] = str(bills[i]['modified'])
-        response = json.dumps(bills)
-        return HttpResponse(response, content_type='application/json')
+            billversion_objs = billversion_objs.filter(closed=False)
+        billversions = JSONRenderer().render(BillVersionSerializer(billversion_objs, many=True).data)
+        return HttpResponse(billversions, content_type='application/json')

@@ -21,7 +21,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="__login">
+      <div className="login__root">
         <div className="login">
           <div className="login__container">
             <div id="content" className="colM">

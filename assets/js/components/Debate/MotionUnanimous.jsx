@@ -5,7 +5,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import moment from 'moment';
 
 import { YEA, NAY, PRES } from './DebateConstants';
-import partyColor from '../shared/partyColor';
+import createCharacterLink from '../shared/createCharacterLink';
 
 class MotionUnanimous extends React.Component {
 
@@ -43,14 +43,28 @@ class MotionUnanimous extends React.Component {
     let motion = this.props.motion;
     let timeLeft = moment(motion.endtime).fromNow();
     let objected = null;
+    let objectButton = null;
     let nays = this.state.nays.length > 0 ? this.state.nays : motion.nays;
-    if (nays.length > 0) {
+    if (nays.length === 0) {
+      if (this.props.active === motion.actor.id) {
+        objectButton = <span>Ends {timeLeft}</span>;
+      } else {
+        objectButton = (
+          <div className='motion-buttons'>
+            <ButtonToolbar>
+              <Button onClick={this.submitObject} disabled={objected !== null}>Object</Button>
+            </ButtonToolbar>
+            <div>&nbsp;&nbsp;Ends {timeLeft}</div>
+          </div>
+        );
+      }
+    } else {
       let party = nays[0].party;
       let id = nays[0].id;
       let actor = nays[0].name
       objected = (
         <div>
-          Objected by <Link className={partyColor(party)} to={'/character/' + id}>{actor}</Link>
+          Objected by {createCharacterLink(id, party, actor)}
         </div>
       );
     }
@@ -58,13 +72,10 @@ class MotionUnanimous extends React.Component {
       <div className='motion'>
         <div className='motion-header'>
           <div className='motion-name'>Motion for Unanimous Consent&nbsp;</div>
-          <ButtonToolbar>
-            <Button onClick={this.submitObject} disabled={objected !== null}>Object</Button>
-          </ButtonToolbar>
-          <div>&nbsp;&nbsp;Ends {timeLeft}</div>
+          {objectButton}
         </div>
         <div>
-          Proposed by <Link className={partyColor(motion.actor_party)} to={'/character/' + motion.actor_id}>{motion.actor}</Link>
+          Proposed by {createCharacterLink(motion.actor.id, motion.actor.party, motion.actor.name)}
           {objected}
         </div>
       </div>

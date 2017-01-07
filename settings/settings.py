@@ -45,6 +45,7 @@ INSTALLED_APPS += [
     'widget_tweaks',
     'django_markdown',
 ] + get_machina_apps()
+# usgs related apps:
 INSTALLED_APPS +=[
     'webpack_loader',
     'rest_framework',

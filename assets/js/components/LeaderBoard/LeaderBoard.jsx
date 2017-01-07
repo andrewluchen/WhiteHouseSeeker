@@ -7,7 +7,7 @@ class LeaderBoard extends React.Component {
     let data = this.props.data;
     let i = 0;
     return (
-      <Table className='leaderboard' bordered={true} striped={true}>
+      <Table className='usgs-table' bordered={true} striped={true}>
         <thead>
         </thead>
         <tbody>

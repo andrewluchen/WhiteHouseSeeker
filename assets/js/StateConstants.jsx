@@ -51,6 +51,13 @@ let STATES = {
   'Wyoming': "WY",
 };
 
+let FROM_STATES = {};
+
+for(let key in STATES){
+  FROM_STATES[STATES[key]] = key;
+}
+
 export {
   STATES,
+  FROM_STATES,
 };

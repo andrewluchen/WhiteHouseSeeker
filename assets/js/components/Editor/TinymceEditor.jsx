@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 import TinyMCE from 'react-tinymce';
 
 class TinymceEditor extends React.Component {
@@ -36,13 +36,19 @@ class TinymceEditor extends React.Component {
             onChange={this.onChange}
           />
         </div>
-        <Button
-          bsStyle='primary'
-          bsSize='large'
-          onClick={this.onSubmit}
-        >
-          Submit
-        </Button>
+        <div className='editor-buttons'>
+          <ButtonToolbar>
+            <div style={{flex:'1'}}/>
+            {this.props.onCancel ? <Button bsStyle='warning' bsSize='large' onClick={this.props.onCancel}>Cancel</Button> : null}
+            <Button
+              bsStyle='primary'
+              bsSize='large'
+              onClick={this.onSubmit}
+            >
+              Submit
+            </Button>
+          </ButtonToolbar>
+        </div>
         <div
           className='preview'
           dangerouslySetInnerHTML={{__html: this.state.content}}
@@ -54,7 +60,14 @@ class TinymceEditor extends React.Component {
 
 TinymceEditor.propTypes = {
   content: React.PropTypes.string,
+  onCancel: React.PropTypes.func,
   onSubmit: React.PropTypes.func,
-}
+  showPreview: React.PropTypes.bool,
+};
+
+QuillEditor.defaultProps = {
+  onCancel: null,
+  showPreview: true,
+};
 
 export default TinymceEditor;

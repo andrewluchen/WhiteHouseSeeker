@@ -10,9 +10,13 @@ class Character extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      characterId: props.params.characterId,
       username: '',
       userId: '',
-      characterId: props.params.characterId,
+      warchest: {
+        id: '',
+        amount: '',
+      },
       characterSummary: {},
       sponsored: [],
       cosponsored: [],
@@ -41,6 +45,7 @@ class Character extends React.Component {
         this.setState({
           username: response.username,
           userId: response.user_id,
+          warchest: response.warchest,
           characterSummary: {
             avatar: response.avatar,
             name: response.name,
@@ -74,6 +79,11 @@ class Character extends React.Component {
         <div>
           <strong>User: </strong>
           <Link to={'/user/' + this.state.userId}>{this.state.username}</Link>
+          <br/>
+          <strong>Warchest: </strong>
+          <Link to={'/warchest/' + this.state.warchest.id}>
+            ${this.state.warchest.amount.toLocaleString()}
+          </Link>
         </div><br/>
         <Tabs>
           <Tab label='Character Summary'>
