@@ -87,6 +87,8 @@ class VotingRecordSerializer(serializers.Serializer):
     yeas = serializers.SerializerMethodField()
     nays = serializers.SerializerMethodField()
     pres = serializers.SerializerMethodField()
+    sponsored = serializers.SerializerMethodField()
+    cosponsored = serializers.SerializerMethodField()
 
     @staticmethod
     def create_votes(vote_objs):
@@ -111,10 +113,32 @@ class VotingRecordSerializer(serializers.Serializer):
         pres_votes = obj.pres_votes.all()
         return VotingRecordSerializer.create_votes(pres_votes)
 
+    def get_sponsored(self, obj):
+        spobjs = obj.sponsored_bills.all()
+        sponsored = []
+        for b in list(spobjs):
+            sponsored.append({
+                'bill_id': b.id,
+                'title': b.title,
+            })
+        return sponsored
+
+    def get_cosponsored(self, obj):
+        csobjs = obj.cosponsored_bills.all()
+        cosponsored = []
+        for b in list(csobjs):
+            cosponsored.append({
+                'bill_id': b.id,
+                'title': b.title,
+            })
+        return cosponsored
+
     class Meta:
         model = Character
         fields = (
             'yeas',
             'nays',
             'pres',
+            'sponsored',
+            'cosponsored',
         )
