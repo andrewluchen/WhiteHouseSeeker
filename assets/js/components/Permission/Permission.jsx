@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 class Permission extends React.Component {
   render() {
-    let character = {};
+    let character = { titles: [] };
     if (this.props.active !== 0) {
       let characters = this.props.characters;
       for (let i = 0; i < characters.length; i++) {
@@ -13,11 +13,7 @@ class Permission extends React.Component {
         }
       }
     }
-    if (
-      this.props.title === character.title ||
-      this.props.title === character.subtitle ||
-      this.props.title === character.partytitle
-    ) {
+    if (character.titles.indexOf(this.props.title) !== -1) {
       return <div>{this.props.children}</div>;
     } else {
       return <div>{this.props.substitute}</div>;
