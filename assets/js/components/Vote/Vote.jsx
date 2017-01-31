@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 
-import Permission from '../Permission/Permission';
+import ViewerPermission from '../Permission/ViewerPermission';
 import TimePermission from '../Permission/TimePermission';
 import VoteActions from './VoteActions';
 import createCharacterLink from '../shared/createCharacterLink';
@@ -251,7 +251,7 @@ class Vote extends React.Component {
           endtime={this.state.endtime}
           substitute={'Time for voting has lapsed.'}
         >
-          <Permission
+          <ViewerPermission
             title={this.getPermissionGroup(this.state.location)}
             substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to vote'}
           >
@@ -278,7 +278,7 @@ class Vote extends React.Component {
                 Present
               </Button>
             </div>
-          </Permission>
+          </ViewerPermission>
         </TimePermission>
         <Grid>
           <Row className='show-grid'>

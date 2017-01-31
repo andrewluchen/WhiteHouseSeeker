@@ -5,7 +5,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import moment from 'moment';
 
 import { YEA, NAY, PRES } from './DebateConstants';
-import Permission from '../Permission/Permission';
+import ViewerPermission from '../Permission/ViewerPermission';
 import TimePermission from '../Permission/TimePermission';
 import createCharacterLink from '../shared/createCharacterLink';
 
@@ -176,7 +176,7 @@ class SecondedMotionBase extends React.Component {
             substitute='Time for voting for has lapsed.'
           >
             <div className='motion-buttons'>
-              <Permission
+              <ViewerPermission
                 title={this.getPermissionGroup(motion.location)}
                 substitute={'You must be a ' + this.getPermissionGroup(motion.location) + ' to vote'}
               >
@@ -185,7 +185,7 @@ class SecondedMotionBase extends React.Component {
                   <Button onClick={() => this.submitVote(NAY)} {...nayStyle}>Nay</Button>
                   <Button onClick={() => this.submitVote(PRES)} {...presStyle}>Present</Button>
                 </ButtonToolbar>
-              </Permission>
+              </ViewerPermission>
               <div>&nbsp;&nbsp;Vote ends {timeLeft}</div>
             </div>
           </TimePermission>

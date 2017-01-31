@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Table } from 'react-bootstrap';
 
-import Permission from '../Permission/Permission';
+import ViewerPermission from '../Permission/ViewerPermission';
 
 class ClerkOffice extends React.Component {
 
@@ -30,12 +30,12 @@ class ClerkOffice extends React.Component {
       <div className='chamber-clerk'>
         <div className='chamber-header'>{this.props.name}</div>
         <div className='chamber-cornerlink'>
-          <Permission
+          <ViewerPermission
             title={this.props.permissionGroup}
             substitute={'You must be a ' + this.props.permissionGroup + ' to submit bills'}
           >
             <Link to={this.props.newRoute}>+ New Legislation</Link>
-          </Permission>
+          </ViewerPermission>
         </div>
         <Table bordered={true} striped={true}>
           <thead>

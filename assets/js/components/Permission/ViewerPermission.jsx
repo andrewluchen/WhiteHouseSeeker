@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-class Permission extends React.Component {
+class ViewerPermission extends React.Component {
   render() {
     let character = { titles: [] };
     if (this.props.active !== 0) {
@@ -21,7 +21,7 @@ class Permission extends React.Component {
   }
 }
 
-Permission.propTypes = {
+ViewerPermission.propTypes = {
   title: React.PropTypes.string,
   substitute: React.PropTypes.string,
   user: React.PropTypes.object,
@@ -37,4 +37,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Permission);
+export default connect(mapStateToProps)(ViewerPermission);

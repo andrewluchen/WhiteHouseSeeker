@@ -6,7 +6,7 @@ import { Button, ButtonToolbar, ControlLabel, DropdownButton, Form, FormControl,
 
 import DebateComments from './DebateComments';
 import DebateMotions from './DebateMotions';
-import Permission from '../Permission/Permission';
+import ViewerPermission from '../Permission/ViewerPermission';
 import TimePermission from '../Permission/TimePermission';
 
 export const COMMENT = 'comment';
@@ -132,7 +132,7 @@ class Debate extends React.Component {
           endtime={this.state.endtime}
           substitute='Time for debate has lapsed.'
         >
-          <Permission
+          <ViewerPermission
             title={this.getPermissionGroup(this.state.location)}
             substitute={'You must be a ' + this.getPermissionGroup(this.state.location) + ' to debate'}
           >
@@ -160,7 +160,7 @@ class Debate extends React.Component {
             >
               Submit
             </Button>
-          </Permission>
+          </ViewerPermission>
         </TimePermission>
       </div>
     );
