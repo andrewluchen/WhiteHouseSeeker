@@ -34,6 +34,7 @@ import NewBill from './components/Bill/NewBill';
 import NewDebate from './components/Debate/NewDebate';
 import NewVote from './components/Vote/NewVote';
 import PlayerNews from './components/Media/PlayerNews';
+import PressRelations from './components/Media/PressRelations';
 import Search from './components/Search';
 import Senate from './components/Senate';
 import Twitter from './components/Media/Twitter'
@@ -69,6 +70,7 @@ class Root extends React.Component {
             <Route path='/character/:characterId' component={Character} />
             <Route path='/news/admin_news' component={AdminNews} />
             <Route path='/news/player_news' component={PlayerNews} />
+            <Route path='/news/press' component={PressRelations} />
             <Route path='/news/twitter' component={Twitter} />
             <Route path='/capitol' component={Capitol} />
             <Route path='/senate' component={Senate} />

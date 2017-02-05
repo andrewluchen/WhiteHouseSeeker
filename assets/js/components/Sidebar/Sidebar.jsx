@@ -35,8 +35,8 @@ class Sidebar extends React.Component {
             <SidebarItem title='News' link='/news'>
               <SidebarSubItem title='Mainstream Media' link='/news/admin_news'/>
               <SidebarSubItem title='Fourth Estate' link='/news/player_news'/>
+              <SidebarSubItem title='Public Relations' link='/news/press'/>
               <SidebarSubItem title='Social Media' link='/news/twitter'/>
-              <SidebarSubItem title='Press Relations' link='/news/press'/>
             </SidebarItem>
             <SidebarItem title='Capitol Hill' link='/capitol'>
               <SidebarSubItem title='US Senate' link='/senate'/>
