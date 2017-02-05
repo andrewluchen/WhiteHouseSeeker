@@ -22,6 +22,7 @@ export function fetchUserCharacters(username) {
       type: 'GET',
       data: {
         username: username,
+        active: true,
       },
       success: response => {
         let characters = response;
@@ -71,6 +72,31 @@ export function updateCharacter(username, id, data) {
       type: 'GET',
       data: {
         username: username,
+        active: true,
+      },
+      success: response => {
+        let characters = response;
+        dispatch(charactersChanged(characters));
+      },
+    });
+  }
+}
+
+export function retireCharacter(username, id) {
+  return dispatch => {
+    $.ajax({
+      url: '/api/character/' + id + '/',
+      type: 'POST',
+      data: {
+        deactivate: true
+      },
+    });
+    $.ajax({
+      url: '/api/characters/',
+      type: 'GET',
+      data: {
+        username: username,
+        active: true,
       },
       success: response => {
         let characters = response;

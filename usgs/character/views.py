@@ -52,7 +52,13 @@ class CharacterView(View):
     def post(self, request, pk):
         character = Character.objects.get(pk=pk)
         validate_character(request.user, character)
-        if (request.POST.get('make_primary')):
+        print (request.POST)
+        if (request.POST.get('deactivate')):
+            character.deactivated = timezone.now()
+            character.primary = False
+            character.save()
+            return HttpResponse(status=200)
+        elif (request.POST.get('make_primary')):
             old = Character.objects.get(player=request.user, primary=True)
             old.primary = False
             character.primary = True
@@ -88,5 +94,7 @@ class CharactersView(View):
         if (request.GET.get('username')):
             player = User.objects.get(username=request.GET.get('username'))
             character_objs = character_objs.filter(player=player)
+        if (request.GET.get('active')):
+            character_objs = character_objs.filter(deactivated=None)
         characters = JSONRenderer().render(CharacterSerializer(character_objs, many=True).data)
         return HttpResponse(characters, content_type='application/json')

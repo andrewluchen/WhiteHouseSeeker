@@ -31,6 +31,7 @@ class CharacterEditor extends React.Component {
       this.state.party = props.partyOption;
     }
     this.saveCharacter = this.saveCharacter.bind(this);
+    this.retireCharacter = this.retireCharacter.bind(this);
     this.onChange = this.onChange.bind(this);
     this.chooseSenate = this.chooseSenate.bind(this);
   }
@@ -81,6 +82,10 @@ class CharacterEditor extends React.Component {
       bio: this.state.bio,
       senator: this.state.senateSeatId,
    });
+  }
+
+  retireCharacter() {
+    this.props.onRetire();
   }
 
   onChange(event) {
@@ -226,6 +231,7 @@ class CharacterEditor extends React.Component {
               <Button
                 bsStyle='danger'
                 bsSize='large'
+                onClick={this.retireCharacter}
               >
                 Retire Character
               </Button>

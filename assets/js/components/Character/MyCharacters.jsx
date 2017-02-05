@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { createCharacter, updateCharacter } from '../../actions/CharacterActions';
+import { createCharacter, updateCharacter, retireCharacter } from '../../actions/CharacterActions';
 
 import CharacterSelector from './CharacterSelector';
 import CharacterEditor from './CharacterEditor';
@@ -17,6 +17,7 @@ class MyCharacters extends React.Component {
     };
     this.createCharacter = this.createCharacter.bind(this);
     this.updateCharacter = this.updateCharacter.bind(this);
+    this.retireCharacter = this.retireCharacter.bind(this);
     this.onCharacterSelected = this.onCharacterSelected.bind(this);
   }
 
@@ -31,6 +32,13 @@ class MyCharacters extends React.Component {
 
   updateCharacter(data) {
     this.props.updateCharacter([this.props.user.username, this.state.active, data]);
+  }
+
+  retireCharacter() {
+    this.props.retireCharacter([this.props.user.username, this.state.active]);
+    this.setState({
+      active: 0,
+    });
   }
 
   onCharacterSelected(characterID) {
@@ -80,6 +88,7 @@ class MyCharacters extends React.Component {
         <CharacterEditor
           data={this.state.data}
           onSave={data => this.updateCharacter(data)}
+          onRetire={this.retireCharacter}
           senatorOption={allowSenator}
           partyOption={partyOption}
         />
@@ -109,6 +118,8 @@ MyCharacters.propTypes = {
   characters: React.PropTypes.array,
   active: React.PropTypes.number,
   createCharacter: React.PropTypes.func,
+  updateCharacter: React.PropTypes.func,
+  retireCharacter: React.PropTypes.func,
 }
 
 function mapStateToProps(state) {
@@ -122,6 +133,7 @@ function mapDispatchToProps(dispatch) {
   return {
     createCharacter: args => dispatch(createCharacter(...args)),
     updateCharacter: args => dispatch(updateCharacter(...args)),
+    retireCharacter: args => dispatch(retireCharacter(...args)),
   };
 }
 
