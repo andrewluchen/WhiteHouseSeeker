@@ -4,8 +4,28 @@ from django.views.generic import View
 
 from rest_framework.renderers import JSONRenderer
 
-from usgs.news.models import Tweet
-from usgs.news.serializers import TweetSerializer
+from usgs.news.models import NewsNetwork, NewsArticle, Tweet
+from usgs.news.serializers import NewsNetworkSerializer, TweetSerializer
+
+class NewsNetworkView(View):
+
+    def get(self, request, pk):
+        news_obj = NewsNetwork.objects.get(id=pk)
+        news = JSONRenderer().render(NewsNetworkSerializer(news_obj).data)
+        return HttpResponse(news, content_type='application/json')
+
+
+class NewsNetworksView(View):
+
+    def get(self, request):
+        news_obj = NewsNetwork.objects.all()
+        news = JSONRenderer().render(NewsNetworkSerializer(news_obj, many=True).data)
+        return HttpResponse(news, content_type='application/json')
+
+class NewsArticleView(View):
+
+    def get(self, request, pk):
+        pass
 
 
 class NewTweetView(View):

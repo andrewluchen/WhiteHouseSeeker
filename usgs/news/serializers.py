@@ -2,7 +2,43 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
-from usgs.news.models import Tweet
+from usgs.news.models import NewsNetwork, NewsArticle, Tweet
+
+class NewsArticleSerializers(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    author = serializers.SerializerMethodField()
+    body = serializers.CharField()
+
+    def get_author(self, obj):
+        return obj.author.username
+
+    class Meta:
+        model = NewsArticle
+        fields = (
+            'id',
+            'author',
+            'body',
+        )
+
+
+class NewsNetworkSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    is_admin = serializers.BooleanField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    articles = serializers.SerializerMethodField()
+
+    def get_articles(self, obj):
+        return NewsArticleSerializers(obj.articles, many=True).data
+
+    class Meta:
+        model = NewsNetwork
+        fields = (
+            'id',
+            'is_admin',
+            'name',
+            'description',
+        )
 
 
 class TweetSerializer(serializers.Serializer):

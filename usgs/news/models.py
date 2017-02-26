@@ -4,11 +4,12 @@ from django.db import models
 
 class NewsNetwork(models.Model):
     is_admin = models.BooleanField(default=False)
-    title = models.CharField(max_length=200)
-    body = models.TextField()
+    name = models.CharField(max_length=200)
+    description = models.TextField()
 
 
-class Article(models.Model):
+class NewsArticle(models.Model):
+    network = models.ForeignKey(NewsNetwork, related_name='articles')
     author = models.ForeignKey(User, related_name='+')
     body = models.TextField()
 
